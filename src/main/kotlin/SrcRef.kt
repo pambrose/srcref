@@ -203,9 +203,9 @@ fun main() {
                   div {
                     style = "padding-left: 25px;"
                     br {}
-                    input { id = "urlval"; type = InputType.text; value = url; size = "95px" }
-                    p {}
-                    input { id = "ghurlval"; type = InputType.text; value = ghurl; size = "95px" }
+                    input { id = "urlval"; type = InputType.text; value = url; size = "125px" }
+                    p { +"will redirect to:" }
+                    input { id = "ghurlval"; type = InputType.text; value = ghurl; size = "125px" }
                     p {}
                     button { onClick = "copyUrl()"; +"Copy URL" }
                     span { +" " }
@@ -222,7 +222,7 @@ fun main() {
       }
 
       get(githubref) {
-        val params = queryParams.apply { forEach { (k, v) -> logger.info { "$k=$v" } } }
+        val params = queryParams.onEach { (k, v) -> logger.info { "$k=$v" } }
         redirectTo { githubRefUrl(params) }
       }
     }
