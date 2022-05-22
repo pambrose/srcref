@@ -1,8 +1,15 @@
+import QueryArgs.ACCOUNT
+import QueryArgs.BRANCH
+import QueryArgs.PATH
+import QueryArgs.REGEX
+import QueryArgs.REPO
 import SrcRef.githubRefUrl
 import SrcRef.githubref
 import SrcRef.logger
 import SrcRef.queryParams
+import SrcRef.urlPrefix
 import com.github.pambrose.common.response.*
+import com.github.pambrose.common.util.*
 import io.ktor.server.application.*
 import io.ktor.server.cio.*
 import io.ktor.server.engine.*
@@ -27,110 +34,110 @@ fun main() {
         respondWith {
           document {
             append.html {
-//              head {
-//                meta { charset = "utf-8" }
-//                meta { name = "apple-mobile-web-app-capable"; content = "yes" }
-//                meta { name = "apple-mobile-web-app-status-bar-style"; content = "black-translucent" }
-//                meta {
-//                  name = "viewport"
-//                  content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-//                }
-//                script {
-//                  rawHtml("\n")
-//                  +"""
-//                    function copyToClipboard(textToCopy) {
-//                        // navigator clipboard api needs a secure context (https)
-//                        if (navigator.clipboard && window.isSecureContext) {
-//                            // navigator clipboard api method'
-//                            return navigator.clipboard.writeText(textToCopy);
-//                        } else {
-//                            // text area method
-//                            let textArea = document.createElement("textarea");
-//                            textArea.value = textToCopy;
-//                            // make the textarea out of viewport
-//                            textArea.style.position = "fixed";
-//                            textArea.style.left = "-999999px";
-//                            textArea.style.top = "-999999px";
-//                            document.body.appendChild(textArea);
-//                            textArea.focus();
-//                            textArea.select();
-//                            return new Promise((res, rej) => {
-//                                // here the magic happens
-//                                document.execCommand('copy') ? res() : rej();
-//                                textArea.remove();
-//                            });
-//                        }
-//                    }
-//
-//                    function copyUrl() {
-//                      var copyText = document.getElementById("urlval");
-//                      copyText.select();
-//                      copyToClipboard(copyText.value);
-//                      //.then(() => alert("Copied the text: " + copyText.value));
-//                    }
-//                  """.trimIndent().prependIndent("\t\t")
-//                  rawHtml("\n\t\t")
-//                }
-//
-//                rawHtml("\n")
-//                style("text/css") {
-//                  media = "screen"
-//                  rawHtml("\n")
-//                  +"""
-//                    form {
-//                      padding: 25px;
-//                    }
-//
-//                    table {
-//                        border-collapse: collapse;
-//                        border: 2px solid black;
-//                    }
-//
-//                    td {
-//                      padding: 5px;
-//                    }
-//                  """.trimIndent().prependIndent("\t\t")
-//                  rawHtml("\n\t")
-//                }
-//                rawHtml("\n")
-//              }
-//              body {
-//                val params = queryParams
-//
-//                form {
-//                  action = "/"
-//                  method = FormMethod.get
-//                  table {
-//                    tr {
-//                      td { style = ""; label { +"Org Name/Username:" } }
-//                      td {
-//                        textInput {
-//                          name = ACCOUNT.arg; size = "20"; required = true; value = params[ACCOUNT.arg] ?: ""
-//                        }
-//                      }
-//                    }
-//                    tr {
-//                      td { style = ""; label { +"Repo Name:" } }
-//                      td { textInput { name = REPO.arg; size = "20"; required = true; value = params[REPO.arg] ?: "" } }
-//                    }
-//                    tr {
-//                      td { style = ""; label { +"Branch Name:" } }
-//                      val p = (params[BRANCH.arg] ?: "").let { if (it.isBlank()) "master" else it }
-//                      td { textInput { name = BRANCH.arg; size = "20"; required = true; value = p } }
-//                    }
-//                    tr {
-//                      td { style = ""; label { +"File Path:" } }
-//                      val p = (params[PATH.arg] ?: "").let { if (it.isBlank()) "/src/main/kotlin/" else it }
-//                      td { textInput { name = PATH.arg; size = "70"; required = true; value = p } }
-//                    }
-//                    tr {
-//                      td { style = ""; label { +"Match Expr:" } }
-//                      td {
-//                        textInput {
-//                          name = REGEX.arg; size = "20"; required = true; value = params[REGEX.arg] ?: ""
-//                        }
-//                      }
-//                    }
+              head {
+                meta { charset = "utf-8" }
+                meta { name = "apple-mobile-web-app-capable"; content = "yes" }
+                meta { name = "apple-mobile-web-app-status-bar-style"; content = "black-translucent" }
+                meta {
+                  name = "viewport"
+                  content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+                }
+                script {
+                  rawHtml("\n")
+                  +"""
+                    function copyToClipboard(textToCopy) {
+                        // navigator clipboard api needs a secure context (https)
+                        if (navigator.clipboard && window.isSecureContext) {
+                            // navigator clipboard api method'
+                            return navigator.clipboard.writeText(textToCopy);
+                        } else {
+                            // text area method
+                            let textArea = document.createElement("textarea");
+                            textArea.value = textToCopy;
+                            // make the textarea out of viewport
+                            textArea.style.position = "fixed";
+                            textArea.style.left = "-999999px";
+                            textArea.style.top = "-999999px";
+                            document.body.appendChild(textArea);
+                            textArea.focus();
+                            textArea.select();
+                            return new Promise((res, rej) => {
+                                // here the magic happens
+                                document.execCommand('copy') ? res() : rej();
+                                textArea.remove();
+                            });
+                        }
+                    }
+
+                    function copyUrl() {
+                      var copyText = document.getElementById("urlval");
+                      copyText.select();
+                      copyToClipboard(copyText.value);
+                      //.then(() => alert("Copied the text: " + copyText.value));
+                    }
+                  """.trimIndent().prependIndent("\t\t")
+                  rawHtml("\n\t\t")
+                }
+
+                rawHtml("\n")
+                style("text/css") {
+                  media = "screen"
+                  rawHtml("\n")
+                  +"""
+                    form {
+                      padding: 25px;
+                    }
+                    
+                    table {
+                        border-collapse: collapse;
+                        border: 2px solid black;
+                    }
+
+                    td {
+                      padding: 5px;
+                    }
+                  """.trimIndent().prependIndent("\t\t")
+                  rawHtml("\n\t")
+                }
+                rawHtml("\n")
+              }
+              body {
+                val params = queryParams
+
+                form {
+                  action = "/"
+                  method = FormMethod.get
+                  table {
+                    tr {
+                      td { style = ""; label { +"Org Name/Username:" } }
+                      td {
+                        textInput {
+                          name = ACCOUNT.arg; size = "20"; required = true; value = params[ACCOUNT.arg] ?: ""
+                        }
+                      }
+                    }
+                    tr {
+                      td { style = ""; label { +"Repo Name:" } }
+                      td { textInput { name = REPO.arg; size = "20"; required = true; value = params[REPO.arg] ?: "" } }
+                    }
+                    tr {
+                      td { style = ""; label { +"Branch Name:" } }
+                      val p = (params[BRANCH.arg] ?: "").let { if (it.isBlank()) "master" else it }
+                      td { textInput { name = BRANCH.arg; size = "20"; required = true; value = p } }
+                    }
+                    tr {
+                      td { style = ""; label { +"File Path:" } }
+                      val p = (params[PATH.arg] ?: "").let { if (it.isBlank()) "/src/main/kotlin/" else it }
+                      td { textInput { name = PATH.arg; size = "70"; required = true; value = p } }
+                    }
+                    tr {
+                      td { style = ""; label { +"Match Expr:" } }
+                      td {
+                        textInput {
+                          name = REGEX.arg; size = "20"; required = true; value = params[REGEX.arg] ?: ""
+                        }
+                      }
+                    }
 //                    tr {
 //                      td { style = ""; label { +"Offset:" } }
 //                      val p = (params[OFFSET.arg] ?: "").let { if (it.isBlank()) "0" else it }
@@ -173,40 +180,40 @@ fun main() {
 //                        }
 //                      }
 //                    }
-//                    tr {
-//                      td { }
-//                      td {
-//                        style = "padding-top:10"
-//                        submitInput {
-//                          style = "font-size:25px; height:35; vertical-align:middle;"
-//                          value = "Get URL"
-//                        }
-//                      }
-//                    }
-//                  }
-//                }
-//
-//                if (params.values.asSequence().filter { it.isNotBlank() }.any()) {
-//                  val args = params.map { (k, v) -> "$k=${v.encode()}" }.joinToString("&")
-//                  val url = "$urlPrefix/$githubref?$args"
-//                  val ghurl = githubRefUrl(params)
-//
-//                  div {
-//                    style = "padding-left: 25px;"
-//                    br {}
-//                    textArea { id = "urlval"; rows = "3"; +url; cols = "91"; readonly = true }
-//                    p { +"will redirect to:" }
-//                    textArea { id = "ghurlval"; rows = "1"; +ghurl; cols = "91"; readonly = true }
-//                    p {}
-//                    button { onClick = "copyUrl()"; +"Copy URL" }
-//                    span { +" " }
-//                    button(classes = "btn btn-success") {
-//                      onClick = "window.open('$url','_blank')"
-//                      +"Try it!"
-//                    }
-//                  }
-//                }
-//              }
+                    tr {
+                      td { }
+                      td {
+                        style = "padding-top:10"
+                        submitInput {
+                          style = "font-size:25px; height:35; vertical-align:middle;"
+                          value = "Get URL"
+                        }
+                      }
+                    }
+                  }
+                }
+
+                if (params.values.asSequence().filter { it.isNotBlank() }.any()) {
+                  val args = params.map { (k, v) -> "$k=${v.encode()}" }.joinToString("&")
+                  val url = "$urlPrefix/$githubref?$args"
+                  val ghurl = githubRefUrl(params)
+
+                  div {
+                    style = "padding-left: 25px;"
+                    br {}
+                    textArea { id = "urlval"; rows = "3"; +url; cols = "91"; readonly = true }
+                    p { +"will redirect to:" }
+                    textArea { id = "ghurlval"; rows = "1"; +ghurl; cols = "91"; readonly = true }
+                    p {}
+                    button { onClick = "copyUrl()"; +"Copy URL" }
+                    span { +" " }
+                    button(classes = "btn btn-success") {
+                      onClick = "window.open('$url','_blank')"
+                      +"Try it!"
+                    }
+                  }
+                }
+              }
             }
           }.serialize()
         }
