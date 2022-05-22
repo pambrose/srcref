@@ -1,6 +1,6 @@
 import QueryArgs.ACCOUNT
 import QueryArgs.BRANCH
-import QueryArgs.PATH
+import QueryArgs.REGEX
 import QueryArgs.REPO
 import SrcRef.githubRefUrl
 import SrcRef.githubref
@@ -124,19 +124,17 @@ fun main() {
                       val pv = (params[BRANCH.arg] ?: "").let { if (it.isBlank()) "master" else it }
                       td { textInput { name = BRANCH.arg; size = "20"; required = true; value = pv } }
                     }
-                    tr {
-                      td { +"File Path:" }
-                      val pv = (params[PATH.arg] ?: "").let { if (it.isBlank()) "/src/main/kotlin/" else it }
-                      td { textInput { name = PATH.arg; size = "70"; required = true; value = pv } }
-                    }
 //                    tr {
-//                      td { +"Match Expr:" }
-//                      td {
-//                        textInput {
-//                          name = REGEX.arg; size = "20"; required = true; value = params[REGEX.arg] ?: ""
-//                        }
-//                      }
+//                      td { +"File Path:" }
+//                      val pv = (params[PATH.arg] ?: "").let { if (it.isBlank()) "/src/main/kotlin/" else it }
+//                      td { textInput { name = PATH.arg; size = "70"; required = true; value = pv } }
 //                    }
+                    tr {
+                      td { +"Match Expr:" }
+                      td {
+                        textInput { name = REGEX.arg; size = "20"; required = true; value = params[REGEX.arg] ?: "" }
+                      }
+                    }
 //                    tr {
 //                      td {  +"Offset:"  }
 //                      val pv = (params[OFFSET.arg] ?: "").let { if (it.isBlank()) "0" else it }
