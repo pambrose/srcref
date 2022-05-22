@@ -152,11 +152,11 @@ fun main() {
                     tr {
                       td { style = ""; label { +"Occurence:" } }
                       td {
+                        val p = (params[OCCURENCE.arg] ?: "").let { if (it.isBlank()) "1" else it }
+                        val isSelected = p.toInt()
                         select {
                           name = OCCURENCE.arg
                           size = "1"
-                          val p = (params[OCCURENCE.arg] ?: "").let { if (it.isBlank()) "1" else it }
-                          val isSelected = p.toInt()
                           option { +" 1st "; value = "1"; selected = isSelected == 1 }
                           option { +" 2nd "; value = "2"; selected = isSelected == 2 }
                           option { +" 3rd "; value = "3"; selected = isSelected == 3 }
