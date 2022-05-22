@@ -207,7 +207,7 @@ fun main() {
                   div {
                     style = "padding-left: 25px;"
                     br {}
-                    textArea { id = "urlval"; rows = "3";+url; cols = "91"; readonly = true }
+                    textArea { id = "urlval"; rows = "3"; +url; cols = "91"; readonly = true }
                     p { +"will redirect to:" }
                     textArea { id = "ghurlval"; rows = "1"; +ghurl; cols = "91"; readonly = true }
                     p {}
