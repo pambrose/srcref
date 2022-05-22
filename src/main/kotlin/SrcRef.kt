@@ -6,8 +6,8 @@ import QueryArgs.PATH
 import QueryArgs.REGEX
 import QueryArgs.REPO
 import QueryArgs.TOPDOWN
-import Target.calcLineNumber
-import Target.logger
+import SrcRef.calcLineNumber
+import SrcRef.logger
 import com.github.pambrose.common.response.*
 import com.github.pambrose.common.util.*
 import io.ktor.server.application.*
@@ -30,9 +30,10 @@ enum class QueryArgs {
 }
 
 fun main() {
+  val prefix = System.getenv("PREFIX") ?: "http://localhost:8080/"
   val geturl = "getUrl"
-  val prefix = "http://localhost:8080/"
   val srcurl = "srcurl"
+
   embeddedServer(CIO, port = System.getenv("PORT")?.toInt() ?: 8080) {
     install(CallLogging)
     install(DefaultHeaders) { header("X-Engine", "Ktor") }
@@ -46,6 +47,37 @@ fun main() {
         respondWith {
           document {
             append.html {
+              head {
+                meta { charset = "utf-8" }
+                meta { name = "apple-mobile-web-app-capable"; content = "yes" }
+                meta { name = "apple-mobile-web-app-status-bar-style"; content = "black-translucent" }
+                meta {
+                  name = "viewport"
+                  content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+                }
+                rawHtml("\n")
+                style("text/css") {
+                  media = "screen"
+                  rawHtml("\n")
+                  +"""
+                    form {
+                      padding: 25px;
+                    }
+                    
+                    table {
+                        border-collapse: collapse;
+                        border: 2px solid black;
+                    }
+
+                    td {
+                      padding: 5px;
+                    }
+                  """.trimIndent().prependIndent("\t\t")
+                  rawHtml("\n\t")
+                }
+                rawHtml("\n")
+
+              }
               body {
                 form {
                   action = geturl
@@ -60,7 +92,7 @@ fun main() {
                       td { textInput { name = REPO.arg; size = "20" } }
                     }
                     tr {
-                      td { style = ""; label { +"Git Branch:" } }
+                      td { style = ""; label { +"Branch Name:" } }
                       td { textInput { name = BRANCH.arg; size = "20"; value = "master" } }
                     }
                     tr {
@@ -99,26 +131,12 @@ fun main() {
                       td {
                         span {
                           style = "text-align:center"
-                          radioInput {
-                            id = "topdown"
-                            name = TOPDOWN.arg
-                            value = "true"
-                            checked = true
-                          }
+                          radioInput { id = "topdown"; name = TOPDOWN.arg; value = "true"; checked = true }
                           label {
-                            htmlFor = "topdown"
-                            +" Top Down "
+                            htmlFor = "topdown"; +" Top Down "
                           }
-                          radioInput {
-                            id = "bottomup"
-                            name = TOPDOWN.arg
-                            value = "false"
-                            checked = false
-                          }
-                          label {
-                            htmlFor = "bottomup"
-                            +" Bottom Up "
-                          }
+                          radioInput { id = "bottomup"; name = TOPDOWN.arg; value = "false"; checked = false }
+                          label { htmlFor = "bottomup"; +" Bottom Up " }
                         }
                       }
                     }
@@ -127,8 +145,9 @@ fun main() {
                       td {
                         style = "padding-top:10"
                         submitInput {
-                          style = "font-size:25px; height:35; width:  155"
-                          value = "Get srcref URL"
+                          style =
+                            "font-size:25px; height:35; width:  155; vertical-align:middle; margin-top:1; margin-bottom:0"
+                          value = "Get URL"
                         }
                       }
                     }
@@ -158,6 +177,7 @@ fun main() {
               body {
                 val args = getVals().map { (k, v) -> "$k=${v.encode()}" }.joinToString("&")
                 val url = "$prefix$srcurl?$args"
+                p { +url }
                 a { href = url; target = "_blank"; +"Test URL" }
               }
             }
@@ -191,15 +211,13 @@ fun main() {
   }.start(wait = true)
 }
 
-object Target : KLogging() {
-  fun calcLineNumber(rawLines: List<String>, topDown: Boolean, pattern: String, occurence: Int, offset: Int) =
+object SrcRef : KLogging() {
+  fun calcLineNumber(lines: List<String>, topDown: Boolean, pattern: String, occurence: Int, offset: Int) =
     try {
-      val lines = if (topDown) rawLines else rawLines.asReversed()
-      val cnt = lines.size
       val regex = Regex(pattern)
-      (lines
+      ((if (topDown) lines else lines.asReversed())
         .asSequence()
-        .mapIndexed { index, s -> (if (topDown) index else (cnt - index - 1)) to s.contains(regex) }
+        .mapIndexed { index, s -> (if (topDown) index else (lines.size - index - 1)) to s.contains(regex) }
         .filter { it.second }
         .drop(occurence - 1)
         .first().first) + offset + 1
@@ -220,3 +238,5 @@ fun githubSourceUrl(
 
 fun githubRawUrl(username: String, repoName: String, path: String = "", branchName: String = "master") =
   "https://raw.githubusercontent.com/$username/$repoName/$branchName/$path"
+
+fun HTMLTag.rawHtml(html: String) = unsafe { raw(html) }
