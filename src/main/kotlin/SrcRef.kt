@@ -6,9 +6,9 @@ import QueryArgs.PATH
 import QueryArgs.REGEX
 import QueryArgs.REPO
 import QueryArgs.TOPDOWN
-import SrcRef.getVals
 import SrcRef.githubRefUrl
 import SrcRef.logger
+import SrcRef.queryParams
 import com.github.pambrose.common.response.*
 import com.github.pambrose.common.util.*
 import io.ktor.server.application.*
@@ -31,8 +31,10 @@ enum class QueryArgs {
 }
 
 fun main() {
+  fun HTMLTag.rawHtml(html: String) = unsafe { raw(html) }
+
   val prefix = (System.getenv("PREFIX") ?: "http://localhost:8080").removeSuffix("/")
-  val srcurl = "srcurl"
+  val githubref = "githubRef"
 
   embeddedServer(CIO, port = System.getenv("PORT")?.toInt() ?: 8080) {
     install(CallLogging)
@@ -115,7 +117,7 @@ fun main() {
                 rawHtml("\n")
               }
               body {
-                val vals = getVals()
+                val params = queryParams
 
                 form {
                   action = "/"
@@ -123,27 +125,27 @@ fun main() {
                   table {
                     tr {
                       td { style = ""; label { +"Org Name/Username:" } }
-                      td { textInput { name = ACCOUNT.arg; size = "20"; value = vals[ACCOUNT.arg] ?: "" } }
+                      td { textInput { name = ACCOUNT.arg; size = "20"; value = params[ACCOUNT.arg] ?: "" } }
                     }
                     tr {
                       td { style = ""; label { +"Repo Name:" } }
-                      td { textInput { name = REPO.arg; size = "20"; value = vals[REPO.arg] ?: "" } }
+                      td { textInput { name = REPO.arg; size = "20"; value = params[REPO.arg] ?: "" } }
                     }
                     tr {
                       td { style = ""; label { +"Branch Name:" } }
-                      td { textInput { name = BRANCH.arg; size = "20"; value = vals[BRANCH.arg] ?: "master" } }
+                      td { textInput { name = BRANCH.arg; size = "20"; value = params[BRANCH.arg] ?: "master" } }
                     }
                     tr {
                       td { style = ""; label { +"File Path:" } }
-                      td { textInput { name = PATH.arg; size = "70"; value = vals[PATH.arg] ?: "/src/main/kotlin/" } }
+                      td { textInput { name = PATH.arg; size = "70"; value = params[PATH.arg] ?: "/src/main/kotlin/" } }
                     }
                     tr {
                       td { style = ""; label { +"Match Expr:" } }
-                      td { textInput { name = REGEX.arg; size = "20"; value = vals[REGEX.arg] ?: "" } }
+                      td { textInput { name = REGEX.arg; size = "20"; value = params[REGEX.arg] ?: "" } }
                     }
                     tr {
                       td { style = ""; label { +"Offset:" } }
-                      td { textInput { name = OFFSET.arg; size = "10"; value = vals[OFFSET.arg] ?: "0" } }
+                      td { textInput { name = OFFSET.arg; size = "10"; value = params[OFFSET.arg] ?: "0" } }
                     }
                     tr {
                       td { style = ""; label { +"Occurence:" } }
@@ -151,7 +153,7 @@ fun main() {
                         select {
                           name = OCCURENCE.arg
                           size = "1"
-                          val isSelected = (vals[OCCURENCE.arg] ?: "1").toInt()
+                          val isSelected = (params[OCCURENCE.arg] ?: "1").toInt()
                           option { +" 1st "; value = "1"; selected = isSelected == 1 }
                           option { +" 2nd "; value = "2"; selected = isSelected == 2 }
                           option { +" 3rd "; value = "3"; selected = isSelected == 3 }
@@ -169,7 +171,7 @@ fun main() {
                       td { style = ""; label { +"Search Direction:" } }
                       td {
                         span {
-                          val isChecked = (vals[TOPDOWN.arg] ?: "true").toBoolean()
+                          val isChecked = (params[TOPDOWN.arg] ?: "true").toBoolean()
                           style = "text-align:center"
                           radioInput { id = "topdown"; name = TOPDOWN.arg; value = "true"; checked = isChecked }
                           label {
@@ -193,14 +195,17 @@ fun main() {
                   }
                 }
 
-                if (vals.values.asSequence().filter { it.isNotBlank() }.any()) {
-                  val args = vals.map { (k, v) -> "$k=${v.encode()}" }.joinToString("&")
-                  val url = githubRefUrl(vals)//"$prefix/?$args"
+                if (params.values.asSequence().filter { it.isNotBlank() }.any()) {
+                  val args = params.map { (k, v) -> "$k=${v.encode()}" }.joinToString("&")
+                  val url = "$prefix/$githubref?$args"
+                  val ghurl = githubRefUrl(params)
 
                   div {
                     style = "padding-left: 25px;"
                     br {}
                     input { id = "urlval"; type = InputType.text; value = url; size = "95px" }
+                    p {}
+                    input { id = "ghurlval"; type = InputType.text; value = ghurl; size = "95px" }
                     p {}
                     button { onClick = "copyUrl()"; +"Copy URL" }
                     span { +" " }
@@ -216,9 +221,9 @@ fun main() {
         }
       }
 
-      get(srcurl) {
-        val vals = getVals().apply { forEach { (k, v) -> logger.info { "$k=$v" } } }
-        redirectTo { githubRefUrl(vals) }
+      get(githubref) {
+        val params = queryParams.apply { forEach { (k, v) -> logger.info { "$k=$v" } } }
+        redirectTo { githubRefUrl(params) }
       }
     }
   }.start(wait = true)
@@ -226,38 +231,37 @@ fun main() {
 
 object SrcRef : KLogging() {
 
-  fun PipelineContext<Unit, ApplicationCall>.getVals() =
-    mutableMapOf<String, String>()
-      .also {
-        QueryArgs
-          .values()
-          .map { it.arg }
-          .forEach { arg ->
-            it[arg] = call.request.queryParameters[arg] ?: ""
-          }
-      }
+  val PipelineContext<Unit, ApplicationCall>.queryParams
+    get() =
+      mutableMapOf<String, String>()
+        .also {
+          QueryArgs
+            .values()
+            .map { it.arg }
+            .forEach { arg ->
+              it[arg] = call.request.queryParameters[arg] ?: ""
+            }
+        }
 
-  fun githubRefUrl(vals: Map<String, String>): String {
-    val account = vals[ACCOUNT.arg] ?: ""
-    val repo = vals[REPO.arg] ?: ""
-    val path = vals[PATH.arg] ?: ""
-    val branch = vals[BRANCH.arg] ?: ""
-
+  fun githubRefUrl(params: Map<String, String>): String {
+    val account = params[ACCOUNT.arg] ?: ""
+    val repo = params[REPO.arg] ?: ""
+    val path = params[PATH.arg] ?: ""
+    val branch = params[BRANCH.arg] ?: ""
     val url = githubRawUrl(account, repo, path, branch)
     val lines = URL(url).readText().lines()
-
     val linenum =
       calcLineNumber(
         lines,
-        vals[TOPDOWN.arg]?.toBoolean() ?: true,
-        vals[REGEX.arg] ?: "",
-        vals[OCCURENCE.arg]?.toInt() ?: 1,
-        vals[OFFSET.arg]?.toInt() ?: 0
+        params[TOPDOWN.arg]?.toBoolean() ?: true,
+        params[REGEX.arg] ?: "",
+        params[OCCURENCE.arg]?.toInt() ?: 1,
+        params[OFFSET.arg]?.toInt() ?: 0
       )
     return githubSourceUrl(account, repo, path, branch, linenum)
   }
 
-  fun calcLineNumber(lines: List<String>, topDown: Boolean, pattern: String, occurence: Int, offset: Int) =
+  private fun calcLineNumber(lines: List<String>, topDown: Boolean, pattern: String, occurence: Int, offset: Int) =
     try {
       val regex = Regex(pattern)
       ((if (topDown) lines else lines.asReversed())
@@ -270,18 +274,16 @@ object SrcRef : KLogging() {
       logger.info(e) { "Error in calcLineNumber()" }
       1
     }
+
+  private fun githubSourceUrl(
+    username: String,
+    repoName: String,
+    path: String = "",
+    branchName: String = "master",
+    lineNum: Int
+  ) =
+    "https://github.com/$username/$repoName/blob/$branchName/$path#L$lineNum"
+
+  private fun githubRawUrl(username: String, repoName: String, path: String = "", branchName: String = "master") =
+    "https://raw.githubusercontent.com/$username/$repoName/$branchName/$path"
 }
-
-fun githubSourceUrl(
-  username: String,
-  repoName: String,
-  path: String = "",
-  branchName: String = "master",
-  lineNum: Int
-) =
-  "https://github.com/$username/$repoName/blob/$branchName/$path#L$lineNum"
-
-fun githubRawUrl(username: String, repoName: String, path: String = "", branchName: String = "master") =
-  "https://raw.githubusercontent.com/$username/$repoName/$branchName/$path"
-
-fun HTMLTag.rawHtml(html: String) = unsafe { raw(html) }
