@@ -1,7 +1,6 @@
 import QueryArgs.ACCOUNT
 import QueryArgs.BRANCH
 import QueryArgs.PATH
-import QueryArgs.REGEX
 import QueryArgs.REPO
 import SrcRef.githubRefUrl
 import SrcRef.githubref
@@ -132,10 +131,10 @@ fun main() {
                     }
                     tr {
                       td { +"Match Expr:" }
-                      td {
-                        val pv = params[REGEX.arg] ?: ""
-                        textInput { name = REGEX.arg; size = "20"; required = true; value = pv }
-                      }
+//                      td {
+//                        val pv = params[REGEX.arg] ?: ""
+//                        textInput { name = REGEX.arg; size = "20"; required = true; value = pv }
+//                      }
                     }
 //                    tr {
 //                      td {  +"Offset:"  }
