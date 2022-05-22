@@ -80,14 +80,14 @@ task uberjar(type: Jar, dependsOn: shadowJar) {
 compileKotlin {
     kotlinOptions {
         jvmTarget = '11'
-        freeCompilerArgs += ['-Xbackend-threads=8']
+        freeCompilerArgs += ['-Xbackend-threads=1']
     }
 }
 
 compileTestKotlin {
     kotlinOptions {
         jvmTarget = '11'
-        freeCompilerArgs += ['-Xbackend-threads=8']
+        freeCompilerArgs += ['-Xbackend-threads=1']
     }
 }
 
