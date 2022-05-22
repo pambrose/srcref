@@ -109,7 +109,7 @@ fun main() {
                   method = FormMethod.get
                   table {
                     tr {
-                      td { label { +"Org Name/Username:" } }
+                      td { +"Org Name/Username:" }
                       td {
                         textInput {
                           name = ACCOUNT.arg; size = "20"; required = true; value = params[ACCOUNT.arg] ?: ""
@@ -117,21 +117,21 @@ fun main() {
                       }
                     }
                     tr {
-                      td { label { +"Repo Name:" } }
+                      td { +"Repo Name:" }
                       td { textInput { name = REPO.arg; size = "20"; required = true; value = params[REPO.arg] ?: "" } }
                     }
                     tr {
-                      td { label { +"Branch Name:" } }
+                      td { +"Branch Name:" }
                       val pv = (params[BRANCH.arg] ?: "").let { if (it.isBlank()) "master" else it }
                       td { textInput { name = BRANCH.arg; size = "20"; required = true; value = pv } }
                     }
                     tr {
-                      td { label { +"File Path:" } }
+                      td { +"File Path:" }
                       val pv = (params[PATH.arg] ?: "").let { if (it.isBlank()) "/src/main/kotlin/" else it }
                       td { textInput { name = PATH.arg; size = "70"; required = true; value = pv } }
                     }
                     tr {
-                      td { label { +"Match Expr:" } }
+                      td { +"Match Expr:" }
                       td {
                         textInput {
                           name = REGEX.arg; size = "20"; required = true; value = params[REGEX.arg] ?: ""
@@ -146,8 +146,8 @@ fun main() {
 //                    tr {
 //                      td { label { +"occurrence:" } }
 //                      td {
-//                        val p = (params[OCCURRENCE.arg] ?: "").let { if (it.isBlank()) "1" else it }
-//                        val isSelected = p.toInt()
+//                        val pv = (params[OCCURRENCE.arg] ?: "").let { if (it.isBlank()) "1" else it }
+//                        val isSelected = pv.toInt()
 //                        select {
 //                          name = OCCURRENCE.arg
 //                          size = "1"
@@ -168,8 +168,8 @@ fun main() {
 //                      td { label { +"Search Direction:" } }
 //                      td {
 //                        span {
-//                          val p = (params[TOPDOWN.arg] ?: "").let { if (it.isBlank()) "true" else it }
-//                          val isChecked = p.toBoolean()
+//                          val pv = (params[TOPDOWN.arg] ?: "").let { if (it.isBlank()) "true" else it }
+//                          val isChecked = pv.toBoolean()
 //                          style = "text-align:center"
 //                          radioInput { id = "topdown"; name = TOPDOWN.arg; value = "true"; checked = isChecked }
 //                          label {
