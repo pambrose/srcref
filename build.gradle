@@ -1,16 +1,40 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.7.0-RC'
+    id 'java'
     id 'application'
+    id 'org.jetbrains.kotlin.jvm' version '1.7.0-RC'
+    id "com.github.ben-manes.versions" version '0.42.0'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
-group = 'com.github.pambrose'
+group = 'com.srcref'
 version = '1.0-SNAPSHOT'
 
+def mainName = "SrcRefKt"
+
+application {
+    mainClassName = mainName
+}
+
 repositories {
+    google()
     mavenCentral()
+    maven { url = 'https://jitpack.io' }
 }
 
 dependencies {
+    implementation "io.ktor:ktor-server:$ktor_version"
+    implementation "io.ktor:ktor-server-cio:$ktor_version"
+    implementation "io.ktor:ktor-server-sessions:$ktor_version"
+    implementation "io.ktor:ktor-server-html-builder:$ktor_version"
+
+    implementation "org.jetbrains.kotlin-wrappers:kotlin-css:$css_version"
+
+    implementation "com.github.pambrose.common-utils:core-utils:$utils_version"
+    implementation "com.github.pambrose.common-utils:ktor-server-utils:$utils_version"
+
+    implementation "io.github.microutils:kotlin-logging:$logging_version"
+    implementation "ch.qos.logback:logback-classic:$logback_version"
+
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
 }
 
@@ -18,14 +42,47 @@ test {
     useJUnitPlatform()
 }
 
+task stage(dependsOn: ['uberjar', 'build', 'clean'])
+build.mustRunAfter clean
+
+shadowJar {
+    zip64 true
+    mergeServiceFiles()
+    exclude "META-INF/*.SF"
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+    exclude "LICENSE*"
+}
+
+task uberjar(type: Jar, dependsOn: shadowJar) {
+    zip64 true
+    archiveFileName = 'kslides.jar'
+    manifest {
+        attributes('Implementation-Title': 'kslides')
+        attributes('Implementation-Version': version)
+        attributes('Built-Date': new Date())
+        attributes('Built-JDK': System.getProperty('java.version'))
+        attributes('Main-Class': mainName)
+    }
+    from zipTree(shadowJar.archiveFile)
+}
+
 compileKotlin {
-    kotlinOptions.jvmTarget = '1.8'
+    kotlinOptions {
+        jvmTarget = '11'
+        freeCompilerArgs += ['-Xbackend-threads=8',
+                             //'-Xcontext-receivers',
+                             //'-Xskip-prerelease-check',
+        ]
+    }
 }
 
 compileTestKotlin {
-    kotlinOptions.jvmTarget = '1.8'
-}
-
-application {
-    mainClassName = 'MainKt'
+    kotlinOptions {
+        jvmTarget = '11'
+        freeCompilerArgs += ['-Xbackend-threads=8',
+                             //'-Xcontext-receivers',
+                             //'-Xskip-prerelease-check',
+        ]
+    }
 }
