@@ -1,7 +1,6 @@
 import QueryArgs.ACCOUNT
 import QueryArgs.BRANCH
 import QueryArgs.PATH
-import QueryArgs.REGEX
 import QueryArgs.REPO
 import SrcRef.githubRefUrl
 import SrcRef.githubref
@@ -130,21 +129,21 @@ fun main() {
                       val pv = (params[PATH.arg] ?: "").let { if (it.isBlank()) "/src/main/kotlin/" else it }
                       td { textInput { name = PATH.arg; size = "70"; required = true; value = pv } }
                     }
-                    tr {
-                      td { +"Match Expr:" }
-                      td {
-                        textInput {
-                          name = REGEX.arg; size = "20"; required = true; value = params[REGEX.arg] ?: ""
-                        }
-                      }
-                    }
 //                    tr {
-//                      td { label { +"Offset:" } }
+//                      td { +"Match Expr:" }
+//                      td {
+//                        textInput {
+//                          name = REGEX.arg; size = "20"; required = true; value = params[REGEX.arg] ?: ""
+//                        }
+//                      }
+//                    }
+//                    tr {
+//                      td {  +"Offset:"  }
 //                      val pv = (params[OFFSET.arg] ?: "").let { if (it.isBlank()) "0" else it }
 //                      td { textInput { name = OFFSET.arg; size = "10"; required = true; value = pv } }
 //                    }
 //                    tr {
-//                      td { label { +"occurrence:" } }
+//                      td {  +"occurrence:"  }
 //                      td {
 //                        val pv = (params[OCCURRENCE.arg] ?: "").let { if (it.isBlank()) "1" else it }
 //                        val isSelected = pv.toInt()
@@ -165,7 +164,7 @@ fun main() {
 //                      }
 //                    }
 //                    tr {
-//                      td { label { +"Search Direction:" } }
+//                      td {  +"Search Direction:" }
 //                      td {
 //                        span {
 //                          val pv = (params[TOPDOWN.arg] ?: "").let { if (it.isBlank()) "true" else it }
