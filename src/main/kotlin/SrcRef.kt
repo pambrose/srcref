@@ -59,7 +59,8 @@ fun main() {
                 }
                 script {
                   rawHtml("\n")
-                  +"""
+                  unsafe {
+                    """
                     function copyToClipboard(textToCopy) {
                         // navigator clipboard api needs a secure context (https)
                         if (navigator.clipboard && window.isSecureContext) {
@@ -91,6 +92,7 @@ fun main() {
                       //.then(() => alert("Copied the text: " + copyText.value));
                     }
                   """.trimIndent().prependIndent("\t\t")
+                  }
                   rawHtml("\n\t\t")
                 }
 
@@ -261,7 +263,7 @@ object SrcRef : KLogging() {
     return githubSourceUrl(account, repo, path, branch, linenum)
   }
 
-  private fun calcLineNumber(lines: List<String>, topDown: Boolean, pattern: String, occurence: Int, offset: Int) =
+  fun calcLineNumber(lines: List<String>, topDown: Boolean, pattern: String, occurence: Int, offset: Int) =
     try {
       val regex = Regex(pattern)
       ((if (topDown) lines else lines.asReversed())

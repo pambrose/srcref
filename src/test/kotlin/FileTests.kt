@@ -34,7 +34,6 @@ class FileTests : StringSpec(
       calcLineNumber(input, true, "bbb", 2, 1) shouldBe 6
       calcLineNumber(input, true, "bbb", 2, 2) shouldBe 7
 
-
       calcLineNumber(input, false, "aaa", 1, 0) shouldBe 3
       calcLineNumber(input, false, "aaa", 1, 1) shouldBe 4
       calcLineNumber(input, false, "aaa", 1, 2) shouldBe 5
