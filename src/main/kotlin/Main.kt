@@ -2,6 +2,7 @@ import QueryArgs.ACCOUNT
 import QueryArgs.BRANCH
 import QueryArgs.PATH
 import QueryArgs.REPO
+import QueryArgs.TOPDOWN
 import SrcRef.githubRefUrl
 import SrcRef.githubref
 import SrcRef.logger
@@ -161,22 +162,22 @@ fun main() {
 //                        }
 //                      }
 //                    }
-//                    tr {
-//                      td {  +"Search Direction:" }
-//                      td {
-//                        span {
-//                          val pv = (params[TOPDOWN.arg] ?: "").let { if (it.isBlank()) "true" else it }
-//                          val isChecked = pv.toBoolean()
-//                          style = "text-align:center"
-//                          radioInput { id = "topdown"; name = TOPDOWN.arg; value = "true"; checked = isChecked }
-//                          label {
-//                            htmlFor = "topdown"; +" Top-down "
-//                          }
-//                          radioInput { id = "bottomup"; name = TOPDOWN.arg; value = "false"; checked = !isChecked }
-//                          label { htmlFor = "bottomup"; +" Bottom-up " }
-//                        }
-//                      }
-//                    }
+                    tr {
+                      td { +"Search Direction:" }
+                      td {
+                        span {
+                          val pv = (params[TOPDOWN.arg] ?: "").let { if (it.isBlank()) "true" else it }
+                          val isChecked = pv.toBoolean()
+                          style = "text-align:center"
+                          radioInput { id = "topdown"; name = TOPDOWN.arg; value = "true"; checked = isChecked }
+                          label {
+                            htmlFor = "topdown"; +" Top-down "
+                          }
+                          radioInput { id = "bottomup"; name = TOPDOWN.arg; value = "false"; checked = !isChecked }
+                          label { htmlFor = "bottomup"; +" Bottom-up " }
+                        }
+                      }
+                    }
                     tr {
                       td { }
                       td {
