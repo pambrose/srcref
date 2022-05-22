@@ -6,7 +6,8 @@ import QueryArgs.PATH
 import QueryArgs.REGEX
 import QueryArgs.REPO
 import QueryArgs.TOPDOWN
-import SrcRef.calcLineNumber
+import SrcRef.getVals
+import SrcRef.githubRefUrl
 import SrcRef.logger
 import com.github.pambrose.common.response.*
 import com.github.pambrose.common.util.*
@@ -30,8 +31,7 @@ enum class QueryArgs {
 }
 
 fun main() {
-  val prefix = System.getenv("PREFIX") ?: "http://localhost:8080/"
-  val geturl = "getUrl"
+  val prefix = (System.getenv("PREFIX") ?: "http://localhost:8080").removeSuffix("/")
   val srcurl = "srcurl"
 
   embeddedServer(CIO, port = System.getenv("PORT")?.toInt() ?: 8080) {
@@ -55,6 +55,43 @@ fun main() {
                   name = "viewport"
                   content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
                 }
+                script {
+                  rawHtml("\n")
+                  +"""
+                    function copyToClipboard(textToCopy) {
+                        // navigator clipboard api needs a secure context (https)
+                        if (navigator.clipboard && window.isSecureContext) {
+                            // navigator clipboard api method'
+                            return navigator.clipboard.writeText(textToCopy);
+                        } else {
+                            // text area method
+                            let textArea = document.createElement("textarea");
+                            textArea.value = textToCopy;
+                            // make the textarea out of viewport
+                            textArea.style.position = "fixed";
+                            textArea.style.left = "-999999px";
+                            textArea.style.top = "-999999px";
+                            document.body.appendChild(textArea);
+                            textArea.focus();
+                            textArea.select();
+                            return new Promise((res, rej) => {
+                                // here the magic happens
+                                document.execCommand('copy') ? res() : rej();
+                                textArea.remove();
+                            });
+                        }
+                    }
+
+                    function copyUrl() {
+                      var copyText = document.getElementById("urlval");
+                      copyText.select();
+                      copyToClipboard(copyText.value);
+                      //.then(() => alert("Copied the text: " + copyText.value));
+                    }
+                  """.trimIndent().prependIndent("\t\t")
+                  rawHtml("\n\t\t")
+                }
+
                 rawHtml("\n")
                 style("text/css") {
                   media = "screen"
@@ -76,36 +113,37 @@ fun main() {
                   rawHtml("\n\t")
                 }
                 rawHtml("\n")
-
               }
               body {
+                val vals = getVals()
+
                 form {
-                  action = geturl
+                  action = "/"
                   method = FormMethod.get
                   table {
                     tr {
                       td { style = ""; label { +"GitHub Username or Org:" } }
-                      td { textInput { name = ACCOUNT.arg; size = "20" } }
+                      td { textInput { name = ACCOUNT.arg; size = "20"; value = vals[ACCOUNT.arg] ?: "" } }
                     }
                     tr {
                       td { style = ""; label { +"Repo Name:" } }
-                      td { textInput { name = REPO.arg; size = "20" } }
+                      td { textInput { name = REPO.arg; size = "20"; value = vals[REPO.arg] ?: "" } }
                     }
                     tr {
                       td { style = ""; label { +"Branch Name:" } }
-                      td { textInput { name = BRANCH.arg; size = "20"; value = "master" } }
+                      td { textInput { name = BRANCH.arg; size = "20"; value = vals[BRANCH.arg] ?: "master" } }
                     }
                     tr {
                       td { style = ""; label { +"File Path:" } }
-                      td { textInput { name = PATH.arg; size = "70"; value = "/src/main/kotlin/..." } }
+                      td { textInput { name = PATH.arg; size = "70"; value = vals[PATH.arg] ?: "/src/main/kotlin/" } }
                     }
                     tr {
                       td { style = ""; label { +"Match Expr:" } }
-                      td { textInput { name = REGEX.arg; size = "20" } }
+                      td { textInput { name = REGEX.arg; size = "20"; value = vals[REGEX.arg] ?: "" } }
                     }
                     tr {
                       td { style = ""; label { +"Offset:" } }
-                      td { textInput { name = OFFSET.arg; size = "10"; value = "0" } }
+                      td { textInput { name = OFFSET.arg; size = "10"; value = vals[OFFSET.arg] ?: "0" } }
                     }
                     tr {
                       td { style = ""; label { +"Occurence:" } }
@@ -113,16 +151,17 @@ fun main() {
                         select {
                           name = OCCURENCE.arg
                           size = "1"
-                          option { +" 1st "; value = "1" }
-                          option { +" 2nd "; value = "2" }
-                          option { +" 3rd "; value = "3" }
-                          option { +" 4th "; value = "4" }
-                          option { +" 5th "; value = "5" }
-                          option { +" 6th "; value = "6" }
-                          option { +" 7th "; value = "7" }
-                          option { +" 8th "; value = "8" }
-                          option { +" 9th "; value = "9" }
-                          option { +" 10th "; value = "10" }
+                          val isSelected = (vals[OCCURENCE.arg] ?: "1").toInt()
+                          option { +" 1st "; value = "1"; selected = isSelected == 1 }
+                          option { +" 2nd "; value = "2"; selected = isSelected == 2 }
+                          option { +" 3rd "; value = "3"; selected = isSelected == 3 }
+                          option { +" 4th "; value = "4"; selected = isSelected == 4 }
+                          option { +" 5th "; value = "5"; selected = isSelected == 5 }
+                          option { +" 6th "; value = "6"; selected = isSelected == 6 }
+                          option { +" 7th "; value = "7"; selected = isSelected == 7 }
+                          option { +" 8th "; value = "8"; selected = isSelected == 8 }
+                          option { +" 9th "; value = "9"; selected = isSelected == 9 }
+                          option { +" 10th "; value = "10"; selected = isSelected == 10 }
                         }
                       }
                     }
@@ -130,13 +169,14 @@ fun main() {
                       td { style = ""; label { +"Search Direction:" } }
                       td {
                         span {
+                          val isChecked = (vals[TOPDOWN.arg] ?: "true").toBoolean()
                           style = "text-align:center"
-                          radioInput { id = "topdown"; name = TOPDOWN.arg; value = "true"; checked = true }
+                          radioInput { id = "topdown"; name = TOPDOWN.arg; value = "true"; checked = isChecked }
                           label {
-                            htmlFor = "topdown"; +" Top Down "
+                            htmlFor = "topdown"; +" Top-down "
                           }
-                          radioInput { id = "bottomup"; name = TOPDOWN.arg; value = "false"; checked = false }
-                          label { htmlFor = "bottomup"; +" Bottom Up " }
+                          radioInput { id = "bottomup"; name = TOPDOWN.arg; value = "false"; checked = !isChecked }
+                          label { htmlFor = "bottomup"; +" Bottom-up " }
                         }
                       }
                     }
@@ -145,11 +185,28 @@ fun main() {
                       td {
                         style = "padding-top:10"
                         submitInput {
-                          style =
-                            "font-size:25px; height:35; width:  155; vertical-align:middle; margin-top:1; margin-bottom:0"
+                          style = "font-size:25px; height:35; vertical-align:middle;"
                           value = "Get URL"
                         }
                       }
+                    }
+                  }
+                }
+
+                if (vals.values.asSequence().filter { it.isNotBlank() }.any()) {
+                  val args = vals.map { (k, v) -> "$k=${v.encode()}" }.joinToString("&")
+                  val url = githubRefUrl(vals)//"$prefix/?$args"
+
+                  div {
+                    style = "padding-left: 25px;"
+                    br {}
+                    input { id = "urlval"; type = InputType.text; value = url; size = "95px" }
+                    p {}
+                    button { onClick = "copyUrl()"; +"Copy URL" }
+                    span { +" " }
+                    button(classes = "btn btn-success") {
+                      onClick = "window.open('$url','_blank')"
+                      +"Try it!"
                     }
                   }
                 }
@@ -159,59 +216,47 @@ fun main() {
         }
       }
 
-      fun PipelineContext<Unit, ApplicationCall>.getVals() =
-        mutableMapOf<String, String>()
-          .also {
-            QueryArgs
-              .values()
-              .map { it.arg }
-              .forEach { arg ->
-                it[arg] = call.request.queryParameters[arg] ?: ""
-              }
-          }
-
-      get(geturl) {
-        respondWith {
-          document {
-            append.html {
-              body {
-                val args = getVals().map { (k, v) -> "$k=${v.encode()}" }.joinToString("&")
-                val url = "$prefix$srcurl?$args"
-                p { +url }
-                a { href = url; target = "_blank"; +"Test URL" }
-              }
-            }
-          }.serialize()
-        }
-      }
-
       get(srcurl) {
         val vals = getVals().apply { forEach { (k, v) -> logger.info { "$k=$v" } } }
-
-        val account = vals[ACCOUNT.arg] ?: ""
-        val repo = vals[REPO.arg] ?: ""
-        val path = vals[PATH.arg] ?: ""
-        val branch = vals[BRANCH.arg] ?: ""
-
-        val url = githubRawUrl(account, repo, path, branch)
-        val lines = URL(url).readText().lines()
-
-        val linenum =
-          calcLineNumber(
-            lines,
-            vals[TOPDOWN.arg]?.toBoolean() ?: true,
-            vals[REGEX.arg] ?: "",
-            vals[OCCURENCE.arg]?.toInt() ?: 1,
-            vals[OFFSET.arg]?.toInt() ?: 0
-          )
-
-        redirectTo { githubSourceUrl(account, repo, path, branch, linenum) }
+        redirectTo { githubRefUrl(vals) }
       }
     }
   }.start(wait = true)
 }
 
 object SrcRef : KLogging() {
+
+  fun PipelineContext<Unit, ApplicationCall>.getVals() =
+    mutableMapOf<String, String>()
+      .also {
+        QueryArgs
+          .values()
+          .map { it.arg }
+          .forEach { arg ->
+            it[arg] = call.request.queryParameters[arg] ?: ""
+          }
+      }
+
+  fun githubRefUrl(vals: Map<String, String>): String {
+    val account = vals[ACCOUNT.arg] ?: ""
+    val repo = vals[REPO.arg] ?: ""
+    val path = vals[PATH.arg] ?: ""
+    val branch = vals[BRANCH.arg] ?: ""
+
+    val url = githubRawUrl(account, repo, path, branch)
+    val lines = URL(url).readText().lines()
+
+    val linenum =
+      calcLineNumber(
+        lines,
+        vals[TOPDOWN.arg]?.toBoolean() ?: true,
+        vals[REGEX.arg] ?: "",
+        vals[OCCURENCE.arg]?.toInt() ?: 1,
+        vals[OFFSET.arg]?.toInt() ?: 0
+      )
+    return githubSourceUrl(account, repo, path, branch, linenum)
+  }
+
   fun calcLineNumber(lines: List<String>, topDown: Boolean, pattern: String, occurence: Int, offset: Int) =
     try {
       val regex = Regex(pattern)
