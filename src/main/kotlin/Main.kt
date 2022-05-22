@@ -1,5 +1,8 @@
 import QueryArgs.ACCOUNT
+import QueryArgs.OCCURRENCE
+import QueryArgs.OFFSET
 import QueryArgs.REPO
+import QueryArgs.TOPDOWN
 import SrcRef.githubRefUrl
 import SrcRef.githubref
 import SrcRef.logger
@@ -135,48 +138,48 @@ fun main() {
 //                        }
 //                      }
 //                    }
-//                    tr {
-//                      td { style = ""; label { +"Offset:" } }
-//                      val p = (params[OFFSET.arg] ?: "").let { if (it.isBlank()) "0" else it }
-//                      td { textInput { name = OFFSET.arg; size = "10"; required = true; value = p } }
-//                    }
-//                    tr {
-//                      td { style = ""; label { +"occurrence:" } }
-//                      td {
-//                        val p = (params[OCCURRENCE.arg] ?: "").let { if (it.isBlank()) "1" else it }
-//                        val isSelected = p.toInt()
-//                        select {
-//                          name = OCCURRENCE.arg
-//                          size = "1"
-//                          option { +" 1st "; value = "1"; selected = isSelected == 1 }
-//                          option { +" 2nd "; value = "2"; selected = isSelected == 2 }
-//                          option { +" 3rd "; value = "3"; selected = isSelected == 3 }
-//                          option { +" 4th "; value = "4"; selected = isSelected == 4 }
-//                          option { +" 5th "; value = "5"; selected = isSelected == 5 }
-//                          option { +" 6th "; value = "6"; selected = isSelected == 6 }
-//                          option { +" 7th "; value = "7"; selected = isSelected == 7 }
-//                          option { +" 8th "; value = "8"; selected = isSelected == 8 }
-//                          option { +" 9th "; value = "9"; selected = isSelected == 9 }
-//                          option { +" 10th "; value = "10"; selected = isSelected == 10 }
-//                        }
-//                      }
-//                    }
-//                    tr {
-//                      td { style = ""; label { +"Search Direction:" } }
-//                      td {
-//                        span {
-//                          val p = (params[TOPDOWN.arg] ?: "").let { if (it.isBlank()) "true" else it }
-//                          val isChecked = p.toBoolean()
-//                          style = "text-align:center"
-//                          radioInput { id = "topdown"; name = TOPDOWN.arg; value = "true"; checked = isChecked }
-//                          label {
-//                            htmlFor = "topdown"; +" Top-down "
-//                          }
-//                          radioInput { id = "bottomup"; name = TOPDOWN.arg; value = "false"; checked = !isChecked }
-//                          label { htmlFor = "bottomup"; +" Bottom-up " }
-//                        }
-//                      }
-//                    }
+                    tr {
+                      td { style = ""; label { +"Offset:" } }
+                      val p = (params[OFFSET.arg] ?: "").let { if (it.isBlank()) "0" else it }
+                      td { textInput { name = OFFSET.arg; size = "10"; required = true; value = p } }
+                    }
+                    tr {
+                      td { style = ""; label { +"occurrence:" } }
+                      td {
+                        val p = (params[OCCURRENCE.arg] ?: "").let { if (it.isBlank()) "1" else it }
+                        val isSelected = p.toInt()
+                        select {
+                          name = OCCURRENCE.arg
+                          size = "1"
+                          option { +" 1st "; value = "1"; selected = isSelected == 1 }
+                          option { +" 2nd "; value = "2"; selected = isSelected == 2 }
+                          option { +" 3rd "; value = "3"; selected = isSelected == 3 }
+                          option { +" 4th "; value = "4"; selected = isSelected == 4 }
+                          option { +" 5th "; value = "5"; selected = isSelected == 5 }
+                          option { +" 6th "; value = "6"; selected = isSelected == 6 }
+                          option { +" 7th "; value = "7"; selected = isSelected == 7 }
+                          option { +" 8th "; value = "8"; selected = isSelected == 8 }
+                          option { +" 9th "; value = "9"; selected = isSelected == 9 }
+                          option { +" 10th "; value = "10"; selected = isSelected == 10 }
+                        }
+                      }
+                    }
+                    tr {
+                      td { style = ""; label { +"Search Direction:" } }
+                      td {
+                        span {
+                          val p = (params[TOPDOWN.arg] ?: "").let { if (it.isBlank()) "true" else it }
+                          val isChecked = p.toBoolean()
+                          style = "text-align:center"
+                          radioInput { id = "topdown"; name = TOPDOWN.arg; value = "true"; checked = isChecked }
+                          label {
+                            htmlFor = "topdown"; +" Top-down "
+                          }
+                          radioInput { id = "bottomup"; name = TOPDOWN.arg; value = "false"; checked = !isChecked }
+                          label { htmlFor = "bottomup"; +" Bottom-up " }
+                        }
+                      }
+                    }
                     tr {
                       td { }
                       td {
