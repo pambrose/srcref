@@ -10,7 +10,7 @@ plugins {
 group = 'com.srcref'
 version = '1.0-SNAPSHOT'
 
-def mainName = "SrcRefKt"
+def mainName = "MainKt"
 
 application {
     mainClassName = mainName
