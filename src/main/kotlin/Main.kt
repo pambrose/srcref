@@ -1,5 +1,7 @@
 import QueryArgs.ACCOUNT
 import QueryArgs.BRANCH
+import QueryArgs.PATH
+import QueryArgs.REGEX
 import QueryArgs.REPO
 import SrcRef.githubRefUrl
 import SrcRef.githubref
@@ -120,26 +122,26 @@ fun main() {
                     }
                     tr {
                       td { label { +"Branch Name:" } }
-                      val p = (params[BRANCH.arg] ?: "").let { if (it.isBlank()) "master" else it }
-                      td { textInput { name = BRANCH.arg; size = "20"; required = true; value = p } }
+                      val pv = (params[BRANCH.arg] ?: "").let { if (it.isBlank()) "master" else it }
+                      td { textInput { name = BRANCH.arg; size = "20"; required = true; value = pv } }
+                    }
+                    tr {
+                      td { label { +"File Path:" } }
+                      val pv = (params[PATH.arg] ?: "").let { if (it.isBlank()) "/src/main/kotlin/" else it }
+                      td { textInput { name = PATH.arg; size = "70"; required = true; value = pv } }
+                    }
+                    tr {
+                      td { label { +"Match Expr:" } }
+                      td {
+                        textInput {
+                          name = REGEX.arg; size = "20"; required = true; value = params[REGEX.arg] ?: ""
+                        }
+                      }
                     }
 //                    tr {
-//                      td { label { +"File Path:" } }
-//                      val p = (params[PATH.arg] ?: "").let { if (it.isBlank()) "/src/main/kotlin/" else it }
-//                      td { textInput { name = PATH.arg; size = "70"; required = true; value = p } }
-//                    }
-//                    tr {
-//                      td { label { +"Match Expr:" } }
-//                      td {
-//                        textInput {
-//                          name = REGEX.arg; size = "20"; required = true; value = params[REGEX.arg] ?: ""
-//                        }
-//                      }
-//                    }
-//                    tr {
 //                      td { label { +"Offset:" } }
-//                      val p = (params[OFFSET.arg] ?: "").let { if (it.isBlank()) "0" else it }
-//                      td { textInput { name = OFFSET.arg; size = "10"; required = true; value = p } }
+//                      val pv = (params[OFFSET.arg] ?: "").let { if (it.isBlank()) "0" else it }
+//                      td { textInput { name = OFFSET.arg; size = "10"; required = true; value = pv } }
 //                    }
 //                    tr {
 //                      td { label { +"occurrence:" } }
