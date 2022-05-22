@@ -122,7 +122,7 @@ fun main() {
                   method = FormMethod.get
                   table {
                     tr {
-                      td { style = ""; label { +"GitHub Username or Org:" } }
+                      td { style = ""; label { +"Org Name/Username:" } }
                       td { textInput { name = ACCOUNT.arg; size = "20"; value = vals[ACCOUNT.arg] ?: "" } }
                     }
                     tr {
