@@ -1,8 +1,8 @@
 import QueryArgs.ACCOUNT
 import QueryArgs.BRANCH
 import QueryArgs.PATH
+import QueryArgs.REGEX
 import QueryArgs.REPO
-import QueryArgs.TOPDOWN
 import SrcRef.githubRefUrl
 import SrcRef.githubref
 import SrcRef.logger
@@ -130,12 +130,13 @@ fun main() {
                       val pv = (params[PATH.arg] ?: "").let { if (it.isBlank()) "/src/main/kotlin/" else it }
                       td { textInput { name = PATH.arg; size = "70"; required = true; value = pv } }
                     }
-//                    tr {
-//                      td { +"Match Expr:" }
-//                      td {
-//                        textInput { name = REGEX.arg; size = "20"; required = true; value = params[REGEX.arg] ?: "" }
-//                      }
-//                    }
+                    tr {
+                      td { +"Match Expr:" }
+                      td {
+                        val pv = params[REGEX.arg] ?: ""
+                        textInput { name = REGEX.arg; size = "20"; required = true; value = pv }
+                      }
+                    }
 //                    tr {
 //                      td {  +"Offset:"  }
 //                      val pv = (params[OFFSET.arg] ?: "").let { if (it.isBlank()) "0" else it }
@@ -162,22 +163,22 @@ fun main() {
 //                        }
 //                      }
 //                    }
-                    tr {
-                      td { +"Search Direction:" }
-                      td {
-                        span {
-                          val pv = (params[TOPDOWN.arg] ?: "").let { if (it.isBlank()) "true" else it }
-                          val isChecked = pv.toBoolean()
-                          style = "text-align:center"
-                          radioInput { id = "topdown"; name = TOPDOWN.arg; value = "true"; checked = isChecked }
-                          label {
-                            htmlFor = "topdown"; +" Top-down "
-                          }
-                          radioInput { id = "bottomup"; name = TOPDOWN.arg; value = "false"; checked = !isChecked }
-                          label { htmlFor = "bottomup"; +" Bottom-up " }
-                        }
-                      }
-                    }
+//                    tr {
+//                      td {  +"Search Direction:" }
+//                      td {
+//                        span {
+//                          val pv = (params[TOPDOWN.arg] ?: "").let { if (it.isBlank()) "true" else it }
+//                          val isChecked = pv.toBoolean()
+//                          style = "text-align:center"
+//                          radioInput { id = "topdown"; name = TOPDOWN.arg; value = "true"; checked = isChecked }
+//                          label {
+//                            htmlFor = "topdown"; +" Top-down "
+//                          }
+//                          radioInput { id = "bottomup"; name = TOPDOWN.arg; value = "false"; checked = !isChecked }
+//                          label { htmlFor = "bottomup"; +" Bottom-up " }
+//                        }
+//                      }
+//                    }
                     tr {
                       td { }
                       td {
