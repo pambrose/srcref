@@ -37,73 +37,73 @@ fun main() {
         respondWith {
           document {
             append.html {
-              head {
-                meta { charset = "utf-8" }
-                meta { name = "apple-mobile-web-app-capable"; content = "yes" }
-                meta { name = "apple-mobile-web-app-status-bar-style"; content = "black-translucent" }
-                meta {
-                  name = "viewport"
-                  content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-                }
-                script {
-                  rawHtml("\n")
-                  +"""
-                    function copyToClipboard(textToCopy) {
-                        // navigator clipboard api needs a secure context (https)
-                        if (navigator.clipboard && window.isSecureContext) {
-                            // navigator clipboard api method'
-                            return navigator.clipboard.writeText(textToCopy);
-                        } else {
-                            // text area method
-                            let textArea = document.createElement("textarea");
-                            textArea.value = textToCopy;
-                            // make the textarea out of viewport
-                            textArea.style.position = "fixed";
-                            textArea.style.left = "-999999px";
-                            textArea.style.top = "-999999px";
-                            document.body.appendChild(textArea);
-                            textArea.focus();
-                            textArea.select();
-                            return new Promise((res, rej) => {
-                                // here the magic happens
-                                document.execCommand('copy') ? res() : rej();
-                                textArea.remove();
-                            });
-                        }
-                    }
-
-                    function copyUrl() {
-                      var copyText = document.getElementById("urlval");
-                      copyText.select();
-                      copyToClipboard(copyText.value);
-                      //.then(() => alert("Copied the text: " + copyText.value));
-                    }
-                  """.trimIndent().prependIndent("\t\t")
-                  rawHtml("\n\t\t")
-                }
-
-                rawHtml("\n")
-                style("text/css") {
-                  media = "screen"
-                  rawHtml("\n")
-                  +"""
-                    form {
-                      padding: 25px;
-                    }
-                    
-                    table {
-                        border-collapse: collapse;
-                        border: 2px solid black;
-                    }
-
-                    td {
-                      padding: 5px;
-                    }
-                  """.trimIndent().prependIndent("\t\t")
-                  rawHtml("\n\t")
-                }
-                rawHtml("\n")
-              }
+//              head {
+//                meta { charset = "utf-8" }
+//                meta { name = "apple-mobile-web-app-capable"; content = "yes" }
+//                meta { name = "apple-mobile-web-app-status-bar-style"; content = "black-translucent" }
+//                meta {
+//                  name = "viewport"
+//                  content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+//                }
+//                script {
+//                  rawHtml("\n")
+//                  +"""
+//                    function copyToClipboard(textToCopy) {
+//                        // navigator clipboard api needs a secure context (https)
+//                        if (navigator.clipboard && window.isSecureContext) {
+//                            // navigator clipboard api method'
+//                            return navigator.clipboard.writeText(textToCopy);
+//                        } else {
+//                            // text area method
+//                            let textArea = document.createElement("textarea");
+//                            textArea.value = textToCopy;
+//                            // make the textarea out of viewport
+//                            textArea.style.position = "fixed";
+//                            textArea.style.left = "-999999px";
+//                            textArea.style.top = "-999999px";
+//                            document.body.appendChild(textArea);
+//                            textArea.focus();
+//                            textArea.select();
+//                            return new Promise((res, rej) => {
+//                                // here the magic happens
+//                                document.execCommand('copy') ? res() : rej();
+//                                textArea.remove();
+//                            });
+//                        }
+//                    }
+//
+//                    function copyUrl() {
+//                      var copyText = document.getElementById("urlval");
+//                      copyText.select();
+//                      copyToClipboard(copyText.value);
+//                      //.then(() => alert("Copied the text: " + copyText.value));
+//                    }
+//                  """.trimIndent().prependIndent("\t\t")
+//                  rawHtml("\n\t\t")
+//                }
+//
+//                rawHtml("\n")
+//                style("text/css") {
+//                  media = "screen"
+//                  rawHtml("\n")
+//                  +"""
+//                    form {
+//                      padding: 25px;
+//                    }
+//
+//                    table {
+//                        border-collapse: collapse;
+//                        border: 2px solid black;
+//                    }
+//
+//                    td {
+//                      padding: 5px;
+//                    }
+//                  """.trimIndent().prependIndent("\t\t")
+//                  rawHtml("\n\t")
+//                }
+//                rawHtml("\n")
+//              }
               body {
                 val params = queryParams
 

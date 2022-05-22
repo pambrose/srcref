@@ -84,4 +84,3 @@ enum class QueryArgs {
 
   val arg get() = name.lowercase()
 }
-
