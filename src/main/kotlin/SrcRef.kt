@@ -1,11 +1,13 @@
-import Args.ACCOUNT
-import Args.BRANCH
-import Args.DIRECTION
-import Args.OCCURENCE
-import Args.OFFSET
-import Args.PATH
-import Args.REGEX
-import Args.REPO
+import QueryArgs.ACCOUNT
+import QueryArgs.BRANCH
+import QueryArgs.OCCURENCE
+import QueryArgs.OFFSET
+import QueryArgs.PATH
+import QueryArgs.REGEX
+import QueryArgs.REPO
+import QueryArgs.TOPDOWN
+import Target.calcLineNumber
+import Target.logger
 import com.github.pambrose.common.response.*
 import com.github.pambrose.common.util.*
 import io.ktor.server.application.*
@@ -18,17 +20,19 @@ import io.ktor.server.routing.*
 import io.ktor.util.pipeline.*
 import kotlinx.html.*
 import kotlinx.html.dom.*
+import mu.*
 import java.net.*
 
-enum class Args {
-  ACCOUNT, REPO, BRANCH, PATH, REGEX, OFFSET, OCCURENCE, DIRECTION;
+enum class QueryArgs {
+  ACCOUNT, REPO, BRANCH, PATH, REGEX, OFFSET, OCCURENCE, TOPDOWN;
 
-  val asArg get() = name.lowercase()
+  val arg get() = name.lowercase()
 }
 
 fun main() {
-
-
+  val geturl = "getUrl"
+  val prefix = "http://localhost:8080/"
+  val srcurl = "srcurl"
   embeddedServer(CIO, port = System.getenv("PORT")?.toInt() ?: 8080) {
     install(CallLogging)
     install(DefaultHeaders) { header("X-Engine", "Ktor") }
@@ -37,7 +41,6 @@ fun main() {
       deflate { priority = 10.0; minimumSize(1024) /* condition*/ }
     }
 
-
     routing {
       get("/") {
         respondWith {
@@ -45,44 +48,49 @@ fun main() {
             append.html {
               body {
                 form {
-                  action = "deriveUrl"
+                  action = geturl
                   method = FormMethod.get
                   table {
                     tr {
                       td { style = ""; label { +"GitHub Username or Org:" } }
-                      td { textInput { name = ACCOUNT.asArg; size = "20" } }
+                      td { textInput { name = ACCOUNT.arg; size = "20" } }
                     }
                     tr {
                       td { style = ""; label { +"Repo Name:" } }
-                      td { textInput { name = REPO.asArg; size = "20" } }
+                      td { textInput { name = REPO.arg; size = "20" } }
                     }
                     tr {
                       td { style = ""; label { +"Git Branch:" } }
-                      td { textInput { name = BRANCH.asArg; size = "20"; value = "master" } }
+                      td { textInput { name = BRANCH.arg; size = "20"; value = "master" } }
                     }
                     tr {
                       td { style = ""; label { +"File Path:" } }
-                      td { textInput { name = PATH.asArg; size = "70"; value = "/src/main/kotlin/..." } }
+                      td { textInput { name = PATH.arg; size = "70"; value = "/src/main/kotlin/..." } }
                     }
                     tr {
                       td { style = ""; label { +"Match Expr:" } }
-                      td { textInput { name = REGEX.asArg; size = "20" } }
+                      td { textInput { name = REGEX.arg; size = "20" } }
                     }
                     tr {
                       td { style = ""; label { +"Offset:" } }
-                      td { textInput { name = OFFSET.asArg; size = "10"; value = "0" } }
+                      td { textInput { name = OFFSET.arg; size = "10"; value = "0" } }
                     }
                     tr {
                       td { style = ""; label { +"Occurence:" } }
                       td {
                         select {
-                          name = OCCURENCE.asArg
+                          name = OCCURENCE.arg
                           size = "1"
                           option { +" 1st "; value = "1" }
                           option { +" 2nd "; value = "2" }
                           option { +" 3rd "; value = "3" }
                           option { +" 4th "; value = "4" }
                           option { +" 5th "; value = "5" }
+                          option { +" 6th "; value = "6" }
+                          option { +" 7th "; value = "7" }
+                          option { +" 8th "; value = "8" }
+                          option { +" 9th "; value = "9" }
+                          option { +" 10th "; value = "10" }
                         }
                       }
                     }
@@ -93,7 +101,7 @@ fun main() {
                           style = "text-align:center"
                           radioInput {
                             id = "topdown"
-                            name = DIRECTION.asArg
+                            name = TOPDOWN.arg
                             value = "true"
                             checked = true
                           }
@@ -103,7 +111,7 @@ fun main() {
                           }
                           radioInput {
                             id = "bottomup"
-                            name = DIRECTION.asArg
+                            name = TOPDOWN.arg
                             value = "false"
                             checked = false
                           }
@@ -135,21 +143,21 @@ fun main() {
       fun PipelineContext<Unit, ApplicationCall>.getVals() =
         mutableMapOf<String, String>()
           .also {
-            Args
+            QueryArgs
               .values()
-              .map { it.asArg }
+              .map { it.arg }
               .forEach { arg ->
                 it[arg] = call.request.queryParameters[arg] ?: ""
               }
           }
 
-      get("deriveUrl") {
+      get(geturl) {
         respondWith {
           document {
             append.html {
               body {
                 val args = getVals().map { (k, v) -> "$k=${v.encode()}" }.joinToString("&")
-                val url = "http://localhost:8080/src?$args"
+                val url = "$prefix$srcurl?$args"
                 a { href = url; target = "_blank"; +"Test URL" }
               }
             }
@@ -157,38 +165,48 @@ fun main() {
         }
       }
 
-      get("src") {
-        val vals = getVals().apply { forEach { (k, v) -> println("$k=$v") } }
+      get(srcurl) {
+        val vals = getVals().apply { forEach { (k, v) -> logger.info { "$k=$v" } } }
 
-        val url = githubRawUrl(
-          vals[ACCOUNT.asArg] ?: "",
-          vals[REPO.asArg] ?: "",
-          vals[PATH.asArg] ?: "",
-          vals[BRANCH.asArg] ?: ""
-        )
-        val topDown = vals[DIRECTION.asArg]?.toBoolean() ?: true
-        val lines = URL(url).readText().lines().let { if (topDown) it else it.asReversed() }
+        val account = vals[ACCOUNT.arg] ?: ""
+        val repo = vals[REPO.arg] ?: ""
+        val path = vals[PATH.arg] ?: ""
+        val branch = vals[BRANCH.arg] ?: ""
 
-        val account = vals[ACCOUNT.asArg] ?: ""
-        val repo = vals[REPO.asArg] ?: ""
-        val path = vals[PATH.asArg] ?: ""
-        val branch = vals[BRANCH.asArg] ?: ""
-        val regex = Regex(vals[REGEX.asArg] ?: "")
-        val occurence = vals[OCCURENCE.asArg]?.toInt() ?: 1
-        val offset = vals[OFFSET.asArg]?.toInt() ?: 0
+        val url = githubRawUrl(account, repo, path, branch)
+        val lines = URL(url).readText().lines()
 
         val linenum =
-          (lines
-            .asSequence()
-            .mapIndexed { index, s -> index to s.contains(regex) }
-            .filter { it.second }
-            .take(occurence)
-            .first().first) + offset + 1
+          calcLineNumber(
+            lines,
+            vals[TOPDOWN.arg]?.toBoolean() ?: true,
+            vals[REGEX.arg] ?: "",
+            vals[OCCURENCE.arg]?.toInt() ?: 1,
+            vals[OFFSET.arg]?.toInt() ?: 0
+          )
 
         redirectTo { githubSourceUrl(account, repo, path, branch, linenum) }
       }
     }
   }.start(wait = true)
+}
+
+object Target : KLogging() {
+  fun calcLineNumber(rawLines: List<String>, topDown: Boolean, pattern: String, occurence: Int, offset: Int) =
+    try {
+      val lines = if (topDown) rawLines else rawLines.asReversed()
+      val cnt = lines.size
+      val regex = Regex(pattern)
+      (lines
+        .asSequence()
+        .mapIndexed { index, s -> (if (topDown) index else (cnt - index - 1)) to s.contains(regex) }
+        .filter { it.second }
+        .drop(occurence - 1)
+        .first().first) + offset + 1
+    } catch (e: Throwable) {
+      logger.info(e) { "Error in calcLineNumber()" }
+      1
+    }
 }
 
 fun githubSourceUrl(
