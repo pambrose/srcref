@@ -11,6 +11,7 @@ import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.compression.*
 import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.routing.*
+import io.ktor.util.pipeline.*
 
 fun main() {
   embeddedServer(CIO, port = System.getenv("PORT")?.toInt() ?: 8080) {
@@ -33,3 +34,5 @@ fun main() {
     }
   }.start(wait = true)
 }
+
+typealias PipelineCall = PipelineContext<Unit, ApplicationCall>

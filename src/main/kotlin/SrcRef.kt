@@ -7,8 +7,6 @@ import QueryArgs.REGEX
 import QueryArgs.REPO
 import QueryArgs.TOPDOWN
 import io.ktor.server.application.*
-import io.ktor.util.pipeline.*
-import kotlinx.html.*
 import mu.*
 import java.net.*
 import kotlin.collections.set
@@ -17,7 +15,7 @@ object SrcRef : KLogging() {
   const val githubref = "githubRef"
   val urlPrefix = (System.getenv("PREFIX") ?: "http://localhost:8080").removeSuffix("/")
 
-  val PipelineContext<Unit, ApplicationCall>.queryParams
+  val PipelineCall.queryParams
     get() =
       mutableMapOf<String, String>()
         .also {
@@ -76,8 +74,6 @@ object SrcRef : KLogging() {
   private fun githubRawUrl(username: String, repoName: String, path: String = "", branchName: String = "master") =
     "https://raw.githubusercontent.com/$username/$repoName/$branchName/$path"
 }
-
-fun HTMLTag.rawHtml(html: String) = unsafe { raw(html) }
 
 enum class QueryArgs {
   ACCOUNT, REPO, BRANCH, PATH, REGEX, OFFSET, OCCURRENCE, TOPDOWN;
