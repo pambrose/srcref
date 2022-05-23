@@ -34,6 +34,6 @@ but you can run your own instance as well.
 ### Misc
 
 * The regex parameter uses [this syntax](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html).
-* Add `&edit=true` to an existing _srcref_ URL to edit it.
+* Add `&edit` to an existing _srcref_ URL to edit it.
 * If you deploy your own version of _srcref_, use the `PREFIX` environment variable to specify URL prefix.
 
