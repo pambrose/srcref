@@ -4,8 +4,8 @@ enum class QueryArgs(val defaultValue: String = "") {
   BRANCH("master"),
   PATH("/src/main/kotlin/"),
   REGEX,
-  OFFSET("0"),
   OCCURRENCE("1"),
+  OFFSET("0"),
   TOPDOWN("true");
 
   val arg get() = name.lowercase()

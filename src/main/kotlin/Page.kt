@@ -81,6 +81,24 @@ object Page {
                 td {
                   padding: 5px;
                 }
+
+                a.top-right {
+                  position: absolute;
+                  z-index: 1;
+                  width: clamp(50px, 8vmax, 80px);
+                  line-height: 0;
+                  color: rgba(255, 255, 255, 0.5);
+                  top: 15px;
+                  right: 15px;
+                }
+                
+                a.top-right path {
+                  fill: #258bd2;
+                }
+                
+                a.top-right:hover {
+                  color: white;
+                }
               """.trimIndent().prependIndent("\t\t")
               rawHtml("\n\t")
             }
@@ -89,10 +107,22 @@ object Page {
           }
           body {
 
+            a(href = "https://github.com/pambrose/srcref", target = "_blank", classes = "top-right") {
+              title = "View source on GitHub"
+              rawHtml(
+                """
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 55 55">
+                    <path fill="currentColor" stroke="none" d="M27.5 11.2a16.3 16.3 0 0 0-5.1 31.7c.8.2 1.1-.3 1.1-.7v-2.8c-4.5 1-5.5-2.2-5.5-2.2-.7-1.9-1.8-2.4-1.8-2.4-1.5-1 .1-1 .1-1 1.6.1 2.5 1.7 2.5 1.7 1.5 2.5 3.8 1.8 4.7 1.4.2-1 .6-1.8 1-2.2-3.5-.4-7.3-1.8-7.3-8 0-1.8.6-3.3 1.6-4.4-.1-.5-.7-2.1.2-4.4 0 0 1.4-.4 4.5 1.7a15.6 15.6 0 0 1 8.1 0c3.1-2 4.5-1.7 4.5-1.7.9 2.3.3 4 .2 4.4 1 1 1.6 2.6 1.6 4.3 0 6.3-3.8 7.7-7.4 8 .6.6 1.1 1.6 1.1 3v4.6c0 .4.3.9 1.1.7a16.3 16.3 0 0 0-5.2-31.7"></path>
+                  </svg>
+                """
+              )
+            }
+
             div {
-              style = "padding-left: 25px;"
+              style = "padding-left: 25px; padding-top: 25px;"
               h2 { +"srcref - Dynamic GitHub Permalinks" }
             }
+
             form {
               action = "/"
               method = FormMethod.get
@@ -130,12 +160,6 @@ object Page {
                   }
                 }
                 tr {
-                  td { +"Offset:" }
-                  td {
-                    textInput { name = OFFSET.arg; size = "10"; required = true; value = OFFSET.defaultIfNull(params) }
-                  }
-                }
-                tr {
                   td { +"Occurrence:" }
                   td {
                     val isSelected = OCCURRENCE.defaultIfBlank(params).toInt()
@@ -153,6 +177,12 @@ object Page {
                       option { +" 9th "; value = "9"; selected = isSelected == 9 }
                       option { +" 10th "; value = "10"; selected = isSelected == 10 }
                     }
+                  }
+                }
+                tr {
+                  td { +"Offset:" }
+                  td {
+                    textInput { name = OFFSET.arg; size = "10"; required = true; value = OFFSET.defaultIfNull(params) }
                   }
                 }
                 tr {
@@ -176,7 +206,7 @@ object Page {
                     style = "padding-top:10"
                     submitInput {
                       style = "font-size:25px; height:35; vertical-align:middle;"
-                      value = "Get URL"
+                      value = "Generate URL"
                     }
                   }
                 }
@@ -195,16 +225,16 @@ object Page {
               div {
                 style = "padding-left: 25px;"
                 br {}
-                p { +"This URL:" }
+                p { +"Embed this URL in your docs:" }
                 textArea { id = "urlval"; rows = "3"; +url; cols = "91"; readonly = true }
-                p { +"will redirect to:" }
+                p { +"to reach this GitHub page:" }
                 textArea { id = "ghurlval"; rows = "2"; +ghurl; cols = "91"; readonly = true }
                 p {}
                 button { onClick = "copyUrl()"; +"Copy URL" }
                 span { +" " }
                 button(classes = "btn btn-success") {
                   onClick = "window.open('$url','_blank')"
-                  +"Try it!"
+                  +"View Permalink"
                 }
               }
             }
