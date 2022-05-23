@@ -120,7 +120,7 @@ object Page {
 
             div {
               style = "padding-left: 25px; padding-top: 25px;"
-              h2 { +"srcref - Dynamic GitHub Permalinks" }
+              h2 { +"srcref - Dynamic Line-Specific GitHub Permalinks" }
             }
 
             form {

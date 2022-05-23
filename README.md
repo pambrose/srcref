@@ -1,7 +1,7 @@
-# srcref - Dynamic GitHub Permalinks
+# srcref - Dynamic Line-Specific GitHub Permalinks
 
-It is sometimes problematic to embed GitHub permalinks (references to specific lines of code)
-in docs because the permalinks are not updated when the referenced code is changed.
+It is problematic to embed GitHub permalinks with line references
+in documentation because the line values are not updated when the file contents are changed.
 
 _srcref_ is a simple utility that allows you to embed GitHub permalinks into your
 docs without worrying about the line numbers of the code changing.
