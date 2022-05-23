@@ -48,7 +48,6 @@ object Page {
                         textArea.focus();
                         textArea.select();
                         return new Promise((res, rej) => {
-                            // here the magic happens
                             document.execCommand('copy') ? res() : rej();
                             textArea.remove();
                         });
@@ -70,19 +69,19 @@ object Page {
               media = "screen"
               rawHtml("\n")
               +"""
-                    form {
-                      padding: 25px;
-                    }
-                    
-                    table {
-                        border-collapse: collapse;
-                        border: 2px solid black;
-                    }
+                form {
+                  padding: 25px;
+                }
+                
+                table {
+                    border-collapse: collapse;
+                    border: 2px solid black;
+                }
 
-                    td {
-                      padding: 5px;
-                    }
-                  """.trimIndent().prependIndent("\t\t")
+                td {
+                  padding: 5px;
+                }
+              """.trimIndent().prependIndent("\t\t")
               rawHtml("\n\t")
             }
             rawHtml("\n")
@@ -98,40 +97,44 @@ object Page {
                   td { +"Org Name/Username:" }
                   td {
                     textInput {
-                      name = ACCOUNT.arg; size = "20"; required = true; value = params[ACCOUNT.arg] ?: ""
+                      name = ACCOUNT.arg; size = "20"; required = true; value = ACCOUNT.defaultIfNull(params)
                     }
                   }
                 }
                 tr {
                   td { +"Repo Name:" }
-                  td { textInput { name = REPO.arg; size = "20"; required = true; value = params[REPO.arg] ?: "" } }
+                  td {
+                    textInput { name = REPO.arg; size = "20"; required = true; value = REPO.defaultIfNull(params) }
+                  }
                 }
                 tr {
                   td { +"Branch Name:" }
-                  val pv = (params[BRANCH.arg] ?: "").let { if (it.isBlank()) "master" else it }
-                  td { textInput { name = BRANCH.arg; size = "20"; required = true; value = pv } }
+                  td {
+                    textInput { name = BRANCH.arg; size = "20"; required = true; value = BRANCH.defaultIfNull(params) }
+                  }
                 }
                 tr {
                   td { +"File Path:" }
-                  val pv = (params[PATH.arg] ?: "").let { if (it.isBlank()) "/src/main/kotlin/" else it }
-                  td { textInput { name = PATH.arg; size = "70"; required = true; value = pv } }
+                  td {
+                    textInput { name = PATH.arg; size = "70"; required = true; value = PATH.defaultIfNull(params) }
+                  }
                 }
                 tr {
                   td { +"Match Expr:" }
                   td {
-                    textInput { name = REGEX.arg; size = "20"; required = true; value = params[REGEX.arg] ?: "" }
+                    textInput { name = REGEX.arg; size = "20"; required = true; value = REGEX.defaultIfNull(params) }
                   }
                 }
                 tr {
                   td { +"Offset:" }
-                  val pv = (params[OFFSET.arg] ?: "").let { if (it.isBlank()) "0" else it }
-                  td { textInput { name = OFFSET.arg; size = "10"; required = true; value = pv } }
+                  td {
+                    textInput { name = OFFSET.arg; size = "10"; required = true; value = OFFSET.defaultIfNull(params) }
+                  }
                 }
                 tr {
-                  td { +"occurrence:" }
+                  td { +"Occurrence:" }
                   td {
-                    val pv = (params[OCCURRENCE.arg] ?: "").let { if (it.isBlank()) "1" else it }
-                    val isSelected = pv.toInt()
+                    val isSelected = OCCURRENCE.defaultIfBlank(params).toInt()
                     select {
                       name = OCCURRENCE.arg
                       size = "1"
@@ -152,8 +155,7 @@ object Page {
                   td { +"Search Direction:" }
                   td {
                     span {
-                      val pv = (params[TOPDOWN.arg] ?: "").let { if (it.isBlank()) "true" else it }
-                      val isChecked = pv.toBoolean()
+                      val isChecked = TOPDOWN.defaultIfBlank(params).toBoolean()
                       style = "text-align:center"
                       radioInput { id = "topdown"; name = TOPDOWN.arg; value = "true"; checked = isChecked }
                       label {
@@ -177,8 +179,12 @@ object Page {
               }
             }
 
-            if (params.values.asSequence().filter { it.isNotBlank() }.any()) {
-              val args = params.map { (k, v) -> "$k=${v.encode()}" }.joinToString("&")
+            if (params.values.asSequence().filter { it?.isNotBlank() ?: false }.any()) {
+              val args =
+                params
+                  .map { (k, v) -> if (v.isNotNull()) "$k=${v.encode()}" else "" }
+                  .filter { it.isNotBlank() }
+                  .joinToString("&")
               val url = "$urlPrefix/$githubref?$args"
               val ghurl = githubRefUrl(params)
 

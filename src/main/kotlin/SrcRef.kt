@@ -17,35 +17,36 @@ object SrcRef : KLogging() {
 
   val PipelineCall.queryParams
     get() =
-      mutableMapOf<String, String>()
+      mutableMapOf<String, String?>()
         .also {
           QueryArgs
             .values()
             .map { it.arg }
             .forEach { arg ->
-              it[arg] = call.request.queryParameters[arg] ?: ""
+              it[arg] = call.request.queryParameters[arg]
             }
         }
 
-  fun githubRefUrl(params: Map<String, String>) =
+  fun githubRefUrl(params: Map<String, String?>) =
     try {
-      val account = params[ACCOUNT.arg] ?: throw IllegalArgumentException()
-      val repo = params[REPO.arg] ?: throw IllegalArgumentException()
-      val path = params[PATH.arg] ?: throw IllegalArgumentException()
-      val branch = params[BRANCH.arg] ?: throw IllegalArgumentException()
+      val account = ACCOUNT.required(params)
+      val repo = REPO.required(params)
+      val path = PATH.required(params)
+      val branch = BRANCH.required(params)
       val url = githubRawUrl(account, repo, path, branch)
+
       val lines = URL(url).readText().lines()
       val linenum =
         calcLineNumber(
           lines,
-          params[TOPDOWN.arg]?.toBoolean() ?: true,
-          params[REGEX.arg] ?: "",
-          params[OCCURRENCE.arg]?.toInt() ?: 1,
-          params[OFFSET.arg]?.toInt() ?: 0
+          TOPDOWN.defaultIfNull(params).toBoolean(),
+          REGEX.required(params),
+          OCCURRENCE.defaultIfNull(params).toInt(),
+          OFFSET.defaultIfNull(params).toInt()
         )
       githubSourceUrl(account, repo, path, branch, linenum)
     } catch (e: Throwable) {
-      "Invalid"
+      "Invalid inputs: ${e.message}"
     }
 
   fun calcLineNumber(lines: List<String>, topDown: Boolean, pattern: String, occurrence: Int, offset: Int) =
@@ -75,8 +76,22 @@ object SrcRef : KLogging() {
     "https://raw.githubusercontent.com/$username/$repoName/$branchName/$path"
 }
 
-enum class QueryArgs {
-  ACCOUNT, REPO, BRANCH, PATH, REGEX, OFFSET, OCCURRENCE, TOPDOWN;
+enum class QueryArgs(val defaultValue: String = "") {
+  ACCOUNT,
+  REPO,
+  BRANCH("master"),
+  PATH("/src/main/kotlin/"),
+  REGEX,
+  OFFSET("0"),
+  OCCURRENCE("1"),
+  TOPDOWN("true");
 
   val arg get() = name.lowercase()
+
+  fun defaultIfNull(params: Map<String, String?>) = params[arg] ?: defaultValue
+
+  fun defaultIfBlank(params: Map<String, String?>) = (params[arg] ?: "").let { if (it.isBlank()) defaultValue else it }
+
+  fun required(params: Map<String, String?>) =
+    (params[arg] ?: "").let { if (it.isBlank()) throw IllegalArgumentException("Missing: $arg") else it }
 }
