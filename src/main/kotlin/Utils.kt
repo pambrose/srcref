@@ -6,27 +6,10 @@ import QueryArgs.PATH
 import QueryArgs.REGEX
 import QueryArgs.REPO
 import QueryArgs.TOPDOWN
-import io.ktor.server.application.*
 import mu.*
 import java.net.*
-import kotlin.collections.set
 
-object SrcRef : KLogging() {
-  const val githubref = "githubRef"
-  val urlPrefix = (System.getenv("PREFIX") ?: "http://localhost:8080").removeSuffix("/")
-
-  val PipelineCall.queryParams
-    get() =
-      mutableMapOf<String, String?>()
-        .also {
-          QueryArgs
-            .values()
-            .map { it.arg }
-            .forEach { arg ->
-              it[arg] = call.request.queryParameters[arg]
-            }
-        }
-
+object Utils : KLogging() {
   fun githubRefUrl(params: Map<String, String?>) =
     try {
       val account = ACCOUNT.required(params)
@@ -74,24 +57,4 @@ object SrcRef : KLogging() {
 
   private fun githubRawUrl(username: String, repoName: String, path: String = "", branchName: String = "master") =
     "https://raw.githubusercontent.com/$username/$repoName/$branchName/$path"
-}
-
-enum class QueryArgs(val defaultValue: String = "") {
-  ACCOUNT,
-  REPO,
-  BRANCH("master"),
-  PATH("/src/main/kotlin/"),
-  REGEX,
-  OFFSET("0"),
-  OCCURRENCE("1"),
-  TOPDOWN("true");
-
-  val arg get() = name.lowercase()
-
-  fun defaultIfNull(params: Map<String, String?>) = params[arg] ?: defaultValue
-
-  fun defaultIfBlank(params: Map<String, String?>) = (params[arg] ?: "").let { if (it.isBlank()) defaultValue else it }
-
-  fun required(params: Map<String, String?>) =
-    (params[arg] ?: "").let { if (it.isBlank()) throw IllegalArgumentException("Missing: $arg") else it }
 }

@@ -1,8 +1,7 @@
 import Page.displayForm
-import SrcRef.githubRefUrl
-import SrcRef.githubref
-import SrcRef.logger
-import SrcRef.queryParams
+import Page.githubref
+import Utils.githubRefUrl
+import Utils.logger
 import com.github.pambrose.common.response.*
 import io.ktor.server.application.*
 import io.ktor.server.cio.*
@@ -24,15 +23,29 @@ fun main() {
 
     routing {
       get("/") {
-        displayForm()
+        val params = queryParams.onEach { (k, v) -> logger.info { "$k=$v" } }
+        displayForm(params)
       }
 
       get(githubref) {
         val params = queryParams.onEach { (k, v) -> logger.info { "$k=$v" } }
-        redirectTo { githubRefUrl(params) }
+        if (call.request.queryParameters.contains("edit"))
+          displayForm(params)
+        else
+          redirectTo { githubRefUrl(params) }
       }
     }
   }.start(wait = true)
 }
+
+val PipelineCall.queryParams
+  get() =
+    mutableMapOf<String, String?>()
+      .also {
+        QueryArgs
+          .values()
+          .map { it.arg }
+          .forEach { arg -> it[arg] = call.request.queryParameters[arg] }
+      }
 
 typealias PipelineCall = PipelineContext<Unit, ApplicationCall>

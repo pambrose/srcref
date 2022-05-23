@@ -6,17 +6,17 @@ import QueryArgs.PATH
 import QueryArgs.REGEX
 import QueryArgs.REPO
 import QueryArgs.TOPDOWN
-import SrcRef.githubRefUrl
-import SrcRef.githubref
-import SrcRef.queryParams
-import SrcRef.urlPrefix
+import Utils.githubRefUrl
 import com.github.pambrose.common.response.*
 import com.github.pambrose.common.util.*
 import kotlinx.html.*
 import kotlinx.html.dom.*
 
 object Page {
-  suspend fun PipelineCall.displayForm() {
+  private val urlPrefix = (System.getenv("PREFIX") ?: "http://localhost:8080").removeSuffix("/")
+  const val githubref = "githubRef"
+
+  suspend fun PipelineCall.displayForm(params: Map<String, String?>) {
     respondWith {
       document {
         append.html {
@@ -70,7 +70,7 @@ object Page {
               rawHtml("\n")
               +"""
                 form {
-                  padding: 25px;
+                  padding-left: 25px;
                 }
                 
                 table {
@@ -85,10 +85,14 @@ object Page {
               rawHtml("\n\t")
             }
             rawHtml("\n")
+            title { +"srcref" }
           }
           body {
-            val params = queryParams
 
+            div {
+              style = "padding-left: 25px;"
+              h2 { +"srcref - Dynamic GitHub Permalinks" }
+            }
             form {
               action = "/"
               method = FormMethod.get
@@ -191,9 +195,10 @@ object Page {
               div {
                 style = "padding-left: 25px;"
                 br {}
+                p { +"This URL:" }
                 textArea { id = "urlval"; rows = "3"; +url; cols = "91"; readonly = true }
                 p { +"will redirect to:" }
-                textArea { id = "ghurlval"; rows = "1"; +ghurl; cols = "91"; readonly = true }
+                textArea { id = "ghurlval"; rows = "2"; +ghurl; cols = "91"; readonly = true }
                 p {}
                 button { onClick = "copyUrl()"; +"Copy URL" }
                 span { +" " }
