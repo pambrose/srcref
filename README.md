@@ -12,7 +12,7 @@ but you can run your own instance as well.
 ## Usage
 
 1) Enter the required information in the form.
-   For the regex, use the [regex101.com](https://regex101.com)
+   For the `Regex` value, use [regex101.com](https://regex101.com)
    to create a pattern that matches the line of code to which you want to link.
 2) Click the "Generate URL" button.
 3) Click the  "View Permalink" button to see the GitHub permalink.

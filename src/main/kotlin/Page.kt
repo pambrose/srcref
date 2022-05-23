@@ -154,7 +154,7 @@ object Page {
                   }
                 }
                 tr {
-                  td { +"Match Expr:" }
+                  td { +"Regex:" }
                   td {
                     textInput { name = REGEX.arg; size = "30"; required = true; value = REGEX.defaultIfNull(params) }
                   }
