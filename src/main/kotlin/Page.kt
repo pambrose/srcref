@@ -101,20 +101,20 @@ object Page {
                   td { +"Org Name/Username:" }
                   td {
                     textInput {
-                      name = ACCOUNT.arg; size = "20"; required = true; value = ACCOUNT.defaultIfNull(params)
+                      name = ACCOUNT.arg; size = "30"; required = true; value = ACCOUNT.defaultIfNull(params)
                     }
                   }
                 }
                 tr {
                   td { +"Repo Name:" }
                   td {
-                    textInput { name = REPO.arg; size = "20"; required = true; value = REPO.defaultIfNull(params) }
+                    textInput { name = REPO.arg; size = "30"; required = true; value = REPO.defaultIfNull(params) }
                   }
                 }
                 tr {
                   td { +"Branch Name:" }
                   td {
-                    textInput { name = BRANCH.arg; size = "20"; required = true; value = BRANCH.defaultIfNull(params) }
+                    textInput { name = BRANCH.arg; size = "30"; required = true; value = BRANCH.defaultIfNull(params) }
                   }
                 }
                 tr {
@@ -126,7 +126,7 @@ object Page {
                 tr {
                   td { +"Match Expr:" }
                   td {
-                    textInput { name = REGEX.arg; size = "20"; required = true; value = REGEX.defaultIfNull(params) }
+                    textInput { name = REGEX.arg; size = "30"; required = true; value = REGEX.defaultIfNull(params) }
                   }
                 }
                 tr {

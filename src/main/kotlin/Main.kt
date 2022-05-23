@@ -23,12 +23,14 @@ fun main() {
 
     routing {
       get("/") {
-        val params = queryParams.onEach { (k, v) -> logger.info { "$k=$v" } }
+        val params = queryParams()
+        logger.info { params }
         displayForm(params)
       }
 
       get(githubref) {
-        val params = queryParams.onEach { (k, v) -> logger.info { "$k=$v" } }
+        val params = queryParams()
+        logger.info { params }
         if (call.request.queryParameters.contains("edit"))
           displayForm(params)
         else
@@ -38,14 +40,13 @@ fun main() {
   }.start(wait = true)
 }
 
-val PipelineCall.queryParams
-  get() =
-    mutableMapOf<String, String?>()
-      .also {
-        QueryArgs
-          .values()
-          .map { it.arg }
-          .forEach { arg -> it[arg] = call.request.queryParameters[arg] }
-      }
+fun PipelineCall.queryParams() =
+  mutableMapOf<String, String?>()
+    .also {
+      QueryArgs
+        .values()
+        .map { it.arg }
+        .forEach { arg -> it[arg] = call.request.queryParameters[arg] }
+    }
 
 typealias PipelineCall = PipelineContext<Unit, ApplicationCall>
