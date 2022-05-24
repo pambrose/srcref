@@ -22,7 +22,7 @@ but you can run your own instance as well.
 
 An example of a _srcref_ reference that leads to the first occurrence
 of `embeddedServer(.*)` in `src/main/kotlin/Main.kt` in this repo can be see
-[here](https://www.srcref.com/githubRef?account=pambrose&repo=srcref&branch=master&path=src%2Fmain%2Fkotlin%2Fcom%2Fpambrose%2Fsrcref%2FMain.kt&regex=embeddedServer%5C%28.*%5C%29&occurrence=1&offset=0&topdown=true)
+[here](https://www.srcref.com?account=pambrose&repo=srcref&branch=master&path=src%2Fmain%2Fkotlin%2Fcom%2Fpambrose%2Fsrcref%2FMain.kt&regex=embeddedServer%5C%28.*%5C%29&occurrence=1&offset=0&topdown=true)
 .
 
 ### Query Parameters
