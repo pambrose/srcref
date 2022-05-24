@@ -8,6 +8,7 @@ import com.pambrose.srcref.Utils.logger
 import io.ktor.server.application.*
 import io.ktor.server.cio.*
 import io.ktor.server.engine.*
+import io.ktor.server.http.content.*
 import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.compression.*
 import io.ktor.server.plugins.defaultheaders.*
@@ -42,6 +43,11 @@ object Main {
             else
               redirectTo { githubRefUrl(params) }
           }
+        }
+
+        static("/") {
+          staticBasePackage = "public"
+          resources(".")
         }
       }
     }.start(wait = true)

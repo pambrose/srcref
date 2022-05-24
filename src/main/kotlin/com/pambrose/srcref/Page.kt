@@ -10,14 +10,16 @@ import com.pambrose.srcref.QueryArgs.REGEX
 import com.pambrose.srcref.QueryArgs.REPO
 import com.pambrose.srcref.QueryArgs.TOPDOWN
 import com.pambrose.srcref.Utils.githubRefUrl
+import com.pambrose.srcref.Utils.rawHtml
 import com.pambrose.srcref.Utils.srcRefUrl
+import io.ktor.http.ContentType.Text.CSS
 import kotlinx.html.*
 import kotlinx.html.dom.*
 
 object Page {
   private val urlPrefix = (System.getenv("PREFIX") ?: "http://localhost:8080").removeSuffix("/")
 
-  suspend fun PipelineCall.displayForm(params: Map<String, String?>) {
+  internal suspend fun PipelineCall.displayForm(params: Map<String, String?>) {
     respondWith {
       document {
         append.html {
@@ -29,85 +31,12 @@ object Page {
               name = "viewport"
               content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
             }
-            script {
-              rawHtml("\n")
-              +"""
-                function copyToClipboard(textToCopy) {
-                    // navigator clipboard api needs a secure context (https)
-                    if (navigator.clipboard && window.isSecureContext) {
-                        // navigator clipboard api method'
-                        return navigator.clipboard.writeText(textToCopy);
-                    } else {
-                        // text area method
-                        let textArea = document.createElement("textarea");
-                        textArea.value = textToCopy;
-                        // make the textarea out of viewport
-                        textArea.style.position = "fixed";
-                        textArea.style.left = "-999999px";
-                        textArea.style.top = "-999999px";
-                        document.body.appendChild(textArea);
-                        textArea.focus();
-                        textArea.select();
-                        return new Promise((res, rej) => {
-                            document.execCommand('copy') ? res() : rej();
-                            textArea.remove();
-                        });
-                    }
-                }
-  
-                function copyUrl() {
-                  var copyText = document.getElementById("urlval");
-                  copyText.select();
-                  copyToClipboard(copyText.value);
-                  //.then(() => alert("Copied the text: " + copyText.value));
-                }
-              """.trimIndent().prependIndent("\t\t")
-              rawHtml("\n\t\t")
-            }
 
-            rawHtml("\n")
-            style("text/css") {
-              media = "screen"
-              rawHtml("\n")
-              +"""
-                form {
-                  padding-left: 25px;
-                }
-                
-                table {
-                    border-collapse: collapse;
-                    border: 2px solid black;
-                }
-
-                td {
-                  padding: 5px;
-                }
-
-                a.top-right {
-                  position: absolute;
-                  z-index: 1;
-                  width: clamp(50px, 8vmax, 80px);
-                  line-height: 0;
-                  color: rgba(255, 255, 255, 0.5);
-                  top: 15px;
-                  right: 15px;
-                }
-                
-                a.top-right path {
-                  fill: #258bd2;
-                }
-                
-                a.top-right:hover {
-                  color: white;
-                }
-              """.trimIndent().prependIndent("\t\t")
-              rawHtml("\n\t")
-            }
-            rawHtml("\n")
+            link { rel = "stylesheet"; href = "css/srcref.css"; type = CSS.toString() }
+            script { src = "js/copyUrl.js" }
             title { +"srcref" }
           }
           body {
-
             a(href = "https://github.com/pambrose/srcref", target = "_blank", classes = "top-right") {
               title = "View source on GitHub"
               rawHtml(
@@ -222,9 +151,9 @@ object Page {
                 style = "padding-left: 25px;"
                 br {}
                 p { +"Embed this URL in your docs:" }
-                textArea { id = "urlval"; rows = "3"; +srcrefUrl; cols = "91"; readonly = true }
+                textArea { id = "srcrefUrl"; rows = "3"; +srcrefUrl; cols = "91"; readonly = true }
                 p { +"to reach this GitHub page:" }
-                textArea { id = "ghurlval"; rows = "2"; +githubUrl; cols = "91"; readonly = true }
+                textArea { rows = "2"; +githubUrl; cols = "91"; readonly = true }
                 p {}
                 button { onClick = "copyUrl()"; +"Copy URL" }
                 span { +" " }
@@ -240,5 +169,3 @@ object Page {
     }
   }
 }
-
-fun HTMLTag.rawHtml(html: String) = unsafe { raw(html) }

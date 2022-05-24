@@ -9,6 +9,7 @@ import com.pambrose.srcref.QueryArgs.PATH
 import com.pambrose.srcref.QueryArgs.REGEX
 import com.pambrose.srcref.QueryArgs.REPO
 import com.pambrose.srcref.QueryArgs.TOPDOWN
+import kotlinx.html.*
 import mu.*
 import java.net.*
 import java.util.regex.*
@@ -90,6 +91,8 @@ object Utils : KLogging() {
         else -> throw e
       }
     }
+
+  fun HTMLTag.rawHtml(html: String) = unsafe { raw(html) }
 
   private fun githubSourceUrl(
     username: String,
