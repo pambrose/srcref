@@ -7,14 +7,12 @@ import QueryArgs.REGEX
 import QueryArgs.REPO
 import QueryArgs.TOPDOWN
 import Utils.githubRefUrl
+import Utils.srcRefUrl
 import com.github.pambrose.common.response.*
-import com.github.pambrose.common.util.*
 import kotlinx.html.*
 import kotlinx.html.dom.*
 
 object Page {
-  private val urlPrefix = (System.getenv("PREFIX") ?: "http://localhost:8080").removeSuffix("/")
-  const val githubref = "githubRef"
 
   suspend fun PipelineCall.displayForm(params: Map<String, String?>) {
     respondWith {
@@ -214,26 +212,21 @@ object Page {
             }
 
             if (params.values.asSequence().filter { it?.isNotBlank() ?: false }.any()) {
-              val args =
-                params
-                  .map { (k, v) -> if (v.isNotNull()) "$k=${v.encode()}" else "" }
-                  .filter { it.isNotBlank() }
-                  .joinToString("&")
-              val url = "$urlPrefix/$githubref?$args"
+              val srcRefUrl = srcRefUrl(params)
               val ghurl = githubRefUrl(params)
 
               div {
                 style = "padding-left: 25px;"
                 br {}
                 p { +"Embed this URL in your docs:" }
-                textArea { id = "urlval"; rows = "3"; +url; cols = "91"; readonly = true }
+                textArea { id = "urlval"; rows = "3"; +srcRefUrl; cols = "91"; readonly = true }
                 p { +"to reach this GitHub page:" }
                 textArea { id = "ghurlval"; rows = "2"; +ghurl; cols = "91"; readonly = true }
                 p {}
                 button { onClick = "copyUrl()"; +"Copy URL" }
                 span { +" " }
                 button(classes = "btn btn-success") {
-                  onClick = "window.open('$url','_blank')"
+                  onClick = "window.open('$srcRefUrl','_blank')"
                   +"View Permalink"
                 }
               }

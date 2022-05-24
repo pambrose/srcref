@@ -18,36 +18,36 @@ class FileTests : StringSpec(
         ccc
       """.lines().filter { it.isNotBlank() }
 
-      calcLineNumber(input, true, "aaa", 1, 0) shouldBe 1
-      calcLineNumber(input, true, "aaa", 1, 1) shouldBe 2
-      calcLineNumber(input, true, "aaa", 1, 2) shouldBe 3
+          calcLineNumber(input, "aaa", 1, 0, true) shouldBe 1
+          calcLineNumber(input, "aaa", 1, 1, true) shouldBe 2
+          calcLineNumber(input, "aaa", 1, 2, true) shouldBe 3
 
-      calcLineNumber(input, true, "aaa", 2, 0) shouldBe 2
-      calcLineNumber(input, true, "aaa", 2, 1) shouldBe 3
-      calcLineNumber(input, true, "aaa", 2, 2) shouldBe 4
+          calcLineNumber(input, "aaa", 2, 0, true) shouldBe 2
+          calcLineNumber(input, "aaa", 2, 1, true) shouldBe 3
+          calcLineNumber(input, "aaa", 2, 2, true) shouldBe 4
 
-      calcLineNumber(input, true, "bbb", 1, 0) shouldBe 4
-      calcLineNumber(input, true, "bbb", 1, 1) shouldBe 5
-      calcLineNumber(input, true, "bbb", 1, 2) shouldBe 6
+          calcLineNumber(input, "bbb", 1, 0, true) shouldBe 4
+          calcLineNumber(input, "bbb", 1, 1, true) shouldBe 5
+          calcLineNumber(input, "bbb", 1, 2, true) shouldBe 6
 
-      calcLineNumber(input, true, "bbb", 2, 0) shouldBe 5
-      calcLineNumber(input, true, "bbb", 2, 1) shouldBe 6
-      calcLineNumber(input, true, "bbb", 2, 2) shouldBe 7
+          calcLineNumber(input, "bbb", 2, 0, true) shouldBe 5
+          calcLineNumber(input, "bbb", 2, 1, true) shouldBe 6
+          calcLineNumber(input, "bbb", 2, 2, true) shouldBe 7
 
-      calcLineNumber(input, false, "aaa", 1, 0) shouldBe 3
-      calcLineNumber(input, false, "aaa", 1, 1) shouldBe 4
-      calcLineNumber(input, false, "aaa", 1, 2) shouldBe 5
+          calcLineNumber(input, "aaa", 1, 0, false) shouldBe 3
+          calcLineNumber(input, "aaa", 1, 1, false) shouldBe 4
+          calcLineNumber(input, "aaa", 1, 2, false) shouldBe 5
 
-      calcLineNumber(input, false, "aaa", 2, 0) shouldBe 2
-      calcLineNumber(input, false, "aaa", 2, 1) shouldBe 3
-      calcLineNumber(input, false, "aaa", 2, 2) shouldBe 4
+          calcLineNumber(input, "aaa", 2, 0, false) shouldBe 2
+          calcLineNumber(input, "aaa", 2, 1, false) shouldBe 3
+          calcLineNumber(input, "aaa", 2, 2, false) shouldBe 4
 
-      calcLineNumber(input, false, "bbb", 1, 0) shouldBe 6
-      calcLineNumber(input, false, "bbb", 1, 1) shouldBe 7
-      calcLineNumber(input, false, "bbb", 1, 2) shouldBe 8
+          calcLineNumber(input, "bbb", 1, 0, false) shouldBe 6
+          calcLineNumber(input, "bbb", 1, 1, false) shouldBe 7
+          calcLineNumber(input, "bbb", 1, 2, false) shouldBe 8
 
-      calcLineNumber(input, false, "bbb", 2, 0) shouldBe 5
-      calcLineNumber(input, false, "bbb", 2, 1) shouldBe 6
-      calcLineNumber(input, false, "bbb", 2, 2) shouldBe 7
+          calcLineNumber(input, "bbb", 2, 0, false) shouldBe 5
+          calcLineNumber(input, "bbb", 2, 1, false) shouldBe 6
+          calcLineNumber(input, "bbb", 2, 2, false) shouldBe 7
     }
   })

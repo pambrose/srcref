@@ -6,34 +6,71 @@ import QueryArgs.PATH
 import QueryArgs.REGEX
 import QueryArgs.REPO
 import QueryArgs.TOPDOWN
+import com.github.pambrose.common.util.*
 import mu.*
 import java.net.*
 import java.util.regex.*
 
 object Utils : KLogging() {
+  private val urlPrefix = (System.getenv("PREFIX") ?: "http://localhost:8080").removeSuffix("/")
+  const val githubref = "githubRef"
+
+  fun srcRefUrl(params: Map<String, String?>): String {
+    val args =
+      params
+        .map { (k, v) -> if (v.isNotNull()) "$k=${v.encode()}" else "" }
+        .filter { it.isNotBlank() }
+        .joinToString("&")
+    return "$urlPrefix/$githubref?$args"
+  }
+
+  fun srcRefUrl(
+    account: String,
+    repo: String,
+    branch: String,
+    path: String,
+    regex: String,
+    occurrence: Int,
+    offset: Int,
+    topDown: Boolean
+  ) =
+    srcRefUrl(
+      mapOf(
+        ACCOUNT.arg to account,
+        REPO.arg to repo,
+        BRANCH.arg to branch,
+        PATH.arg to path,
+        REGEX.arg to regex,
+        OCCURRENCE.arg to occurrence.toString(),
+        OFFSET.arg to offset.toString(),
+        TOPDOWN.arg to topDown.toString()
+      )
+    )
+
   fun githubRefUrl(params: Map<String, String?>) =
     try {
       val account = ACCOUNT.required(params)
       val repo = REPO.required(params)
-      val path = PATH.required(params)
       val branch = BRANCH.required(params)
+      val path = PATH.required(params)
+
       val url = githubRawUrl(account, repo, path, branch)
 
       val lines = URL(url).readText().lines()
       val linenum =
         calcLineNumber(
           lines,
-          TOPDOWN.defaultIfNull(params).toBoolean(),
           REGEX.required(params),
           OCCURRENCE.defaultIfNull(params).toInt(),
-          OFFSET.defaultIfNull(params).toInt()
+          OFFSET.defaultIfNull(params).toInt(),
+          TOPDOWN.defaultIfNull(params).toBoolean()
         ).also { if (it < 1) throw IllegalArgumentException("Line number is less than 1") }
       githubSourceUrl(account, repo, path, branch, linenum)
     } catch (e: Throwable) {
       "${e::class.simpleName}: ${e.message}"
     }
 
-  fun calcLineNumber(lines: List<String>, topDown: Boolean, pattern: String, occurrence: Int, offset: Int) =
+  fun calcLineNumber(lines: List<String>, pattern: String, occurrence: Int, offset: Int, topDown: Boolean) =
     try {
       val regex = Regex(pattern)
       ((if (topDown) lines else lines.asReversed())
