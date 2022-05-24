@@ -29,12 +29,12 @@ object Utils : KLogging() {
   fun srcRefUrl(
     account: String,
     repo: String,
-    branch: String,
     path: String,
     regex: String,
-    occurrence: Int,
-    offset: Int,
-    topDown: Boolean
+    branch: String = "master",
+    occurrence: Int = 1,
+    offset: Int = 0,
+    topDown: Boolean = true
   ) =
     srcRefUrl(
       mapOf(
