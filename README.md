@@ -1,7 +1,7 @@
 # srcref - Dynamic Line-Specific GitHub Permalinks
 
-It is problematic to embed GitHub permalinks with line references
-in documentation because the line values are not updated when the file contents are changed.
+It is problematic to embed line-specific GitHub permalinks in documentation because
+changes to the target file can invalidate the permalink line references.
 
 _srcref_ is a simple utility that allows you to embed GitHub permalinks into your
 docs without worrying about the line numbers of the code changing.
@@ -18,6 +18,10 @@ but you can run your own instance as well.
 2) Click the "Generate URL" button.
 3) Click the  "View Permalink" button to see the GitHub permalink.
 4) Click the "Copy URL" button to copy the _srcref_ URL to your clipboard.
+
+An example of a _srcref_ URL that leads to this line of Markdown can be see
+[here](https://www.srcref.com/?account=pambrose&repo=srcref&branch=master&path=README.md&regex=An+example+of&occurrence=1&offset=0&topdown=true)
+.
 
 ### Query Parameters
 

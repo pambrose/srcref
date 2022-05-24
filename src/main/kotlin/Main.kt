@@ -11,6 +11,10 @@ import io.ktor.server.plugins.compression.*
 import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.routing.*
 import io.ktor.util.pipeline.*
+import kotlin.collections.forEach
+import kotlin.collections.map
+import kotlin.collections.mutableMapOf
+import kotlin.collections.set
 
 fun main() {
   embeddedServer(CIO, port = System.getenv("PORT")?.toInt() ?: 8080) {
@@ -23,18 +27,20 @@ fun main() {
 
     routing {
       get("/") {
-        val params = queryParams()
-        logger.info { params }
-        displayForm(params)
+        queryParams().also { params ->
+          logger.info { params }
+          displayForm(params)
+        }
       }
 
       get(githubref) {
-        val params = queryParams()
-        logger.info { params }
-        if (call.request.queryParameters.contains("edit"))
-          displayForm(params)
-        else
-          redirectTo { githubRefUrl(params) }
+        queryParams().also { params ->
+          logger.info { params }
+          if (call.request.queryParameters.contains("edit"))
+            displayForm(params)
+          else
+            redirectTo { githubRefUrl(params) }
+        }
       }
     }
   }.start(wait = true)
