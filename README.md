@@ -15,8 +15,8 @@ but you can run your own instance as well.
    For the `Regex` value, use [regex101.com](https://regex101.com)
    to create a pattern that matches the line of code to which you want to link.
    Remember to protect regex characters like `()`, `[]` and `{}` by prefixing them with a `\`.
-2) Click the "Generate URL" button.
-3) Click the  "View Permalink" button to see the GitHub permalink.
+2) Click the "Generate URL" button to generate the _srcref_ URL.
+3) Click the "View Permalink" button to see the line-specific GitHub permalink.
 4) Click the "Copy URL" button to copy the _srcref_ URL to your clipboard.
 
 An example of a _srcref_ reference that leads to the first occurrence
