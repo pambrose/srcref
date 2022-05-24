@@ -144,7 +144,7 @@ object Page {
             }
 
             if (params.values.asSequence().filter { it?.isNotBlank() ?: false }.any()) {
-              val srcrefUrl = srcRefUrl(urlPrefix, params)
+              val srcrefUrl = srcRefUrl(params, prefix = urlPrefix)
               val githubUrl = githubRefUrl(params)
 
               div {

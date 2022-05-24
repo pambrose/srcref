@@ -18,7 +18,11 @@ import java.util.regex.*
 object Utils {
   const val githubref = "githubRef"
 
-  fun srcRefUrl(prefix: String, params: Map<String, String?>, escapeHtml4: Boolean = false): String {
+  fun srcRefUrl(
+    params: Map<String, String?>,
+    escapeHtml4: Boolean = false,
+    prefix: String = "https://www.srcref.com"
+  ): String {
     val args =
       params
         .map { (k, v) -> if (v.isNotNull()) "$k=${v.encode()}" else "" }
@@ -28,11 +32,11 @@ object Utils {
   }
 
   fun srcRefUrl(
-    prefix: String,
     account: String,
     repo: String,
     path: String,
     regex: String,
+    prefix: String = "https://www.srcref.com",
     branch: String = "master",
     occurrence: Int = 1,
     offset: Int = 0,
@@ -40,7 +44,6 @@ object Utils {
     escapeHtml4: Boolean = false,
   ) =
     srcRefUrl(
-      prefix,
       mapOf(
         ACCOUNT.arg to account,
         REPO.arg to repo,
@@ -51,7 +54,8 @@ object Utils {
         OFFSET.arg to offset.toString(),
         TOPDOWN.arg to topDown.toString()
       ),
-      escapeHtml4
+      escapeHtml4,
+      prefix,
     )
 
   fun githubRefUrl(params: Map<String, String?>) =
