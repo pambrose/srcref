@@ -20,8 +20,9 @@ but you can run your own instance as well.
 4) Click the "Copy URL" button to copy the _srcref_ URL to your clipboard.
 
 An example of a _srcref_ reference that leads to the first occurrence
-of _embeddedServer_ in `src/main/kotlin/Main.kt` in this repo can be see
-[here](https://www.srcref.com?account=pambrose&repo=srcref&branch=master&path=src%2Fmain%2Fkotlin%2FMain.kt&regex=embeddedServer&occurrence=1&offset=0&topdown=true)
+of _embeddedServer(.*)_ in `src/main/kotlin/Main.kt` in this repo can be see
+[here](https://www.srcref.com/githubRef?account=pambrose&repo=srcref&branch=master&path=src%2Fmain%2Fkotlin%2FMain.kt&regex=embeddedServer%5C%28.*%5C%29&occurrence=1&offset=0&topdown=true)
+.
 
 ### Query Parameters
 
