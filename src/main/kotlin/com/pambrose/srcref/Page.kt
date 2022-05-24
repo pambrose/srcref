@@ -15,6 +15,7 @@ import kotlinx.html.*
 import kotlinx.html.dom.*
 
 object Page {
+  private val urlPrefix = (System.getenv("PREFIX") ?: "http://localhost:8080").removeSuffix("/")
 
   suspend fun PipelineCall.displayForm(params: Map<String, String?>) {
     respondWith {
@@ -214,21 +215,21 @@ object Page {
             }
 
             if (params.values.asSequence().filter { it?.isNotBlank() ?: false }.any()) {
-              val srcRefUrl = srcRefUrl(params)
-              val ghurl = githubRefUrl(params)
+              val srcrefUrl = srcRefUrl(urlPrefix, params)
+              val githubUrl = githubRefUrl(params)
 
               div {
                 style = "padding-left: 25px;"
                 br {}
                 p { +"Embed this URL in your docs:" }
-                textArea { id = "urlval"; rows = "3"; +srcRefUrl; cols = "91"; readonly = true }
+                textArea { id = "urlval"; rows = "3"; +srcrefUrl; cols = "91"; readonly = true }
                 p { +"to reach this GitHub page:" }
-                textArea { id = "ghurlval"; rows = "2"; +ghurl; cols = "91"; readonly = true }
+                textArea { id = "ghurlval"; rows = "2"; +githubUrl; cols = "91"; readonly = true }
                 p {}
                 button { onClick = "copyUrl()"; +"Copy URL" }
                 span { +" " }
                 button(classes = "btn btn-success") {
-                  onClick = "window.open('$srcRefUrl','_blank')"
+                  onClick = "window.open('$srcrefUrl','_blank')"
                   +"View Permalink"
                 }
               }

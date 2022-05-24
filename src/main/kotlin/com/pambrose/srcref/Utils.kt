@@ -14,19 +14,19 @@ import java.net.*
 import java.util.regex.*
 
 object Utils : KLogging() {
-  private val urlPrefix = (System.getenv("PREFIX") ?: "http://localhost:8080").removeSuffix("/")
   const val githubref = "githubRef"
 
-  fun srcRefUrl(params: Map<String, String?>): String {
+  fun srcRefUrl(prefix: String, params: Map<String, String?>): String {
     val args =
       params
         .map { (k, v) -> if (v.isNotNull()) "$k=${v.encode()}" else "" }
         .filter { it.isNotBlank() }
         .joinToString("&")
-    return "$urlPrefix/$githubref?$args"
+    return "$prefix/$githubref?$args"
   }
 
   fun srcRefUrl(
+    prefix: String,
     account: String,
     repo: String,
     path: String,
@@ -37,12 +37,13 @@ object Utils : KLogging() {
     topDown: Boolean = true
   ) =
     srcRefUrl(
+      prefix,
       mapOf(
         ACCOUNT.arg to account,
         REPO.arg to repo,
-        BRANCH.arg to branch,
         PATH.arg to path,
         REGEX.arg to regex,
+        BRANCH.arg to branch,
         OCCURRENCE.arg to occurrence.toString(),
         OFFSET.arg to offset.toString(),
         TOPDOWN.arg to topDown.toString()
