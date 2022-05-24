@@ -10,7 +10,7 @@ plugins {
 group = 'com.github.pambrose.srcref'
 version = '1.0.0'
 
-def mainName = "com.pambrose.srcref.Main"
+def mainName = "com.pambrose.srcref.SrcRef"
 
 application {
     mainClassName = mainName

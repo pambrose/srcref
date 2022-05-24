@@ -9,12 +9,12 @@ import com.pambrose.srcref.QueryArgs.PATH
 import com.pambrose.srcref.QueryArgs.REGEX
 import com.pambrose.srcref.QueryArgs.REPO
 import com.pambrose.srcref.QueryArgs.TOPDOWN
+import com.pambrose.srcref.SrcRef.logger
 import kotlinx.html.*
-import mu.*
 import java.net.*
 import java.util.regex.*
 
-object Utils : KLogging() {
+object Utils {
   const val githubref = "githubRef"
 
   fun srcRefUrl(prefix: String, params: Map<String, String?>): String {
