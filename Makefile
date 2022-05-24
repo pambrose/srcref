@@ -14,16 +14,13 @@ uberjar:
 	./gradlew uberjar
 
 uber: uberjar
-	java -jar build/libs/kslides.jar
+	java -jar build/libs/srcref.jar
 
 dist:
 	./gradlew installDist
 
 stage:
 	./gradlew stage
-
-cleandocs:
-	rm -rf docs/playground docs/plotly
 
 versioncheck:
 	./gradlew dependencyUpdates

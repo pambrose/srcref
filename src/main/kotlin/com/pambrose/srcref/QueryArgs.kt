@@ -1,3 +1,5 @@
+package com.pambrose.srcref
+
 enum class QueryArgs(val defaultValue: String = "") {
   ACCOUNT,
   REPO,
