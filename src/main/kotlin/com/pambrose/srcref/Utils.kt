@@ -11,19 +11,20 @@ import com.pambrose.srcref.QueryArgs.REPO
 import com.pambrose.srcref.QueryArgs.TOPDOWN
 import com.pambrose.srcref.SrcRef.logger
 import kotlinx.html.*
+import org.apache.commons.text.*
 import java.net.*
 import java.util.regex.*
 
 object Utils {
   const val githubref = "githubRef"
 
-  fun srcRefUrl(prefix: String, params: Map<String, String?>): String {
+  fun srcRefUrl(prefix: String, params: Map<String, String?>, escapeHtml4: Boolean = false): String {
     val args =
       params
         .map { (k, v) -> if (v.isNotNull()) "$k=${v.encode()}" else "" }
         .filter { it.isNotBlank() }
         .joinToString("&")
-    return "$prefix/$githubref?$args"
+    return "$prefix/$githubref?$args".let { if (escapeHtml4) StringEscapeUtils.escapeHtml4(it) else it }
   }
 
   fun srcRefUrl(
@@ -35,7 +36,8 @@ object Utils {
     branch: String = "master",
     occurrence: Int = 1,
     offset: Int = 0,
-    topDown: Boolean = true
+    topDown: Boolean = true,
+    escapeHtml4: Boolean = false,
   ) =
     srcRefUrl(
       prefix,
@@ -48,7 +50,8 @@ object Utils {
         OCCURRENCE.arg to occurrence.toString(),
         OFFSET.arg to offset.toString(),
         TOPDOWN.arg to topDown.toString()
-      )
+      ),
+      escapeHtml4
     )
 
   fun githubRefUrl(params: Map<String, String?>) =
