@@ -1,16 +1,20 @@
 package com.pambrose.srcref
 
-enum class QueryArgs(val defaultValue: String = "") {
-  ACCOUNT,
-  REPO,
-  BRANCH("master"),
-  PATH("/src/main/kotlin/"),
-  REGEX,
-  OCCURRENCE("1"),
-  OFFSET("0"),
-  TOPDOWN("true");
+enum class QueryArgs(val pname: String, val defaultValue: String = "") {
+  ACCOUNT("account"),
+  REPO("repo"),
+  BRANCH("branch", "master"),
+  PATH("path", "/src/main/kotlin/"),
+  BEGIN_REGEX("bregex", ""),
+  BEGIN_OCCURRENCE("boccur", "1"),
+  BEGIN_OFFSET("boffset", "0"),
+  BEGIN_TOPDOWN("btopd", "true"),
+  END_REGEX("eregex", ""),
+  END_OCCURRENCE("eoccur", "1"),
+  END_OFFSET("eoffset", "0"),
+  END_TOPDOWN("etopd", "false");
 
-  val arg get() = name.lowercase()
+  val arg get() = pname.lowercase()
 
   fun defaultIfNull(params: Map<String, String?>) = params[arg] ?: defaultValue
 
