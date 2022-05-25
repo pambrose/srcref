@@ -2,22 +2,28 @@ package com.pambrose.srcref
 
 import com.github.pambrose.common.response.*
 import com.pambrose.srcref.QueryArgs.ACCOUNT
+import com.pambrose.srcref.QueryArgs.BEGIN_OCCURRENCE
+import com.pambrose.srcref.QueryArgs.BEGIN_OFFSET
+import com.pambrose.srcref.QueryArgs.BEGIN_REGEX
+import com.pambrose.srcref.QueryArgs.BEGIN_TOPDOWN
 import com.pambrose.srcref.QueryArgs.BRANCH
-import com.pambrose.srcref.QueryArgs.OCCURRENCE
-import com.pambrose.srcref.QueryArgs.OFFSET
+import com.pambrose.srcref.QueryArgs.END_OCCURRENCE
+import com.pambrose.srcref.QueryArgs.END_OFFSET
+import com.pambrose.srcref.QueryArgs.END_REGEX
+import com.pambrose.srcref.QueryArgs.END_TOPDOWN
 import com.pambrose.srcref.QueryArgs.PATH
-import com.pambrose.srcref.QueryArgs.REGEX
 import com.pambrose.srcref.QueryArgs.REPO
-import com.pambrose.srcref.QueryArgs.TOPDOWN
-import com.pambrose.srcref.Utils.githubRefUrl
-import com.pambrose.srcref.Utils.rawHtml
-import com.pambrose.srcref.Utils.srcRefUrl
+import com.pambrose.srcref.Urls.EDIT
+import com.pambrose.srcref.Urls.githubRangeUrl
+import com.pambrose.srcref.Urls.srcrefToGithubUrl
 import io.ktor.http.ContentType.Text.CSS
 import kotlinx.html.*
 import kotlinx.html.dom.*
 
 object Page {
-  private val urlPrefix = (System.getenv("PREFIX") ?: "http://localhost:8080").removeSuffix("/")
+  internal val urlPrefix = (System.getenv("PREFIX") ?: "http://localhost:8080").removeSuffix("/")
+
+  private fun HTMLTag.rawHtml(html: String) = unsafe { raw(html) }
 
   internal suspend fun PipelineCall.displayForm(params: Map<String, String?>) {
     respondWith {
@@ -53,28 +59,45 @@ object Page {
               h2 { +"srcref - Dynamic Line-Specific GitHub Permalinks" }
             }
 
+            fun SELECT.occurrenceOptions(isSelected: Int) {
+              option { +" 1st "; value = "1"; selected = isSelected == 1 }
+              option { +" 2nd "; value = "2"; selected = isSelected == 2 }
+              option { +" 3rd "; value = "3"; selected = isSelected == 3 }
+              option { +" 4th "; value = "4"; selected = isSelected == 4 }
+              option { +" 5th "; value = "5"; selected = isSelected == 5 }
+              option { +" 6th "; value = "6"; selected = isSelected == 6 }
+              option { +" 7th "; value = "7"; selected = isSelected == 7 }
+              option { +" 8th "; value = "8"; selected = isSelected == 8 }
+              option { +" 9th "; value = "9"; selected = isSelected == 9 }
+              option { +" 10th "; value = "10"; selected = isSelected == 10 }
+            }
+
+            val textWidth = "40"
+            val offsetWidth = "7"
             form {
-              action = "/"
+              action = "/$EDIT"
               method = FormMethod.get
               table {
                 tr {
                   td { +"Org Name/Username:" }
                   td {
                     textInput {
-                      name = ACCOUNT.arg; size = "30"; required = true; value = ACCOUNT.defaultIfNull(params)
+                      name = ACCOUNT.arg; size = textWidth; required = true; value = ACCOUNT.defaultIfNull(params)
                     }
                   }
                 }
                 tr {
                   td { +"Repo Name:" }
                   td {
-                    textInput { name = REPO.arg; size = "30"; required = true; value = REPO.defaultIfNull(params) }
+                    textInput { name = REPO.arg; size = textWidth; required = true; value = REPO.defaultIfNull(params) }
                   }
                 }
                 tr {
                   td { +"Branch Name:" }
                   td {
-                    textInput { name = BRANCH.arg; size = "30"; required = true; value = BRANCH.defaultIfNull(params) }
+                    textInput {
+                      name = BRANCH.arg; size = textWidth; required = true; value = BRANCH.defaultIfNull(params)
+                    }
                   }
                 }
                 tr {
@@ -84,52 +107,88 @@ object Page {
                   }
                 }
                 tr {
-                  td { +"Regex:" }
+                  td { +"Begin Regex:" }
                   td {
-                    textInput { name = REGEX.arg; size = "30"; required = true; value = REGEX.defaultIfNull(params) }
-                  }
-                }
-                tr {
-                  td { +"Occurrence:" }
-                  td {
-                    val isSelected = OCCURRENCE.defaultIfBlank(params).toInt()
-                    select {
-                      name = OCCURRENCE.arg
-                      size = "1"
-                      option { +" 1st "; value = "1"; selected = isSelected == 1 }
-                      option { +" 2nd "; value = "2"; selected = isSelected == 2 }
-                      option { +" 3rd "; value = "3"; selected = isSelected == 3 }
-                      option { +" 4th "; value = "4"; selected = isSelected == 4 }
-                      option { +" 5th "; value = "5"; selected = isSelected == 5 }
-                      option { +" 6th "; value = "6"; selected = isSelected == 6 }
-                      option { +" 7th "; value = "7"; selected = isSelected == 7 }
-                      option { +" 8th "; value = "8"; selected = isSelected == 8 }
-                      option { +" 9th "; value = "9"; selected = isSelected == 9 }
-                      option { +" 10th "; value = "10"; selected = isSelected == 10 }
+                    textInput {
+                      name = BEGIN_REGEX.arg; size = textWidth; required = true; value =
+                      BEGIN_REGEX.defaultIfNull(params)
                     }
                   }
                 }
                 tr {
-                  td { +"Offset:" }
+                  td { +"Begin Occurrence:" }
                   td {
-                    textInput { name = OFFSET.arg; size = "10"; required = true; value = OFFSET.defaultIfNull(params) }
+                    val isSelected = BEGIN_OCCURRENCE.defaultIfBlank(params).toInt()
+                    select { name = BEGIN_OCCURRENCE.arg; size = "1"; occurrenceOptions(isSelected) }
                   }
                 }
                 tr {
-                  td { +"Search Direction:" }
+                  td { +"Begin Offset:" }
+                  td {
+                    textInput {
+                      name = BEGIN_OFFSET.arg; size = offsetWidth; required = true; value =
+                      BEGIN_OFFSET.defaultIfNull(params)
+                    }
+                  }
+                }
+                tr {
+                  td { +"Begin Search Direction:" }
                   td {
                     span {
-                      val isChecked = TOPDOWN.defaultIfBlank(params).toBoolean()
+                      val isChecked = BEGIN_TOPDOWN.defaultIfBlank(params).toBoolean()
                       style = "text-align:center"
-                      radioInput { id = "topdown"; name = TOPDOWN.arg; value = "true"; checked = isChecked }
+                      radioInput { id = "begin_topdown"; name = BEGIN_TOPDOWN.arg; value = "true"; checked = isChecked }
                       label {
-                        htmlFor = "topdown"; +" Top-down "
+                        htmlFor = "begin_topdown"; +" Top-down "
                       }
-                      radioInput { id = "bottomup"; name = TOPDOWN.arg; value = "false"; checked = !isChecked }
-                      label { htmlFor = "bottomup"; +" Bottom-up " }
+                      radioInput {
+                        id = "begin_bottomup"; name = BEGIN_TOPDOWN.arg; value = "false"; checked = !isChecked
+                      }
+                      label { htmlFor = "begin_bottomup"; +" Bottom-up " }
                     }
                   }
                 }
+
+                tr {
+                  td { +"End Regex:" }
+                  td {
+                    textInput {
+                      name = END_REGEX.arg; size = textWidth; value = END_REGEX.defaultIfNull(params)
+                    }
+                    +" (optional)"
+                  }
+                }
+                tr {
+                  td { +"End Occurrence:" }
+                  td {
+                    val isSelected = END_OCCURRENCE.defaultIfBlank(params).toInt()
+                    select { name = END_OCCURRENCE.arg; size = "1"; occurrenceOptions(isSelected) }
+                  }
+                }
+                tr {
+                  td { +"End Offset:" }
+                  td {
+                    textInput {
+                      name = END_OFFSET.arg; size = offsetWidth; value = END_OFFSET.defaultIfNull(params)
+                    }
+                  }
+                }
+                tr {
+                  td { +"End Search Direction:" }
+                  td {
+                    span {
+                      val isChecked = END_TOPDOWN.defaultIfBlank(params).toBoolean()
+                      style = "text-align:center"
+                      radioInput { id = "end_topdown"; name = END_TOPDOWN.arg; value = "true"; checked = isChecked }
+                      label {
+                        htmlFor = "end_topdown"; +" Top-down "
+                      }
+                      radioInput { id = "end_bottomup"; name = END_TOPDOWN.arg; value = "false"; checked = !isChecked }
+                      label { htmlFor = "end_bottomup"; +" Bottom-up " }
+                    }
+                  }
+                }
+
                 tr {
                   td { }
                   td {
@@ -143,9 +202,9 @@ object Page {
               }
             }
 
-            if (params.values.asSequence().filter { it?.isNotBlank() ?: false }.any()) {
-              val srcrefUrl = srcRefUrl(params, prefix = urlPrefix)
-              val githubUrl = githubRefUrl(params)
+            if (params.values.asSequence().filter { it?.isNotBlank() == true }.any()) {
+              val srcrefUrl = srcrefToGithubUrl(params, prefix = urlPrefix)
+              val githubUrl = githubRangeUrl(params, urlPrefix)
 
               div {
                 style = "padding-left: 25px;"
@@ -153,7 +212,7 @@ object Page {
                 p { +"Embed this URL in your docs:" }
                 textArea { id = "srcrefUrl"; rows = "3"; +srcrefUrl; cols = "91"; readonly = true }
                 p { +"to reach this GitHub page:" }
-                textArea { rows = "2"; +githubUrl; cols = "91"; readonly = true }
+                textArea { rows = "3"; +githubUrl; cols = "91"; readonly = true }
                 p {}
                 button { onClick = "copyUrl()"; +"Copy URL" }
                 span { +" " }

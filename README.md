@@ -20,25 +20,40 @@ but you can run your own instance as well.
 4) Click the "Copy URL" button to copy the _srcref_ URL to your clipboard.
 5) Paste the _srcref_ URL into your documentation.
 
-An example of a _srcref_ reference that leads to the first occurrence
-of `embeddedServer(.*)` in `src/main/kotlin/Main.kt` in this repo can be see
-[here](https://www.srcref.com?account=pambrose&repo=srcref&branch=master&path=src%2Fmain%2Fkotlin%2Fcom%2Fpambrose%2Fsrcref%2FMain.kt&regex=embeddedServer%5C%28.*%5C%29&occurrence=1&offset=0&topdown=true)
+The inputs for a _srcref_ reference that highlights from the first occurrence
+of `install\(CallLogging\)` to 3 lines beyond the first occurrence of `install\(Compression\)` in
+`src/main/kotlin/Main.kt` in this repo can be seen
+[here](https://www.srcref.com/edit?account=pambrose&repo=srcref&branch=dev&path=%2Fsrc%2Fmain%2Fkotlin%2Fcom%2Fpambrose%2Fsrcref%2FMain.kt&bregex=install%5C%28CallLogging%5C%29&boccur=1&boffset=0&btopd=true&eregex=install%5C%28Compression%5C%29&eoccur=1&eoffset=3&etopd=false)
 .
 
 ### Query Parameters
 
-| Parameter      | Default | Description                                            |
-|----------------|---------|--------------------------------------------------------|
-| **account**    |         | GitHub account or organization name                    |
-| **repo**       |         | Repo name                                              |
-| **branch**     | master  | Branch name                                            |
-| **path**       |         | Path of the file                                       |
-| **regex**      |         | Regex used in the `contains()` evaluated for each line |
-| **occurrence** | 1       | The number of matches                                  |
-| **offset**     | 0       | The number of lines above or below the final match     |
-| **topdown**    | true    | The direction to evaluate the file                     |
+| Parameter   | Default | Description                                                                        |
+|-------------|---------|------------------------------------------------------------------------------------|
+| **account** |         | GitHub account or organization name                                                |
+| **repo**    |         | Repo name                                                                          |
+| **branch**  | master  | Branch name                                                                        |
+| **path**    |         | Path of the file                                                                   |
+| **bregex**  |         | The regex used in the `contains()` evaluated for each line for the beginning match |
+| **boccur**  | 1       | The number of matches for the beginning match                                      |
+| **boffset** | 0       | The number of lines above or below the beginning match                             |
+| **btopd**   | true    | The direction to evaluate the file for the beginning match                         |
+| **eregex**  |         | The regex used in the `contains()` evaluated for each line for the ending match    |
+| **eoccur**  | 1       | The number of matches for the ending match                                         |
+| **eoffset** | 0       | The number of lines above or below the ending match                                |
+| **etopd**   | true    | The direction to evaluate the file for the ending match                            |
 
-### Misc
+## Embedded Usage
+
+You can generate _srcref_ URLs programmatically with the `srcRefUrl()` call. Add this to your
+gradle dependencies:
+
+```
+implementation "com.github.pambrose:srcref:1.0.2"
+
+```
+
+## Misc
 
 * Add `&edit` to a _srcref_ URL to edit it.
 * If you deploy your own version of _srcref_, use the `PREFIX` environment variable to specify URL prefix and
