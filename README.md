@@ -47,10 +47,13 @@ The highlighted lines can be seen
 | **eoffset** | 0       | The number of lines above or below the ending match                                |
 | **etopd**   | true    | The direction to evaluate the file for the ending match                            |
 
-## Embedded Usage
+## Programmatic Usage
 
-You can generate _srcref_ URLs programmatically with the `srcRefUrl()` call. Add this to your
-gradle dependencies:
+You can generate _srcref_ URLs programmatically with the `srcrefUrl()` call
+([example](https://www.srcref.com/github?account=kslides&repo=kslides&branch=master&path=kslides-core%2Fsrc%2Fmain%2Fkotlin%2Fcom%2Fkslides%2FPresentation.kt&bregex=srcrefUrl%5C%28&boccur=1&boffset=0&btopd=true&eregex=escapeHtml4+%3D+true&eoccur=1&eoffset=1&etopd=true))
+.
+
+Add this to your gradle dependencies:
 
 ```
 implementation "com.github.pambrose:srcref:1.0.2"
