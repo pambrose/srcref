@@ -220,6 +220,11 @@ object Page {
                   onClick = "window.open('$srcrefUrl','_blank')"
                   +"View GitHub Permalink"
                 }
+                span { +" " }
+                button(classes = "btn btn-success") {
+                  onClick = "window.open('/')"
+                  +"Reset Values"
+                }
               }
             }
           }

@@ -4,7 +4,7 @@ enum class QueryArgs(private val paramName: String, private val defaultValue: St
   ACCOUNT("account"),
   REPO("repo"),
   BRANCH("branch", "master"),
-  PATH("path", "src/main/kotlin/"),
+  PATH("path", ""),
   BEGIN_REGEX("bregex", ""),
   BEGIN_OCCURRENCE("boccur", "1"),
   BEGIN_OFFSET("boffset", "0"),
