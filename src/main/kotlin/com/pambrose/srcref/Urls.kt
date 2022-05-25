@@ -42,7 +42,7 @@ object Urls {
     try {
       val account = ACCOUNT.required(params)
       val repo = REPO.required(params)
-      val path = PATH.required(params)
+      val path = PATH.required(params).let { if (it.startsWith("/")) it.substring(1) else it }
       val branch = BRANCH.required(params)
 
       val url = githubRawUrl(account, repo, path, branch)
