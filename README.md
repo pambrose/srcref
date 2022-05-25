@@ -16,7 +16,7 @@ but you can run your own instance as well.
    Remember to protect regex characters like `()`, `[]` and `{}` by prefixing them with a `\`.
    Use [regex101.com](https://regex101.com) to assist creating a regex value.
 2) Click the "Generate URL" button to generate the _srcref_ URL.
-3) Click the "View Permalink" button to verify the line-specific GitHub permalink.
+3) Click the "View GitHub Permalink" button to verify the line-specific GitHub permalink.
 4) Click the "Copy URL" button to copy the _srcref_ URL to your clipboard.
 5) Paste the _srcref_ URL into your documentation.
 

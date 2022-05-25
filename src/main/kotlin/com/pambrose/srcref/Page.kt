@@ -218,7 +218,7 @@ object Page {
                 span { +" " }
                 button(classes = "btn btn-success") {
                   onClick = "window.open('$srcrefUrl','_blank')"
-                  +"View Permalink"
+                  +"View GitHub Permalink"
                 }
               }
             }
