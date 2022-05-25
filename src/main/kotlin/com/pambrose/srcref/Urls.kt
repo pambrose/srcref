@@ -81,11 +81,11 @@ object Urls {
     repoName: String,
     branchName: String,
     path: String = "",
-    begin_lineNum: Int,
-    end_lineNum: Int,
+    beginLineNum: Int,
+    endLineNum: Int,
   ): String {
-    val suffix = if (end_lineNum > 0 && begin_lineNum != end_lineNum) "-L$end_lineNum" else ""
-    return "https://github.com/$username/$repoName/blob/$branchName/$path#L$begin_lineNum$suffix"
+    val suffix = if (endLineNum > 0 && beginLineNum != endLineNum) "-L$endLineNum" else ""
+    return "https://github.com/$username/$repoName/blob/$branchName/$path#L$beginLineNum$suffix"
   }
 
   private fun githubRawUrl(username: String, repoName: String, path: String = "", branchName: String = "master") =
