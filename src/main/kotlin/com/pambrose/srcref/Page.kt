@@ -13,16 +13,17 @@ import com.pambrose.srcref.QueryArgs.END_REGEX
 import com.pambrose.srcref.QueryArgs.END_TOPDOWN
 import com.pambrose.srcref.QueryArgs.PATH
 import com.pambrose.srcref.QueryArgs.REPO
-import com.pambrose.srcref.Utils.editRef
-import com.pambrose.srcref.Utils.githubRefUrl
-import com.pambrose.srcref.Utils.rawHtml
-import com.pambrose.srcref.Utils.srcRefUrl
+import com.pambrose.srcref.Urls.EDIT
+import com.pambrose.srcref.Urls.githubRangeUrl
+import com.pambrose.srcref.Urls.srcrefToGithubUrl
 import io.ktor.http.ContentType.Text.CSS
 import kotlinx.html.*
 import kotlinx.html.dom.*
 
 object Page {
   internal val urlPrefix = (System.getenv("PREFIX") ?: "http://localhost:8080").removeSuffix("/")
+
+  private fun HTMLTag.rawHtml(html: String) = unsafe { raw(html) }
 
   internal suspend fun PipelineCall.displayForm(params: Map<String, String?>) {
     respondWith {
@@ -74,7 +75,7 @@ object Page {
             val textWidth = "40"
             val offsetWidth = "7"
             form {
-              action = "/$editRef"
+              action = "/$EDIT"
               method = FormMethod.get
               table {
                 tr {
@@ -201,9 +202,9 @@ object Page {
               }
             }
 
-            if (params.values.asSequence().filter { it?.isNotBlank() ?: false }.any()) {
-              val srcrefUrl = srcRefUrl(params, prefix = urlPrefix)
-              val githubUrl = githubRefUrl(params, urlPrefix)
+            if (params.values.asSequence().filter { it?.isNotBlank() == true }.any()) {
+              val srcrefUrl = srcrefToGithubUrl(params, prefix = urlPrefix)
+              val githubUrl = githubRangeUrl(params, urlPrefix)
 
               div {
                 style = "padding-left: 25px;"

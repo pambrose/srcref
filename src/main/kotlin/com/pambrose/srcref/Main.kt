@@ -3,10 +3,12 @@ package com.pambrose.srcref
 import com.github.pambrose.common.response.*
 import com.pambrose.srcref.Page.displayForm
 import com.pambrose.srcref.Page.urlPrefix
-import com.pambrose.srcref.Utils.editRef
-import com.pambrose.srcref.Utils.errorRef
-import com.pambrose.srcref.Utils.githubRef
-import com.pambrose.srcref.Utils.githubRefUrl
+import com.pambrose.srcref.Urls.ARGS
+import com.pambrose.srcref.Urls.EDIT
+import com.pambrose.srcref.Urls.ERROR
+import com.pambrose.srcref.Urls.GITHUB
+import com.pambrose.srcref.Urls.MSG
+import com.pambrose.srcref.Urls.githubRangeUrl
 import io.ktor.server.application.*
 import io.ktor.server.cio.*
 import io.ktor.server.engine.*
@@ -34,29 +36,29 @@ object SrcRef : KLogging() {
 
       routing {
         get("/") {
-          redirectTo { "/$editRef" }
+          redirectTo { EDIT }
         }
 
-        get(editRef) {
+        get(EDIT) {
           queryParams().also { params ->
             logger.info { params }
             displayForm(params)
           }
         }
 
-        get(githubRef) {
+        get(GITHUB) {
           queryParams().also { params ->
             logger.info { params }
-            if (call.request.queryParameters.contains("edit"))
+            if (call.request.queryParameters.contains(EDIT))
               displayForm(params)
             else
-              redirectTo { githubRefUrl(params, urlPrefix) }
+              redirectTo { githubRangeUrl(params, urlPrefix) }
           }
         }
 
-        get(errorRef) {
-          val msgval = call.request.queryParameters["msg"] ?: "Missing message"
-          val argsval = call.request.queryParameters["args"] ?: "Missing args"
+        get(ERROR) {
+          val msgval = call.request.queryParameters[MSG] ?: "Missing message"
+          val argsval = call.request.queryParameters[ARGS] ?: "Missing args"
           respondWith {
             document {
               append.html {

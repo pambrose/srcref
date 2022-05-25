@@ -1,6 +1,6 @@
 package com.pambrose.srcref
 
-enum class QueryArgs(val pname: String, val defaultValue: String = "") {
+enum class QueryArgs(private val paramName: String, private val defaultValue: String = "") {
   ACCOUNT("account"),
   REPO("repo"),
   BRANCH("branch", "master"),
@@ -14,12 +14,12 @@ enum class QueryArgs(val pname: String, val defaultValue: String = "") {
   END_OFFSET("eoffset", "0"),
   END_TOPDOWN("etopd", "false");
 
-  val arg get() = pname.lowercase()
+  val arg get() = paramName.lowercase()
 
   fun defaultIfNull(params: Map<String, String?>) = params[arg] ?: defaultValue
 
-  fun defaultIfBlank(params: Map<String, String?>) = (params[arg] ?: "").let { if (it.isBlank()) defaultValue else it }
+  fun defaultIfBlank(params: Map<String, String?>) = (params[arg] ?: "").let { it.ifBlank { defaultValue } }
 
   fun required(params: Map<String, String?>) =
-    (params[arg] ?: "").let { if (it.isBlank()) throw IllegalArgumentException("Missing: $arg") else it }
+    (params[arg] ?: "").let { it.ifBlank { throw IllegalArgumentException("Missing: $arg") } }
 }

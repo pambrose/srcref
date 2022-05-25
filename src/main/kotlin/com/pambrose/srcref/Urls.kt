@@ -14,17 +14,18 @@ import com.pambrose.srcref.QueryArgs.END_TOPDOWN
 import com.pambrose.srcref.QueryArgs.PATH
 import com.pambrose.srcref.QueryArgs.REPO
 import com.pambrose.srcref.SrcRef.logger
-import kotlinx.html.*
 import org.apache.commons.text.*
 import java.net.*
 import java.util.regex.*
 
-object Utils {
-  const val editRef = "edit"
-  const val githubRef = "github"
-  const val errorRef = "error"
+object Urls {
+  const val EDIT = "edit"
+  const val GITHUB = "github"
+  const val ERROR = "error"
+  const val MSG = "msg"
+  const val ARGS = "args"
 
-  fun srcRefUrl(
+  internal fun srcrefToGithubUrl(
     params: Map<String, String?>,
     escapeHtml4: Boolean = false,
     prefix: String = "https://www.srcref.com"
@@ -34,45 +35,10 @@ object Utils {
         .map { (k, v) -> if (v.isNotNull()) "$k=${v.encode()}" else "" }
         .filter { it.isNotBlank() }
         .joinToString("&")
-    return "$prefix/$githubRef?$args".let { if (escapeHtml4) StringEscapeUtils.escapeHtml4(it) else it }
+    return "$prefix/$GITHUB?$args".let { if (escapeHtml4) StringEscapeUtils.escapeHtml4(it) else it }
   }
 
-  fun srcRefUrl(
-    account: String,
-    repo: String,
-    path: String,
-    begin_regex: String,
-    begin_occurrence: Int = 1,
-    begin_offset: Int = 0,
-    begin_topDown: Boolean = true,
-    end_regex: String = "",
-    end_occurrence: Int = 1,
-    end_offset: Int = 0,
-    end_topDown: Boolean = true,
-    prefix: String = "https://www.srcref.com",
-    branch: String = "master",
-    escapeHtml4: Boolean = false,
-  ) =
-    srcRefUrl(
-      mapOf(
-        ACCOUNT.arg to account,
-        REPO.arg to repo,
-        PATH.arg to path,
-        BEGIN_REGEX.arg to begin_regex,
-        BEGIN_OCCURRENCE.arg to begin_occurrence.toString(),
-        BEGIN_OFFSET.arg to begin_offset.toString(),
-        BEGIN_TOPDOWN.arg to begin_topDown.toString(),
-        END_REGEX.arg to end_regex,
-        END_OCCURRENCE.arg to end_occurrence.toString(),
-        END_OFFSET.arg to end_offset.toString(),
-        END_TOPDOWN.arg to end_topDown.toString(),
-        BRANCH.arg to branch,
-      ),
-      escapeHtml4,
-      prefix,
-    )
-
-  fun githubRefUrl(params: Map<String, String?>, prefix: String) =
+  internal fun githubRangeUrl(params: Map<String, String?>, prefix: String) =
     try {
       val account = ACCOUNT.required(params)
       val repo = REPO.required(params)
@@ -82,7 +48,7 @@ object Utils {
       val url = githubRawUrl(account, repo, path, branch)
 
       val lines = URL(url).readText().lines()
-      val begin_linenum =
+      val beginLinenum =
         calcLineNumber(
           lines,
           BEGIN_REGEX.required(params),
@@ -91,10 +57,10 @@ object Utils {
           BEGIN_TOPDOWN.defaultIfNull(params).toBoolean()
         ).also { if (it < 1) throw IllegalArgumentException("Begin line number is less than 1") }
 
-      val end_linenum =
-        if (END_REGEX.defaultIfNull(params).isBlank()) {
+      val endLinenum =
+        if (END_REGEX.defaultIfNull(params).isBlank())
           -1
-        } else
+        else
           calcLineNumber(
             lines,
             END_REGEX.defaultIfNull(params),
@@ -103,12 +69,27 @@ object Utils {
             END_TOPDOWN.defaultIfNull(params).toBoolean()
           ).also { if (it < 1) throw IllegalArgumentException("End line number is less than 1") }
 
-      githubSourceUrl(account, repo, branch, path, begin_linenum, end_linenum)
+      githubSourceUrl(account, repo, branch, path, beginLinenum, endLinenum)
     } catch (e: Throwable) {
       val msg = "${e::class.simpleName}: ${e.message}".encode()
       val args = params.toString().encode()
-      "$prefix/$errorRef?msg=$msg&args=$args"
+      "$prefix/$ERROR?$MSG=$msg&$ARGS=$args"
     }
+
+  private fun githubSourceUrl(
+    username: String,
+    repoName: String,
+    branchName: String,
+    path: String = "",
+    begin_lineNum: Int,
+    end_lineNum: Int,
+  ): String {
+    val suffix = if (end_lineNum > 0 && begin_lineNum != end_lineNum) "-L$end_lineNum" else ""
+    return "https://github.com/$username/$repoName/blob/$branchName/$path#L$begin_lineNum$suffix"
+  }
+
+  private fun githubRawUrl(username: String, repoName: String, path: String = "", branchName: String = "master") =
+    "https://raw.githubusercontent.com/$username/$repoName/$branchName/$path"
 
   internal fun calcLineNumber(lines: List<String>, pattern: String, occurrence: Int, offset: Int, topDown: Boolean) =
     try {
@@ -123,23 +104,8 @@ object Utils {
       logger.info(e) { "Error in calcLineNumber()" }
       when (e) {
         is PatternSyntaxException -> throw IllegalArgumentException("Invalid regex:\"${pattern}\" - ${e.message}")
-        is NoSuchElementException -> throw IllegalArgumentException("Requested matches ($occurrence) not found for regex: \"$pattern\"")
+        is NoSuchElementException -> throw IllegalArgumentException("Required matches ($occurrence) not found for regex: \"$pattern\"")
         else -> throw e
       }
     }
-
-  fun HTMLTag.rawHtml(html: String) = unsafe { raw(html) }
-
-  private fun githubSourceUrl(
-    username: String,
-    repoName: String,
-    branchName: String,
-    path: String = "",
-    begin_lineNum: Int,
-    end_lineNum: Int,
-  ) =
-    "https://github.com/$username/$repoName/blob/$branchName/$path#L$begin_lineNum${if (end_lineNum > 0) "-L$end_lineNum" else ""}"
-
-  private fun githubRawUrl(username: String, repoName: String, path: String = "", branchName: String = "master") =
-    "https://raw.githubusercontent.com/$username/$repoName/$branchName/$path"
 }
