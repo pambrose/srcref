@@ -17,6 +17,7 @@ import com.pambrose.srcref.SrcRef.logger
 import org.apache.commons.text.*
 import java.net.*
 import java.util.regex.*
+import kotlin.time.*
 
 object Urls {
   const val EDIT = "edit"
@@ -46,7 +47,8 @@ object Urls {
       val branch = BRANCH.required(params)
 
       val url = githubRawUrl(account, repo, path, branch)
-      val lines = URL(url).readText().lines()
+      val (lines, duration) = measureTimedValue { URL(url).readText().lines() }
+      logger.info("Read $url in $duration")
 
       val beginOffsetStr = BEGIN_OFFSET.defaultIfNull(params)
       val beginOffset =
