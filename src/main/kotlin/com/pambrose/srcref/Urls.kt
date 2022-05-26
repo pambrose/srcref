@@ -101,11 +101,22 @@ object Urls {
         .drop(occurrence - 1)
         .first().first) + offset + 1
     } catch (e: Throwable) {
-      logger.info(e) { "Error in calcLineNumber()" }
       when (e) {
-        is PatternSyntaxException -> throw IllegalArgumentException("Invalid regex:\"${pattern}\" - ${e.message}")
-        is NoSuchElementException -> throw IllegalArgumentException("Required matches ($occurrence) not found for regex: \"$pattern\"")
-        else -> throw e
+        is PatternSyntaxException -> {
+          val msg = "Invalid regex:\"${pattern}\" - ${e.message}"
+          logger.info { "Problem in calcLineNumber(): $msg" }
+          throw IllegalArgumentException(msg)
+        }
+        is NoSuchElementException -> {
+          val msg = "Required matches ($occurrence) not found for regex: \"$pattern\""
+          logger.info { "Problem in calcLineNumber(): $msg" }
+          throw IllegalArgumentException(msg)
+        }
+        else -> {
+          val msg = "${e::class.simpleName}: ${e.message}"
+          logger.error { "Error in calcLineNumber(): $msg" }
+          throw e
+        }
       }
     }
 }
