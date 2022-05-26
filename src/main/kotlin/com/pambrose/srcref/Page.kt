@@ -1,6 +1,7 @@
 package com.pambrose.srcref
 
 import com.github.pambrose.common.response.*
+import com.pambrose.srcref.Api.srcrefUrl
 import com.pambrose.srcref.QueryArgs.ACCOUNT
 import com.pambrose.srcref.QueryArgs.BEGIN_OCCURRENCE
 import com.pambrose.srcref.QueryArgs.BEGIN_OFFSET
@@ -206,13 +207,13 @@ object Page {
               }
             }
 
-            if (params.values.asSequence().filter { it?.isNotBlank() == true }.any()) {
-              val srcrefUrl = srcrefToGithubUrl(params, prefix = urlPrefix)
-              val githubUrl = githubRangeUrl(params, urlPrefix)
+            br {}
+            div {
+              style = "padding-left: 25px;"
 
-              div {
-                style = "padding-left: 25px;"
-                br {}
+              if (params.values.asSequence().filter { it?.isNotBlank() == true }.any()) {
+                val srcrefUrl = srcrefToGithubUrl(params, prefix = urlPrefix)
+                val githubUrl = githubRangeUrl(params, urlPrefix)
                 p { +"Embed this URL in your docs:" }
                 textArea { id = "srcrefUrl"; rows = "3"; +srcrefUrl; cols = "91"; readonly = true }
                 p { +"to reach this GitHub page:" }
@@ -228,6 +229,28 @@ object Page {
                 button(classes = "btn btn-success") {
                   onClick = "window.open('/')"
                   +"Reset Values"
+                }
+              } else {
+                button(classes = "btn btn-success") {
+                  val url =
+                    srcrefUrl(
+                      account = "pambrose",
+                      repo = "srcref",
+                      branch = "master",
+                      path = "src/main/kotlin/com/pambrose/srcref/Main.kt",
+                      beginRegex = "install\\(CallLogging\\)",
+                      beginOccurrence = 1,
+                      beginOffset = 0,
+                      beginTopDown = true,
+                      endRegex = "install\\(Compression\\)",
+                      endOccurrence = 1,
+                      endOffset = 3,
+                      endTopDown = true,
+                      prefix = "",
+                    )
+                  onClick =
+                    "window.open('${"$url&edit=true"}','_blank')"
+                  +"Example Values"
                 }
               }
             }

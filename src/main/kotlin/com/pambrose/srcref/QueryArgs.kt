@@ -12,7 +12,7 @@ enum class QueryArgs(private val paramName: String, private val defaultValue: St
   END_REGEX("eregex"),
   END_OCCURRENCE("eoccur", "1"),
   END_OFFSET("eoffset", "0"),
-  END_TOPDOWN("etopd", "false");
+  END_TOPDOWN("etopd", "true");
 
   val arg get() = paramName.lowercase()
 
