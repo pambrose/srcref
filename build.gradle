@@ -25,7 +25,6 @@ repositories {
 dependencies {
     implementation "io.ktor:ktor-server:$ktor_version"
     implementation "io.ktor:ktor-server-cio:$ktor_version"
-    implementation "io.ktor:ktor-server-sessions:$ktor_version"
     implementation "io.ktor:ktor-server-html-builder:$ktor_version"
 
     implementation "org.jetbrains.kotlin-wrappers:kotlin-css:$css_version"

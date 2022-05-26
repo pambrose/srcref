@@ -20,25 +20,23 @@ import java.util.regex.*
 import kotlin.time.*
 
 object Urls {
-  const val EDIT = "edit"
-  const val GITHUB = "github"
-  const val ERROR = "error"
-  const val MSG = "msg"
-  const val ARGS = "args"
+  internal const val EDIT = "edit"
+  internal const val GITHUB = "github"
+  internal const val ERROR = "error"
+  internal const val MSG = "msg"
+
+  internal fun Map<String, String?>.toQueryParams() =
+    this.map { (k, v) -> if (v.isNotNull()) "$k=${v.encode()}" else "" }
+      .filter { it.isNotBlank() }
+      .joinToString("&")
 
   internal fun srcrefToGithubUrl(
     params: Map<String, String?>,
     escapeHtml4: Boolean = false,
     prefix: String = "https://www.srcref.com"
-  ): String {
-    val args =
-      params
-        .map { (k, v) -> if (v.isNotNull()) "$k=${v.encode()}" else "" }
-        .filter { it.isNotBlank() }
-        .joinToString("&")
-    return "$prefix/$GITHUB?$args".let { if (escapeHtml4) StringEscapeUtils.escapeHtml4(it) else it }
-  }
+  ) = "$prefix/$GITHUB?${params.toQueryParams()}".let { if (escapeHtml4) StringEscapeUtils.escapeHtml4(it) else it }
 
+  // This returns an url and an error message if there is an error
   internal fun githubRangeUrl(params: Map<String, String?>, prefix: String) =
     try {
       val account = ACCOUNT.required(params)
@@ -85,13 +83,11 @@ object Urls {
             END_TOPDOWN.defaultIfNull(params).toBoolean()
           ).also { if (it < 1) throw IllegalArgumentException("End line number is less than 1") }
         }
-
-      githubSourceUrl(account, repo, branch, path, beginLinenum, endLinenum)
+      githubSourceUrl(account, repo, branch, path, beginLinenum, endLinenum) to ""
     } catch (e: Throwable) {
-      val msg = "${e::class.simpleName}: ${e.message}"
-      val args = params.toString()
-      logger.info { "Input problem: $msg $args" }
-      "$prefix/$ERROR?$MSG=${msg.encode()}&$ARGS=${args.encode()}"
+      val errorMsg = "${e::class.simpleName}: ${e.message}"
+      logger.info { "Input problem: $errorMsg $params" }
+      "$prefix/$ERROR?$MSG=${errorMsg.encode()}&${params.toQueryParams()}" to errorMsg
     }
 
   private fun githubSourceUrl(

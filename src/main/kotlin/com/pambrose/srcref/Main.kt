@@ -1,9 +1,9 @@
 package com.pambrose.srcref
 
 import com.github.pambrose.common.response.*
+import com.pambrose.srcref.Page.displayError
 import com.pambrose.srcref.Page.displayForm
 import com.pambrose.srcref.Page.urlPrefix
-import com.pambrose.srcref.Urls.ARGS
 import com.pambrose.srcref.Urls.EDIT
 import com.pambrose.srcref.Urls.ERROR
 import com.pambrose.srcref.Urls.GITHUB
@@ -18,10 +18,7 @@ import io.ktor.server.plugins.compression.*
 import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.routing.*
 import io.ktor.util.pipeline.*
-import kotlinx.html.*
-import kotlinx.html.dom.*
 import mu.*
-import kotlin.collections.set
 
 object SrcRef : KLogging() {
   @JvmStatic
@@ -40,46 +37,24 @@ object SrcRef : KLogging() {
         }
 
         get(EDIT) {
-          queryParams().also { params ->
-            logger.info { params }
-            displayForm(params)
-          }
+          val params = readQueryParams()
+          logger.info { params }
+          displayForm(params)
         }
 
         get(GITHUB) {
-          queryParams().also { params ->
-            logger.info { params }
-            if (call.request.queryParameters.contains(EDIT))
-              displayForm(params)
-            else
-              redirectTo { githubRangeUrl(params, urlPrefix) }
-          }
+          val params = readQueryParams()
+          logger.info { params }
+          if (call.request.queryParameters.contains(EDIT))
+            displayForm(params)
+          else
+            redirectTo { githubRangeUrl(params, urlPrefix).first }
         }
 
         get(ERROR) {
-          val msgval = call.request.queryParameters[MSG] ?: "Missing message"
-          val argsval = call.request.queryParameters[ARGS] ?: "Missing args"
-          respondWith {
-            document {
-              append.html {
-                head {}
-                body {
-                  h1 { +"Srcref Exception" }
-                  h2 { +msgval }
-                  h2 { +"Args" }
-                  div {
-                    style = "padding-left: 20px;"
-                    textArea {
-                      rows = "5"
-                      cols = "100"
-                      readonly = true
-                      +argsval
-                    }
-                  }
-                }
-              }
-            }.serialize()
-          }
+          val params = readQueryParams()
+          val msg = readMsg()
+          displayError(params, msg)
         }
 
         static("/") {
@@ -91,13 +66,14 @@ object SrcRef : KLogging() {
   }
 }
 
-fun PipelineCall.queryParams() =
-  mutableMapOf<String, String?>()
-    .also {
-      QueryArgs
-        .values()
-        .map { it.arg }
-        .forEach { arg -> it[arg] = call.request.queryParameters[arg] }
-    }
+private fun PipelineCall.readQueryParams() =
+  buildMap {
+    QueryArgs
+      .values()
+      .map { it.arg }
+      .forEach { arg -> put(arg, call.request.queryParameters[arg]) }
+  }
+
+private fun PipelineCall.readMsg() = call.request.queryParameters[MSG] ?: "Missing message"
 
 typealias PipelineCall = PipelineContext<Unit, ApplicationCall>

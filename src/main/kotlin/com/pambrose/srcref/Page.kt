@@ -17,47 +17,57 @@ import com.pambrose.srcref.QueryArgs.REPO
 import com.pambrose.srcref.Urls.EDIT
 import com.pambrose.srcref.Urls.githubRangeUrl
 import com.pambrose.srcref.Urls.srcrefToGithubUrl
+import com.pambrose.srcref.Urls.toQueryParams
 import io.ktor.http.ContentType.Text.CSS
 import kotlinx.html.*
 import kotlinx.html.dom.*
 
 object Page {
+  private const val widthVal = "93"
+
   internal val urlPrefix = (System.getenv("PREFIX") ?: "http://localhost:8080").removeSuffix("/")
 
   private fun HTMLTag.rawHtml(html: String) = unsafe { raw(html) }
 
-  internal suspend fun PipelineCall.displayForm(params: Map<String, String?>) {
-    respondWith {
-      document {
-        append.html {
-          head {
-            meta { charset = "utf-8" }
-            meta { name = "apple-mobile-web-app-capable"; content = "yes" }
-            meta { name = "apple-mobile-web-app-status-bar-style"; content = "black-translucent" }
-            meta {
-              name = "viewport"
-              content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-            }
+  private fun HEAD.commonHead() {
+    meta { charset = "utf-8" }
+    meta { name = "apple-mobile-web-app-capable"; content = "yes" }
+    meta { name = "apple-mobile-web-app-status-bar-style"; content = "black-translucent" }
+    meta {
+      name = "viewport"
+      content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    }
 
-            link { rel = "shortcut icon"; href = "/favicon.ico"; type = "image/x-icon" }
-            link { rel = "icon"; href = "/favicon.ico"; type = "image/x-icon" }
-            link { rel = "stylesheet"; href = "css/srcref.css"; type = CSS.toString() }
+    link { rel = "shortcut icon"; href = "/favicon.ico"; type = "image/x-icon" }
+    link { rel = "icon"; href = "/favicon.ico"; type = "image/x-icon" }
+    link { rel = "stylesheet"; href = "css/srcref.css"; type = CSS.toString() }
+  }
 
-            script { src = "js/copyUrl.js" }
-
-            title { +"srcref" }
-          }
-          body {
-            a(href = "https://github.com/pambrose/srcref", target = "_blank", classes = "top-right") {
-              title = "View source on GitHub"
-              rawHtml(
-                """
+  private fun BODY.githubIcon() {
+    a(href = "https://github.com/pambrose/srcref", target = "_blank", classes = "top-right") {
+      title = "View source on GitHub"
+      rawHtml(
+        """
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 55 55">
                     <path fill="currentColor" stroke="none" d="M27.5 11.2a16.3 16.3 0 0 0-5.1 31.7c.8.2 1.1-.3 1.1-.7v-2.8c-4.5 1-5.5-2.2-5.5-2.2-.7-1.9-1.8-2.4-1.8-2.4-1.5-1 .1-1 .1-1 1.6.1 2.5 1.7 2.5 1.7 1.5 2.5 3.8 1.8 4.7 1.4.2-1 .6-1.8 1-2.2-3.5-.4-7.3-1.8-7.3-8 0-1.8.6-3.3 1.6-4.4-.1-.5-.7-2.1.2-4.4 0 0 1.4-.4 4.5 1.7a15.6 15.6 0 0 1 8.1 0c3.1-2 4.5-1.7 4.5-1.7.9 2.3.3 4 .2 4.4 1 1 1.6 2.6 1.6 4.3 0 6.3-3.8 7.7-7.4 8 .6.6 1.1 1.6 1.1 3v4.6c0 .4.3.9 1.1.7a16.3 16.3 0 0 0-5.2-31.7"></path>
                   </svg>
                 """
-              )
-            }
+      )
+    }
+  }
+
+  internal suspend fun PipelineCall.displayForm(params: Map<String, String?>) {
+    respondWith {
+
+      document {
+        append.html {
+          head {
+            commonHead()
+            script { src = "js/copyUrl.js" }
+            title { +"srcref" }
+          }
+          body {
+            githubIcon()
 
             div {
               style = "padding-left: 25px; padding-top: 25px;"
@@ -198,8 +208,7 @@ object Page {
                   td { }
                   td {
                     style = "padding-top:10"
-                    submitInput {
-                      style = "font-size:25px; height:35; vertical-align:middle;"
+                    submitInput(classes = "button") {
                       value = "Generate URL"
                     }
                   }
@@ -211,27 +220,39 @@ object Page {
             div {
               style = "padding-left: 25px;"
 
-              if (params.values.asSequence().filter { it?.isNotBlank() == true }.any()) {
+              if (params.hasValues()) {
                 val srcrefUrl = srcrefToGithubUrl(params, prefix = urlPrefix)
-                val githubUrl = githubRangeUrl(params, urlPrefix)
-                p { +"Embed this URL in your docs:" }
-                textArea { id = "srcrefUrl"; rows = "3"; +srcrefUrl; cols = "91"; readonly = true }
-                p { +"to reach this GitHub page:" }
-                textArea { rows = "3"; +githubUrl; cols = "91"; readonly = true }
-                p {}
-                button { onClick = "copyUrl()"; +"Copy URL" }
-                span { +" " }
-                button(classes = "btn btn-success") {
-                  onClick = "window.open('$srcrefUrl','_blank')"
-                  +"View GitHub Permalink"
+                val (githubUrl, errorMsg) = githubRangeUrl(params, urlPrefix)
+                val isValid = errorMsg.isEmpty()
+
+                span {
+                  button(classes = "button") {
+                    onClick = "window.open('$EDIT','_self')"
+                    +"Reset Values"
+                  }
+                  if (isValid) {
+                    +" "
+                    button(classes = "button") { onClick = "copyUrl()"; +"Copy URL" }
+                    +" "
+                    button(classes = "button") {
+                      onClick = "window.open('$srcrefUrl','_blank')"
+                      +"View GitHub Permalink"
+                    }
+                  }
                 }
-                span { +" " }
-                button(classes = "btn btn-success") {
-                  onClick = "window.open('/')"
-                  +"Reset Values"
+
+                if (isValid) {
+                  p { +"Embed this URL in your docs:" }
+                  textArea { id = "srcrefUrl"; rows = "4"; +srcrefUrl; cols = widthVal; readonly = true }
+                  p { +"to reach this GitHub page:" }
+                  val rowVal = if (isValid) 2 else 9
+                  textArea { rows = rowVal.toString(); +githubUrl; cols = widthVal; readonly = true }
+                } else {
+                  h2 { +"Exception:" }
+                  textArea { rows = "3"; cols = widthVal; readonly = true; +errorMsg }
                 }
               } else {
-                button(classes = "btn btn-success") {
+                button(classes = "button") {
                   val url =
                     srcrefUrl(
                       account = "pambrose",
@@ -249,8 +270,40 @@ object Page {
                       prefix = "",
                     )
                   onClick =
-                    "window.open('${"$url&edit=true"}','_blank')"
+                    "window.open('${"$url&edit=true"}','_self')"
                   +"Example Values"
+                }
+              }
+            }
+          }
+        }
+      }.serialize()
+    }
+  }
+
+  internal fun Map<String, String?>.hasValues() = values.asSequence().filter { it?.isNotBlank() == true }.any()
+
+  internal suspend fun PipelineCall.displayError(params: Map<String, String?>, msg: String) {
+    respondWith {
+      document {
+        append.html {
+          head {
+            commonHead()
+            title { +"srcref Error" }
+          }
+          body {
+            githubIcon()
+            div {
+              style = "padding-left: 20px;"
+              h2 { +"srcref Exception:" }
+              textArea { rows = "3"; cols = widthVal; readonly = true; +msg }
+              h2 { +"Args:" }
+              textArea { rows = "5"; cols = widthVal; readonly = true; +params.toString() }
+              div {
+                style = "padding-top: 20px;"
+                button(classes = "button") {
+                  onClick = "window.open('/$EDIT?${params.toQueryParams()}', '_self')"
+                  +"Edit Values"
                 }
               }
             }
