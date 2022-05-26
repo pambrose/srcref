@@ -26,4 +26,13 @@ function copyUrl() {
     copyText.select();
     copyToClipboard(copyText.value);
     //.then(() => alert("Copied the text: " + copyText.value));
+    showSnackbar();
+}
+
+function showSnackbar() {
+    var x = document.getElementById("snackbar");
+    x.className = "show";
+    setTimeout(function () {
+        x.className = x.className.replace("show", "");
+    }, 1500);
 }

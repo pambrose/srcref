@@ -231,6 +231,10 @@ object Page {
                     +"Reset Values"
                   }
                   if (isValid) {
+                    div {
+                      id = "snackbar"
+                      +"URL Copied!"
+                    }
                     +" "
                     button(classes = "button") { onClick = "copyUrl()"; +"Copy URL" }
                     +" "
