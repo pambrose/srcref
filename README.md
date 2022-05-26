@@ -28,8 +28,9 @@ but you can run your own instance as well.
 ### Example
 
 In order to highlight all the lines from the first occurrence
-of `install\(CallLogging\)` to 3 lines beyond the first occurrence of `install\(Compression\)` in
-`src/main/kotlin/Main.kt`, create a _srcref_ URL using
+of `install(CallLogging)` to 3 lines beyond the first occurrence of `install(Compression)` in
+[src/main/kotlin/Main.kt](https://github.com/pambrose/srcref/blob/master/src/main/kotlin/com/pambrose/srcref/Main.kt),
+create a _srcref_ URL using
 [these values](https://www.srcref.com/edit?account=pambrose&repo=srcref&branch=master&path=%2Fsrc%2Fmain%2Fkotlin%2Fcom%2Fpambrose%2Fsrcref%2FMain.kt&bregex=install%5C%28CallLogging%5C%29&boccur=1&boffset=0&btopd=true&eregex=install%5C%28Compression%5C%29&eoccur=1&eoffset=3&etopd=false)
 .
 
