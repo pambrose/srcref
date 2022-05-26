@@ -46,34 +46,50 @@ object Urls {
       val branch = BRANCH.required(params)
 
       val url = githubRawUrl(account, repo, path, branch)
-
       val lines = URL(url).readText().lines()
+
+      val beginOffsetStr = BEGIN_OFFSET.defaultIfNull(params)
+      val beginOffset =
+        try {
+          beginOffsetStr.toInt()
+        } catch (e: NumberFormatException) {
+          throw IllegalArgumentException("Invalid Begin Offset value: $beginOffsetStr")
+        }
       val beginLinenum =
         calcLineNumber(
           lines,
           BEGIN_REGEX.required(params),
           BEGIN_OCCURRENCE.defaultIfNull(params).toInt(),
-          BEGIN_OFFSET.defaultIfNull(params).toInt(),
+          beginOffset,
           BEGIN_TOPDOWN.defaultIfNull(params).toBoolean()
         ).also { if (it < 1) throw IllegalArgumentException("Begin line number is less than 1") }
 
       val endLinenum =
-        if (END_REGEX.defaultIfNull(params).isBlank())
+        if (END_REGEX.defaultIfNull(params).isBlank()) {
           -1
-        else
+        } else {
+          val endOffsetStr = END_OFFSET.defaultIfNull(params)
+          val endOffset =
+            try {
+              endOffsetStr.toInt()
+            } catch (e: NumberFormatException) {
+              throw IllegalArgumentException("Invalid End Offset value: $endOffsetStr")
+            }
           calcLineNumber(
             lines,
             END_REGEX.defaultIfNull(params),
             END_OCCURRENCE.defaultIfNull(params).toInt(),
-            END_OFFSET.defaultIfNull(params).toInt(),
+            endOffset,
             END_TOPDOWN.defaultIfNull(params).toBoolean()
           ).also { if (it < 1) throw IllegalArgumentException("End line number is less than 1") }
+        }
 
       githubSourceUrl(account, repo, branch, path, beginLinenum, endLinenum)
     } catch (e: Throwable) {
-      val msg = "${e::class.simpleName}: ${e.message}".encode()
-      val args = params.toString().encode()
-      "$prefix/$ERROR?$MSG=$msg&$ARGS=$args"
+      val msg = "${e::class.simpleName}: ${e.message}"
+      val args = params.toString()
+      logger.info { "Input problem: $msg $args" }
+      "$prefix/$ERROR?$MSG=${msg.encode()}&$ARGS=${args.encode()}"
     }
 
   private fun githubSourceUrl(
@@ -102,19 +118,12 @@ object Urls {
         .first().first) + offset + 1
     } catch (e: Throwable) {
       when (e) {
-        is PatternSyntaxException -> {
-          val msg = "Invalid regex:\"${pattern}\" - ${e.message}"
-          logger.info { "Problem in calcLineNumber(): $msg" }
-          throw IllegalArgumentException(msg)
-        }
-        is NoSuchElementException -> {
-          val msg = "Required matches ($occurrence) not found for regex: \"$pattern\""
-          logger.info { "Problem in calcLineNumber(): $msg" }
-          throw IllegalArgumentException(msg)
-        }
+        is PatternSyntaxException ->
+          throw IllegalArgumentException("Invalid regex:\"${pattern}\" - ${e.message}")
+        is NoSuchElementException ->
+          throw IllegalArgumentException("Required matches ($occurrence) not found for regex: \"$pattern\"")
         else -> {
-          val msg = "${e::class.simpleName}: ${e.message}"
-          logger.error { "Error in calcLineNumber(): $msg" }
+          logger.error { "Error in calcLineNumber(): ${e::class.simpleName}: ${e.message}" }
           throw e
         }
       }
