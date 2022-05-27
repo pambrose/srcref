@@ -1,6 +1,6 @@
 package com.pambrose.srcref
 
-enum class QueryArgs(private val paramName: String, private val defaultValue: String = "") {
+internal enum class QueryArgs(private val paramName: String, private val defaultValue: String = "") {
   ACCOUNT("account"),
   REPO("repo"),
   BRANCH("branch", "master"),

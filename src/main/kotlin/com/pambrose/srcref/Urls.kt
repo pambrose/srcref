@@ -26,7 +26,7 @@ object Urls {
   internal const val MSG = "msg"
 
   internal fun Map<String, String?>.toQueryParams() =
-    this.map { (k, v) -> if (v.isNotNull()) "$k=${v.encode()}" else "" }
+    map { (k, v) -> if (v.isNotNull()) "$k=${v.encode()}" else "" }
       .filter { it.isNotBlank() }
       .joinToString("&")
 
