@@ -27,33 +27,32 @@ but you can run your own instance as well.
 
 ### Example
 
-In order to highlight all the lines from the first occurrence
+To highlight all the lines from the first occurrence
 of `install(CallLogging)` to 3 lines beyond the first occurrence of `install(Compression)` in
 [src/main/kotlin/Main.kt](https://github.com/pambrose/srcref/blob/master/src/main/kotlin/com/pambrose/srcref/Main.kt),
 create a _srcref_ URL using
 [these values](https://www.srcref.com/edit?account=pambrose&repo=srcref&branch=master&path=src%2Fmain%2Fkotlin%2Fcom%2Fpambrose%2Fsrcref%2FMain.kt&bregex=install%5C%28CallLogging%5C%29&boccur=1&boffset=0&btopd=true&eregex=install%5C%28Compression%5C%29&eoccur=1&eoffset=3&etopd=false)
 .
 
-The resulting _srcref_ link generates this
+The resulting _srcref_ URL leads to this
 [GitHub permalink](https://www.srcref.com/github?account=pambrose&repo=srcref&branch=master&path=src%2Fmain%2Fkotlin%2Fcom%2Fpambrose%2Fsrcref%2FMain.kt&bregex=install%5C%28CallLogging%5C%29&boccur=1&boffset=0&btopd=true&eregex=install%5C%28Compression%5C%29&eoccur=1&eoffset=3&etopd=false)
 .
 
 ### Query Parameters
 
-| Parameter   | Default | Description                                                                        |
-|-------------|---------|------------------------------------------------------------------------------------|
-| **account** |         | GitHub account or organization name                                                |
-| **repo**    |         | Repo name                                                                          |
-| **branch**  | master  | Branch name                                                                        |
-| **path**    |         | Path of the file                                                                   |
-| **bregex**  |         | The regex used in the `contains()` evaluated for each line for the beginning match |
-| **boccur**  | 1       | The number of matches for the beginning match                                      |
-| **boffset** | 0       | The number of lines above or below the beginning match                             |
-| **btopd**   | true    | The direction to evaluate the file for the beginning match                         |
-| **eregex**  |         | The regex used in the `contains()` evaluated for each line for the ending match    |
-| **eoccur**  | 1       | The number of matches for the ending match                                         |
-| **eoffset** | 0       | The number of lines above or below the ending match                                |
-| **etopd**   | true    | The direction to evaluate the file for the ending match                            |
+| Parameter | Default   | Required | Description                                                |
+|-----------|-----------|----------|------------------------------------------------------------|
+| _account_ |           | Yes      | GitHub account or organization name                        |
+| _repo_    |           | Yes      | Repo name                                                  |
+| _branch_  | "master"  | Yes      | Branch name                                                |
+| _bregex_  |           | Yes      | The regex used to determine the beginning match            |
+| _boccur_  | 1         | Yes      | The number of matches for the beginning match              |
+| _boffset_ | 0         | Yes      | The number of lines above or below the beginning match     |
+| _btopd_   | true      | Yes      | The direction to evaluate the file for the beginning match |
+| _eregex_  |           | No       | The regex used to determine the ending match               |
+| _eoccur_  | 1         | No       | The number of matches for the ending match                 |
+| _eoffset_ | 0         | No       | The number of lines above or below the ending match        |
+| _etopd_   | true      | No       | The direction to evaluate the file for the ending match    |
 
 ## Programmatic Usage
 
@@ -64,7 +63,7 @@ You can generate _srcref_ URLs programmatically with the `srcrefUrl()` call
 Add this to your gradle dependencies:
 
 ```
-implementation "com.github.pambrose:srcref:1.0.2"
+implementation "com.github.pambrose:srcref:1.0.3"
 ```
 
 ## Misc

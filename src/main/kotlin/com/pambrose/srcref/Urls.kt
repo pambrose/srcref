@@ -14,7 +14,7 @@ import com.pambrose.srcref.QueryArgs.END_TOPDOWN
 import com.pambrose.srcref.QueryArgs.PATH
 import com.pambrose.srcref.QueryArgs.REPO
 import com.pambrose.srcref.SrcRef.logger
-import org.apache.commons.text.*
+import org.apache.commons.text.StringEscapeUtils.escapeHtml4
 import java.net.*
 import java.util.regex.*
 import kotlin.time.*
@@ -34,7 +34,7 @@ object Urls {
     params: Map<String, String?>,
     escapeHtml4: Boolean = false,
     prefix: String = "https://www.srcref.com"
-  ) = "$prefix/$GITHUB?${params.toQueryParams()}".let { if (escapeHtml4) StringEscapeUtils.escapeHtml4(it) else it }
+  ): String = "$prefix/$GITHUB?${params.toQueryParams()}".let { if (escapeHtml4) escapeHtml4(it) else it }
 
   // This returns an url and an error message if there is an error
   internal fun githubRangeUrl(params: Map<String, String?>, prefix: String) =

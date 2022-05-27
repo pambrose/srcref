@@ -249,8 +249,7 @@ object Page {
                   p { +"Embed this URL in your docs:" }
                   textArea { id = "srcrefUrl"; rows = "4"; +srcrefUrl; cols = widthVal; readonly = true }
                   p { +"to reach this GitHub page:" }
-                  val rowVal = if (isValid) 2 else 9
-                  textArea { rows = rowVal.toString(); +githubUrl; cols = widthVal; readonly = true }
+                  textArea { rows = "2"; +githubUrl; cols = widthVal; readonly = true }
                 } else {
                   h2 { +"Exception:" }
                   textArea { rows = "3"; cols = widthVal; readonly = true; +errorMsg }
@@ -285,7 +284,7 @@ object Page {
     }
   }
 
-  internal fun Map<String, String?>.hasValues() = values.asSequence().filter { it?.isNotBlank() == true }.any()
+  private fun Map<String, String?>.hasValues() = values.asSequence().filter { it?.isNotBlank() == true }.any()
 
   internal suspend fun PipelineCall.displayError(params: Map<String, String?>, msg: String) {
     respondWith {

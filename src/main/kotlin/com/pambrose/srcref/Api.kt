@@ -31,7 +31,7 @@ object Api {
     prefix: String = "https://www.srcref.com",
     branch: String = "master",
     escapeHtml4: Boolean = false,
-  ) =
+  ): String =
     srcrefToGithubUrl(
       mapOf(
         ACCOUNT.arg to account,
