@@ -13,7 +13,7 @@ import mu.*
 import java.util.concurrent.*
 import java.util.concurrent.atomic.*
 import kotlin.time.*
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.TimeSource.Monotonic
 
 internal class ContentCache {
@@ -56,7 +56,7 @@ internal class ContentCache {
     internal val contentCache = ContentCache()
 
     init {
-      logger.info { "Starting cache claenup thread" }
+      logger.info { "Starting cache cleanup thread" }
 
       newSingleThreadContext("Cache Cleanup").executor.execute {
         while (true) {
@@ -73,7 +73,7 @@ internal class ContentCache {
           } catch (e: Throwable) {
             logger.error(e) { "Exception in Cache Cleanup ${e.simpleClassName} ${e.message}" }
           }
-          Thread.sleep(30.seconds.inWholeMilliseconds)
+          Thread.sleep(5.minutes.inWholeMilliseconds)
         }
       }
     }
