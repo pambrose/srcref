@@ -1,9 +1,11 @@
 package com.pambrose.srcref
 
 import com.github.pambrose.common.response.*
-import com.pambrose.srcref.Page.displayError
-import com.pambrose.srcref.Page.displayForm
-import com.pambrose.srcref.Page.urlPrefix
+import com.pambrose.srcref.Pages.displayCache
+import com.pambrose.srcref.Pages.displayError
+import com.pambrose.srcref.Pages.displayForm
+import com.pambrose.srcref.Pages.urlPrefix
+import com.pambrose.srcref.Urls.CACHE
 import com.pambrose.srcref.Urls.EDIT
 import com.pambrose.srcref.Urls.ERROR
 import com.pambrose.srcref.Urls.GITHUB
@@ -55,6 +57,10 @@ object SrcRef : KLogging() {
           val params = readQueryParams()
           val msg = readMsg()
           displayError(params, msg)
+        }
+
+        get(CACHE) {
+          displayCache()
         }
 
         static("/") {

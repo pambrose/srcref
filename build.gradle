@@ -27,6 +27,9 @@ dependencies {
     implementation "io.ktor:ktor-server-cio:$ktor_version"
     implementation "io.ktor:ktor-server-html-builder:$ktor_version"
 
+    implementation "io.ktor:ktor-client-core:$ktor_version"
+    implementation "io.ktor:ktor-client-cio:$ktor_version"
+
     implementation "org.jetbrains.kotlin-wrappers:kotlin-css:$css_version"
 
     implementation "com.github.pambrose.common-utils:core-utils:$utils_version"
@@ -80,6 +83,7 @@ compileKotlin {
         jvmTarget = '1.8'
         freeCompilerArgs += ['-Xbackend-threads=8',
                              '-opt-in=kotlin.time.ExperimentalTime',
+                             '-opt-in=kotlinx.coroutines.DelicateCoroutinesApi',
         ]
     }
 }

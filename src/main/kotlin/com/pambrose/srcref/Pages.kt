@@ -2,6 +2,7 @@ package com.pambrose.srcref
 
 import com.github.pambrose.common.response.*
 import com.pambrose.srcref.Api.srcrefUrl
+import com.pambrose.srcref.ContentCache.Companion.contentCache
 import com.pambrose.srcref.QueryArgs.ACCOUNT
 import com.pambrose.srcref.QueryArgs.BEGIN_OCCURRENCE
 import com.pambrose.srcref.QueryArgs.BEGIN_OFFSET
@@ -15,14 +16,16 @@ import com.pambrose.srcref.QueryArgs.END_TOPDOWN
 import com.pambrose.srcref.QueryArgs.PATH
 import com.pambrose.srcref.QueryArgs.REPO
 import com.pambrose.srcref.Urls.EDIT
+import com.pambrose.srcref.Urls.RAW_PREFIX
 import com.pambrose.srcref.Urls.githubRangeUrl
 import com.pambrose.srcref.Urls.srcrefToGithubUrl
 import com.pambrose.srcref.Urls.toQueryParams
 import io.ktor.http.ContentType.Text.CSS
 import kotlinx.html.*
 import kotlinx.html.dom.*
+import kotlinx.html.stream.*
 
-object Page {
+object Pages {
   private const val widthVal = "93"
 
   internal val urlPrefix = (System.getenv("PREFIX") ?: "http://localhost:8080").removeSuffix("/")
@@ -48,17 +51,20 @@ object Page {
       title = "View source on GitHub"
       rawHtml(
         """
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 55 55">
-                    <path fill="currentColor" stroke="none" d="M27.5 11.2a16.3 16.3 0 0 0-5.1 31.7c.8.2 1.1-.3 1.1-.7v-2.8c-4.5 1-5.5-2.2-5.5-2.2-.7-1.9-1.8-2.4-1.8-2.4-1.5-1 .1-1 .1-1 1.6.1 2.5 1.7 2.5 1.7 1.5 2.5 3.8 1.8 4.7 1.4.2-1 .6-1.8 1-2.2-3.5-.4-7.3-1.8-7.3-8 0-1.8.6-3.3 1.6-4.4-.1-.5-.7-2.1.2-4.4 0 0 1.4-.4 4.5 1.7a15.6 15.6 0 0 1 8.1 0c3.1-2 4.5-1.7 4.5-1.7.9 2.3.3 4 .2 4.4 1 1 1.6 2.6 1.6 4.3 0 6.3-3.8 7.7-7.4 8 .6.6 1.1 1.6 1.1 3v4.6c0 .4.3.9 1.1.7a16.3 16.3 0 0 0-5.2-31.7"></path>
-                  </svg>
-                """
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 55 55">
+                <path fill="currentColor" stroke="none" d="M27.5 11.2a16.3 16.3 0 0 0-5.1 31.7c.8.2 1.1-.3 1.1-.7v-2.8c-4.5 1-5.5-2.2-5.5-2.2-.7-1.9-1.8-2.4-1.8-2.4-1.5-1 .1-1 .1-1 1.6.1 2.5 1.7 2.5 1.7 1.5 2.5 3.8 1.8 4.7 1.4.2-1 .6-1.8 1-2.2-3.5-.4-7.3-1.8-7.3-8 0-1.8.6-3.3 1.6-4.4-.1-.5-.7-2.1.2-4.4 0 0 1.4-.4 4.5 1.7a15.6 15.6 0 0 1 8.1 0c3.1-2 4.5-1.7 4.5-1.7.9 2.3.3 4 .2 4.4 1 1 1.6 2.6 1.6 4.3 0 6.3-3.8 7.7-7.4 8 .6.6 1.1 1.6 1.1 3v4.6c0 .4.3.9 1.1.7a16.3 16.3 0 0 0-5.2-31.7"></path>
+              </svg>
+              """
       )
     }
   }
 
   internal suspend fun PipelineCall.displayForm(params: Map<String, String?>) {
-    respondWith {
 
+    // This is called early because it is suspending and we cannot suspend inside document construction
+    val (githubUrl, errorMsg) = githubRangeUrl(params, urlPrefix)
+
+    respondWith {
       document {
         append.html {
           head {
@@ -163,14 +169,16 @@ object Page {
                     }
                   }
                 }
-
+                tr {
+                  td { id = "optional" }
+                  td { id = "optional"; +"End values are optional" }
+                }
                 tr {
                   td { +"End Regex:" }
                   td {
                     textInput {
                       name = END_REGEX.arg; size = textWidth; value = END_REGEX.defaultIfNull(params)
                     }
-                    +" (optional)"
                   }
                 }
                 tr {
@@ -203,7 +211,6 @@ object Page {
                     }
                   }
                 }
-
                 tr {
                   td { }
                   td {
@@ -222,9 +229,7 @@ object Page {
 
               if (params.hasValues()) {
                 val srcrefUrl = srcrefToGithubUrl(params, prefix = urlPrefix)
-                val (githubUrl, errorMsg) = githubRangeUrl(params, urlPrefix)
                 val isValid = errorMsg.isEmpty()
-
                 span {
                   button(classes = "button") {
                     onClick = "window.open('$EDIT','_self')"
@@ -239,7 +244,7 @@ object Page {
                     button(classes = "button") { onClick = "copyUrl()"; +"Copy URL" }
                     +" "
                     button(classes = "button") {
-                      onClick = "window.open('$srcrefUrl','_blank')"
+                      onClick = "window.open('$srcrefUrl', '_blank')"
                       +"View GitHub Permalink"
                     }
                   }
@@ -284,35 +289,77 @@ object Page {
     }
   }
 
-  private fun Map<String, String?>.hasValues() = values.asSequence().filter { it?.isNotBlank() == true }.any()
+  internal fun Map<String, String?>.hasValues() = values.asSequence().filter { it?.isNotBlank() == true }.any()
 
   internal suspend fun PipelineCall.displayError(params: Map<String, String?>, msg: String) {
     respondWith {
-      document {
-        append.html {
-          head {
-            commonHead()
-            title { +"srcref Error" }
-          }
-          body {
-            githubIcon()
+      createHTML().html {
+        head {
+          commonHead()
+          title { +"srcref Error" }
+        }
+        body {
+          githubIcon()
+          div {
+            style = "padding-left: 20px;"
+            h2 { +"srcref Exception:" }
+            textArea { rows = "3"; cols = widthVal; readonly = true; +msg }
+            h2 { +"Args:" }
+            textArea { rows = "5"; cols = widthVal; readonly = true; +params.toString() }
             div {
-              style = "padding-left: 20px;"
-              h2 { +"srcref Exception:" }
-              textArea { rows = "3"; cols = widthVal; readonly = true; +msg }
-              h2 { +"Args:" }
-              textArea { rows = "5"; cols = widthVal; readonly = true; +params.toString() }
-              div {
-                style = "padding-top: 20px;"
-                button(classes = "button") {
-                  onClick = "window.open('/$EDIT?${params.toQueryParams()}', '_self')"
-                  +"Edit Values"
-                }
+              style = "padding-top: 20px;"
+              button(classes = "button") {
+                onClick = "window.open('/$EDIT?${params.toQueryParams()}', '_self')"
+                +"Edit Values"
               }
             }
           }
         }
-      }.serialize()
+      }
+    }
+  }
+
+  internal suspend fun PipelineCall.displayCache() {
+    respondWith {
+      createHTML().html {
+        head {
+          commonHead()
+          title { +"srcref Content Cache" }
+        }
+        body {
+          githubIcon()
+          div {
+            style = "padding-left: 20px;"
+            h2 { +"srcref Content Cache" }
+            h3 { +"Cache Size: ${contentCache.size}" }
+            if (contentCache.size > 0)
+              table {
+                id = "cachetable"
+                style = "width: 100%; border-collapse: collapse;"
+                tr {
+                  th { +"Hits" }
+                  th { +"Last Access" }
+                  th { +"Age" }
+                  th { +"Size" }
+                  th { +"Lines" }
+                  th { style = "padding-left: 5px; text-align: left;"; +"Url" }
+                  th { style = "padding-left: 5px; text-align: left;"; +"ETag" }
+                }
+                contentCache.sortedByLastReferenced().forEach { (url, v) ->
+                  tr {
+                    td { style = "text-align: center;"; +v.hits.toString() }
+                    td { style = "text-align: center;"; +v.lastReferenced.toString() }
+                    td { style = "text-align: center;"; +v.age.toString() }
+                    td { style = "text-align: center;"; +v.contentLength.toString() }
+                    td { style = "text-align: center;"; +v.content.size.toString() }
+                    td { +url.let { if (url.startsWith(RAW_PREFIX)) it.substring(RAW_PREFIX.length) else it } }
+                    td { +v.etag.substring(1..20).let { if (v.etag.length > 20) "$it..." else it } }
+                  }
+                }
+              }
+          }
+        }
+      }
     }
   }
 }

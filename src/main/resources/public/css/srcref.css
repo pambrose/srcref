@@ -108,3 +108,26 @@ a.top-right:hover {
         opacity: 0;
     }
 }
+
+#cachetable th {
+    border: 1px solid;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#cachetable td {
+    border: 1px solid;
+}
+
+#cachetable tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#optional {
+    padding-top: 5px;
+    color: white;
+    background: #238BD2;
+    text-decoration: underline;
+    text-decoration-color: #238BD2;
+}
+

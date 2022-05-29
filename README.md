@@ -19,7 +19,7 @@ but you can run your own instance as well.
    The `Regex` values use [this syntax](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html).
    Remember to protect regex characters like `()`, `[]` and `{}` by prefixing them with a `\`.
    Use [regex101.com](https://regex101.com) to assist creating regex values.
-2) If the _End_ _Regex_ field is empty, the _srcref_ URL will highlight a single line.
+2) If the _End_ _Regex_ field is empty, the _srcref_ URL will highlight a single line on GitHub.
 3) Click the "Generate URL" button to generate the _srcref_ URL.
 4) Click the "View GitHub Permalink" button to verify the line-specific GitHub permalink.
 5) Click the "Copy URL" button to copy the _srcref_ URL to your clipboard.
@@ -54,6 +54,10 @@ The resulting _srcref_ URL leads to this
 | _eoffset_ | 0         | No       | The number of lines above or below the ending match        |
 | _etopd_   | true      | No       | The direction to evaluate the file for the ending match    |
 
+## Editing a _srcref_ URL
+
+* Add `&edit` to a _srcref_ URL to edit it.
+
 ## Programmatic Usage
 
 You can generate _srcref_ URLs programmatically with the `srcrefUrl()` call
@@ -66,9 +70,14 @@ Add this to your gradle dependencies:
 implementation "com.github.pambrose:srcref:1.0.3"
 ```
 
-## Misc
+## Deploying Your Own _srcref_ Server
 
-* Add `&edit` to a _srcref_ URL to edit it.
-* If you deploy your own version of _srcref_, use the `PREFIX` environment variable to specify URL prefix and
-  the `PORT` environment variable to specify the HTTP port.
+These are the environment variables you need to set to deploy your own _srcref_ server:
+
+| Env Var          | Default                  | Description                         |
+|------------------|--------------------------|-------------------------------------|
+| _PORT_           | 8080                     | HTTP port to listen on              |
+| _PREFIX_         | "https://www.srcref.com" | Prefix for URLs                     |
+| _MAX_LENGTH_     | 5MB (5242880)            | Maximum allowed file size           |
+| _MAX_CACHE_SIZE_ | 2048                     | Maximum cache size before evictions |
 

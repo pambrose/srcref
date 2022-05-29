@@ -21,5 +21,5 @@ internal enum class QueryArgs(private val paramName: String, private val default
   fun defaultIfBlank(params: Map<String, String?>) = (params[arg] ?: "").let { it.ifBlank { defaultValue } }
 
   fun required(params: Map<String, String?>) =
-    (params[arg] ?: "").let { it.ifBlank { throw IllegalArgumentException("Missing: $arg") } }
+    (params[arg] ?: "").let { it.ifBlank { throw IllegalArgumentException("Missing: $arg value") } }
 }
