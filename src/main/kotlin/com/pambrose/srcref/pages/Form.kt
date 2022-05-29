@@ -2,6 +2,18 @@ package com.pambrose.srcref.pages
 
 import com.github.pambrose.common.response.*
 import com.pambrose.srcref.*
+import com.pambrose.srcref.QueryArgs.ACCOUNT
+import com.pambrose.srcref.QueryArgs.BEGIN_OCCURRENCE
+import com.pambrose.srcref.QueryArgs.BEGIN_OFFSET
+import com.pambrose.srcref.QueryArgs.BEGIN_REGEX
+import com.pambrose.srcref.QueryArgs.BEGIN_TOPDOWN
+import com.pambrose.srcref.QueryArgs.BRANCH
+import com.pambrose.srcref.QueryArgs.END_OCCURRENCE
+import com.pambrose.srcref.QueryArgs.END_OFFSET
+import com.pambrose.srcref.QueryArgs.END_REGEX
+import com.pambrose.srcref.QueryArgs.END_TOPDOWN
+import com.pambrose.srcref.QueryArgs.PATH
+import com.pambrose.srcref.QueryArgs.REPO
 import com.pambrose.srcref.pages.Common.commonHead
 import com.pambrose.srcref.pages.Common.githubIcon
 import com.pambrose.srcref.pages.Common.hasValues
@@ -55,8 +67,8 @@ object Form {
                   td { +"Org Name/Username:" }
                   td {
                     textInput {
-                      name = QueryArgs.ACCOUNT.arg; size = textWidth; required = true; value =
-                      QueryArgs.ACCOUNT.defaultIfNull(params)
+                      name = ACCOUNT.arg; size = textWidth; required = true; value =
+                      ACCOUNT.defaultIfNull(params)
                     }
                   }
                 }
@@ -64,8 +76,8 @@ object Form {
                   td { +"Repo Name:" }
                   td {
                     textInput {
-                      name = QueryArgs.REPO.arg; size = textWidth; required = true; value =
-                      QueryArgs.REPO.defaultIfNull(params)
+                      name = REPO.arg; size = textWidth; required = true; value =
+                      REPO.defaultIfNull(params)
                     }
                   }
                 }
@@ -73,8 +85,8 @@ object Form {
                   td { +"Branch Name:" }
                   td {
                     textInput {
-                      name = QueryArgs.BRANCH.arg; size = textWidth; required = true; value =
-                      QueryArgs.BRANCH.defaultIfNull(params)
+                      name = BRANCH.arg; size = textWidth; required = true; value =
+                      BRANCH.defaultIfNull(params)
                     }
                   }
                 }
@@ -82,8 +94,8 @@ object Form {
                   td { +"File Path:" }
                   td {
                     textInput {
-                      name = QueryArgs.PATH.arg; size = "70"; required = true; value =
-                      QueryArgs.PATH.defaultIfNull(params)
+                      name = PATH.arg; size = "70"; required = true; value =
+                      PATH.defaultIfNull(params)
                     }
                   }
                 }
@@ -91,24 +103,24 @@ object Form {
                   td { +"Begin Regex:" }
                   td {
                     textInput {
-                      name = QueryArgs.BEGIN_REGEX.arg; size = textWidth; required = true; value =
-                      QueryArgs.BEGIN_REGEX.defaultIfNull(params)
+                      name = BEGIN_REGEX.arg; size = textWidth; required = true; value =
+                      BEGIN_REGEX.defaultIfNull(params)
                     }
                   }
                 }
                 tr {
                   td { +"Begin Occurrence:" }
                   td {
-                    val isSelected = QueryArgs.BEGIN_OCCURRENCE.defaultIfBlank(params).toInt()
-                    select { name = QueryArgs.BEGIN_OCCURRENCE.arg; size = "1"; occurrenceOptions(isSelected) }
+                    val isSelected = BEGIN_OCCURRENCE.defaultIfBlank(params).toInt()
+                    select { name = BEGIN_OCCURRENCE.arg; size = "1"; occurrenceOptions(isSelected) }
                   }
                 }
                 tr {
                   td { +"Begin Offset:" }
                   td {
                     textInput {
-                      name = QueryArgs.BEGIN_OFFSET.arg; size = offsetWidth; required = true; value =
-                      QueryArgs.BEGIN_OFFSET.defaultIfNull(params)
+                      name = BEGIN_OFFSET.arg; size = offsetWidth; required = true; value =
+                      BEGIN_OFFSET.defaultIfNull(params)
                     }
                   }
                 }
@@ -116,16 +128,16 @@ object Form {
                   td { +"Begin Search Direction:" }
                   td {
                     span {
-                      val isChecked = QueryArgs.BEGIN_TOPDOWN.defaultIfBlank(params).toBoolean()
+                      val isChecked = BEGIN_TOPDOWN.defaultIfBlank(params).toBoolean()
                       style = "text-align:center"
                       radioInput {
-                        id = "begin_topdown"; name = QueryArgs.BEGIN_TOPDOWN.arg; value = "true"; checked = isChecked
+                        id = "begin_topdown"; name = BEGIN_TOPDOWN.arg; value = "true"; checked = isChecked
                       }
                       label {
                         htmlFor = "begin_topdown"; +" Top-down "
                       }
                       radioInput {
-                        id = "begin_bottomup"; name = QueryArgs.BEGIN_TOPDOWN.arg; value = "false"; checked = !isChecked
+                        id = "begin_bottomup"; name = BEGIN_TOPDOWN.arg; value = "false"; checked = !isChecked
                       }
                       label { htmlFor = "begin_bottomup"; +" Bottom-up " }
                     }
@@ -139,24 +151,24 @@ object Form {
                   td { +"End Regex:" }
                   td {
                     textInput {
-                      name = QueryArgs.END_REGEX.arg; size = textWidth; value =
-                      QueryArgs.END_REGEX.defaultIfNull(params)
+                      name = END_REGEX.arg; size = textWidth; value =
+                      END_REGEX.defaultIfNull(params)
                     }
                   }
                 }
                 tr {
                   td { +"End Occurrence:" }
                   td {
-                    val isSelected = QueryArgs.END_OCCURRENCE.defaultIfBlank(params).toInt()
-                    select { name = QueryArgs.END_OCCURRENCE.arg; size = "1"; occurrenceOptions(isSelected) }
+                    val isSelected = END_OCCURRENCE.defaultIfBlank(params).toInt()
+                    select { name = END_OCCURRENCE.arg; size = "1"; occurrenceOptions(isSelected) }
                   }
                 }
                 tr {
                   td { +"End Offset:" }
                   td {
                     textInput {
-                      name = QueryArgs.END_OFFSET.arg; size = offsetWidth; value =
-                      QueryArgs.END_OFFSET.defaultIfNull(params)
+                      name = END_OFFSET.arg; size = offsetWidth; value =
+                      END_OFFSET.defaultIfNull(params)
                     }
                   }
                 }
@@ -164,16 +176,16 @@ object Form {
                   td { +"End Search Direction:" }
                   td {
                     span {
-                      val isChecked = QueryArgs.END_TOPDOWN.defaultIfBlank(params).toBoolean()
+                      val isChecked = END_TOPDOWN.defaultIfBlank(params).toBoolean()
                       style = "text-align:center"
                       radioInput {
-                        id = "end_topdown"; name = QueryArgs.END_TOPDOWN.arg; value = "true"; checked = isChecked
+                        id = "end_topdown"; name = END_TOPDOWN.arg; value = "true"; checked = isChecked
                       }
                       label {
                         htmlFor = "end_topdown"; +" Top-down "
                       }
                       radioInput {
-                        id = "end_bottomup"; name = QueryArgs.END_TOPDOWN.arg; value = "false"; checked = !isChecked
+                        id = "end_bottomup"; name = END_TOPDOWN.arg; value = "false"; checked = !isChecked
                       }
                       label { htmlFor = "end_bottomup"; +" Bottom-up " }
                     }
