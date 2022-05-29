@@ -78,6 +78,14 @@ internal class ContentCache {
       }
     }
 
+    private fun String.isInvalidContentType() =
+      startsWith("application/") ||
+          startsWith("image/") ||
+          startsWith("video/") ||
+          startsWith("model/") ||
+          startsWith("font/") ||
+          startsWith("audio/")
+
     internal suspend fun fetchContent(url: String): List<String> {
       val cacheItem = contentCache[url]
       val response =
@@ -95,6 +103,15 @@ internal class ContentCache {
           }
         }
 
+      response.headers[HttpHeaders.ContentType]?.also { contentType ->
+        if (contentType.isInvalidContentType()) {
+          val msg = "Invalid content type: $contentType"
+          logger.warn { msg }
+          throw IllegalArgumentException(msg)
+        } else if (!contentType.startsWith("text/"))
+          logger.warn { "Unanticipated content type: $contentType" }
+      }
+
       return if (response.status == HttpStatusCode.NotModified && cacheItem.isNotNull()) {
         cacheItem.run {
           logger.info { "Returning cached content for ETag: $etag and url: $url" }
@@ -102,10 +119,10 @@ internal class ContentCache {
           content
         }
       } else {
-        val cl = HttpHeaders.ContentLength
-        val length = response.headers[cl].toInt { "$cl header is null or not an integer" }
+        val contentLength = HttpHeaders.ContentLength
+        val length = response.headers[contentLength].toInt { "$contentLength header is null or not an integer" }
         if (length >= contentCache.maxLength) {
-          val msg = "$cl exceeds maximum length: $length"
+          val msg = "$contentLength exceeds maximum length: $length"
           logger.warn { msg }
           throw IllegalArgumentException(msg)
         }

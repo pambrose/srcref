@@ -145,7 +145,7 @@ object Form {
                 }
                 tr {
                   td { id = "optional" }
-                  td { id = "optional"; +"End values are optional" }
+                  td { id = "optional"; +"⬇ End values are optional ⬇" }
                 }
                 tr {
                   td { +"End Regex:" }

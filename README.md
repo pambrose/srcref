@@ -74,10 +74,11 @@ implementation "com.github.pambrose:srcref:1.0.3"
 
 These are the environment variables you need to set to deploy your own _srcref_ server:
 
-| Env Var          | Default                  | Description                         |
-|------------------|--------------------------|-------------------------------------|
-| _PORT_           | 8080                     | HTTP port to listen on              |
-| _PREFIX_         | "https://www.srcref.com" | Prefix for URLs                     |
-| _MAX_LENGTH_     | 5MB (5242880)            | Maximum allowed file size           |
-| _MAX_CACHE_SIZE_ | 2048                     | Maximum cache size before evictions |
+| Env Var          | Default                  | Description                                                 |
+|------------------|--------------------------|-------------------------------------------------------------|
+| _PORT_           | 8080                     | HTTP port to listen on                                      |
+| _PREFIX_         | "https://www.srcref.com" | Prefix for URLs                                             |
+| _MAX_LENGTH_     | 5MB (5242880)            | Maximum allowed file size                                   |
+| _MAX_CACHE_SIZE_ | 2048                     | Maximum cache size before evictions                         |
+| _DEFAULT_BRANCH_ | "master"                 | Default branch name to use if _branch_ parameter is missing |
 

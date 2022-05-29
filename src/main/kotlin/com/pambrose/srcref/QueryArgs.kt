@@ -3,7 +3,7 @@ package com.pambrose.srcref
 internal enum class QueryArgs(private val paramName: String, private val defaultValue: String = "") {
   ACCOUNT("account"),
   REPO("repo"),
-  BRANCH("branch", "master"),
+  BRANCH("branch", System.getenv("DEFAULT_BRANCH") ?: "master"),
   PATH("path"),
   BEGIN_REGEX("bregex"),
   BEGIN_OCCURRENCE("boccur", "1"),

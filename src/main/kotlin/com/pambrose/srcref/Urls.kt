@@ -108,7 +108,7 @@ object Urls {
     return "https://github.com/$username/$repoName/blob/$branchName/$path#L$beginLineNum$suffix"
   }
 
-  private fun githubRawUrl(username: String, repoName: String, path: String = "", branchName: String = "master") =
+  private fun githubRawUrl(username: String, repoName: String, path: String = "", branchName: String) =
     "$RAW_PREFIX/$username/$repoName/$branchName/$path"
 
   internal fun calcLineNumber(

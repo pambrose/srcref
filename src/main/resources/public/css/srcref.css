@@ -124,7 +124,8 @@ a.top-right:hover {
 }
 
 #optional {
-    padding-top: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
     color: white;
     background: #238BD2;
     text-decoration: underline;

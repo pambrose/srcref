@@ -22,6 +22,9 @@ dist:
 stage:
 	./gradlew stage
 
+purge:
+	 heroku builds:cache:purge -a srcref --confirm srcref
+
 versioncheck:
 	./gradlew dependencyUpdates
 
