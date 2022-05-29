@@ -1,16 +1,16 @@
 package com.pambrose.srcref
 
 import com.github.pambrose.common.response.*
-import com.pambrose.srcref.Pages.displayCache
-import com.pambrose.srcref.Pages.displayError
-import com.pambrose.srcref.Pages.displayForm
-import com.pambrose.srcref.Pages.urlPrefix
 import com.pambrose.srcref.Urls.CACHE
 import com.pambrose.srcref.Urls.EDIT
 import com.pambrose.srcref.Urls.ERROR
 import com.pambrose.srcref.Urls.GITHUB
 import com.pambrose.srcref.Urls.MSG
 import com.pambrose.srcref.Urls.githubRangeUrl
+import com.pambrose.srcref.pages.Cache.displayCache
+import com.pambrose.srcref.pages.Common.urlPrefix
+import com.pambrose.srcref.pages.Error.displayError
+import com.pambrose.srcref.pages.Form.displayForm
 import io.ktor.server.application.*
 import io.ktor.server.cio.*
 import io.ktor.server.engine.*
