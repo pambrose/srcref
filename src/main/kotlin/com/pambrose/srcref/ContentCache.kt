@@ -22,7 +22,7 @@ internal class ContentCache {
   private val maxLength = System.getenv("MAX_LENGTH")?.toInt() ?: (5 * 1048576)
 
   class CacheContent(
-    internal val content: List<String>,
+    internal val pageLines: List<String>,
     internal val etag: String,
     internal val contentLength: Int,
     private val references: AtomicInteger = AtomicInteger(0),
@@ -116,7 +116,7 @@ internal class ContentCache {
         cacheItem.run {
           logger.info { "Returning cached content for ETag: $etag and url: $url" }
           markReferenced()
-          content
+          pageLines
         }
       } else {
         val contentLength = HttpHeaders.ContentLength
@@ -131,7 +131,15 @@ internal class ContentCache {
         val pageLines = response.body<String>().lines()
         if (etag.isNotBlank()) {
           logger.info { "Adding item to content cache -- ETag: $etag and url: $url" }
-          contentCache[url] = CacheContent(pageLines, etag, length)
+          val now = Monotonic.markNow()
+          contentCache[url] =
+            CacheContent(
+              pageLines = pageLines,
+              etag = etag,
+              contentLength = length,
+              referenced = now,
+              created = now
+            )
         }
         pageLines
       }

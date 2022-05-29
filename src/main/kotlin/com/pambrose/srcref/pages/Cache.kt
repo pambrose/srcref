@@ -43,7 +43,7 @@ object Cache {
                       td { style = "text-align: center;"; +v.lastReferenced.toString() }
                       td { style = "text-align: center;"; +v.age.toString() }
                       td { style = "text-align: center;"; +v.contentLength.toString() }
-                      td { style = "text-align: center;"; +v.content.size.toString() }
+                      td { style = "text-align: center;"; +v.pageLines.size.toString() }
                       td { +url.let { if (url.startsWith(RAW_PREFIX)) it.substring(RAW_PREFIX.length) else it } }
                       td { +v.etag.substring(1..20).let { if (v.etag.length > 20) "$it..." else it } }
                     }
