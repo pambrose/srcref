@@ -52,36 +52,42 @@ object Form {
               method = FormMethod.get
               table {
                 tr {
-                  td { +"Org Name/Username:" }
+                  td { +"Username/Org Name:" }
                   td {
-                    textInput {
-                      name = ACCOUNT.arg; size = textWidth; required = true
-                      value = ACCOUNT.defaultIfNull(params)
+                    withToolTop("GitHub username or organization name") {
+                      textInput {
+                        name = ACCOUNT.arg; size = textWidth; required = true
+                        value = ACCOUNT.defaultIfNull(params)
+                      }
                     }
                   }
                 }
                 tr {
                   td { +"Repo Name:" }
                   td {
-                    textInput {
-                      name = REPO.arg; size = textWidth; required = true
-                      value = REPO.defaultIfNull(params)
+                    withToolTop("GitHub repository name") {
+                      textInput {
+                        name = REPO.arg; size = textWidth; required = true
+                        value = REPO.defaultIfNull(params)
+                      }
                     }
                   }
                 }
                 tr {
                   td { +"Branch Name:" }
                   td {
-                    textInput {
-                      name = BRANCH.arg; size = textWidth; required = true
-                      value = BRANCH.defaultIfNull(params)
+                    withToolTop("GitHub branch name") {
+                      textInput {
+                        name = BRANCH.arg; size = textWidth; required = true
+                        value = BRANCH.defaultIfNull(params)
+                      }
                     }
                   }
                 }
                 tr {
                   td { +"File Path:" }
                   td {
-                    withToolTop("File path in repo") {
+                    withToolTop("File path in repository") {
                       textInput {
                         name = PATH.arg; size = "70"; required = true
                         value = PATH.defaultIfNull(params)
