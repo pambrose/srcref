@@ -1,6 +1,7 @@
 .idea
 build
 .gradle
+docker_env_vars
 
 ### Kotlin template
 # Compiled class file
