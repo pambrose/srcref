@@ -2,18 +2,19 @@ package com.pambrose.srcref.pages
 
 import com.github.pambrose.common.response.*
 import com.pambrose.srcref.*
-import com.pambrose.srcref.QueryArgs.ACCOUNT
-import com.pambrose.srcref.QueryArgs.BEGIN_OCCURRENCE
-import com.pambrose.srcref.QueryArgs.BEGIN_OFFSET
-import com.pambrose.srcref.QueryArgs.BEGIN_REGEX
-import com.pambrose.srcref.QueryArgs.BEGIN_TOPDOWN
-import com.pambrose.srcref.QueryArgs.BRANCH
-import com.pambrose.srcref.QueryArgs.END_OCCURRENCE
-import com.pambrose.srcref.QueryArgs.END_OFFSET
-import com.pambrose.srcref.QueryArgs.END_REGEX
-import com.pambrose.srcref.QueryArgs.END_TOPDOWN
-import com.pambrose.srcref.QueryArgs.PATH
-import com.pambrose.srcref.QueryArgs.REPO
+import com.pambrose.srcref.Endpoints.EDIT
+import com.pambrose.srcref.QueryParams.ACCOUNT
+import com.pambrose.srcref.QueryParams.BEGIN_OCCURRENCE
+import com.pambrose.srcref.QueryParams.BEGIN_OFFSET
+import com.pambrose.srcref.QueryParams.BEGIN_REGEX
+import com.pambrose.srcref.QueryParams.BEGIN_TOPDOWN
+import com.pambrose.srcref.QueryParams.BRANCH
+import com.pambrose.srcref.QueryParams.END_OCCURRENCE
+import com.pambrose.srcref.QueryParams.END_OFFSET
+import com.pambrose.srcref.QueryParams.END_REGEX
+import com.pambrose.srcref.QueryParams.END_TOPDOWN
+import com.pambrose.srcref.QueryParams.PATH
+import com.pambrose.srcref.QueryParams.REPO
 import com.pambrose.srcref.pages.Common.commonHead
 import com.pambrose.srcref.pages.Common.githubIcon
 import com.pambrose.srcref.pages.Common.hasValues
@@ -40,154 +41,164 @@ object Form {
             githubIcon()
 
             div {
-              style = "padding-left: 25px; padding-top: 25px;"
+              style = "padding-left: 25px; padding-top: 10px;"
               h2 { +"srcref - Dynamic Line-Specific GitHub Permalinks" }
             }
 
-            fun SELECT.occurrenceOptions(isSelected: Int) {
-              option { +" 1st "; value = "1"; selected = isSelected == 1 }
-              option { +" 2nd "; value = "2"; selected = isSelected == 2 }
-              option { +" 3rd "; value = "3"; selected = isSelected == 3 }
-              option { +" 4th "; value = "4"; selected = isSelected == 4 }
-              option { +" 5th "; value = "5"; selected = isSelected == 5 }
-              option { +" 6th "; value = "6"; selected = isSelected == 6 }
-              option { +" 7th "; value = "7"; selected = isSelected == 7 }
-              option { +" 8th "; value = "8"; selected = isSelected == 8 }
-              option { +" 9th "; value = "9"; selected = isSelected == 9 }
-              option { +" 10th "; value = "10"; selected = isSelected == 10 }
-            }
-
             val textWidth = "40"
-            val offsetWidth = "7"
+            val offsetWidth = "6"
             form {
-              action = "/${Urls.EDIT}"
+              action = "/$EDIT"
               method = FormMethod.get
               table {
                 tr {
-                  td { +"Org Name/Username:" }
+                  td { +"Username/Org Name:" }
                   td {
-                    textInput {
-                      name = ACCOUNT.arg; size = textWidth; required = true; value =
-                      ACCOUNT.defaultIfNull(params)
+                    withToolTop("GitHub username or organization name") {
+                      textInput {
+                        name = ACCOUNT.arg; size = textWidth; required = true
+                        value = ACCOUNT.defaultIfNull(params)
+                      }
                     }
                   }
                 }
                 tr {
                   td { +"Repo Name:" }
                   td {
-                    textInput {
-                      name = REPO.arg; size = textWidth; required = true; value =
-                      REPO.defaultIfNull(params)
+                    withToolTop("GitHub repository name") {
+                      textInput {
+                        name = REPO.arg; size = textWidth; required = true
+                        value = REPO.defaultIfNull(params)
+                      }
                     }
                   }
                 }
                 tr {
                   td { +"Branch Name:" }
                   td {
-                    textInput {
-                      name = BRANCH.arg; size = textWidth; required = true; value =
-                      BRANCH.defaultIfNull(params)
+                    withToolTop("GitHub branch name") {
+                      textInput {
+                        name = BRANCH.arg; size = textWidth; required = true
+                        value = BRANCH.defaultIfNull(params)
+                      }
                     }
                   }
                 }
                 tr {
                   td { +"File Path:" }
                   td {
-                    textInput {
-                      name = PATH.arg; size = "70"; required = true; value =
-                      PATH.defaultIfNull(params)
+                    withToolTop("File path in repository") {
+                      textInput {
+                        name = PATH.arg; size = "70"; required = true
+                        value = PATH.defaultIfNull(params)
+                      }
                     }
                   }
                 }
                 tr {
                   td { +"Begin Regex:" }
                   td {
-                    textInput {
-                      name = BEGIN_REGEX.arg; size = textWidth; required = true; value =
-                      BEGIN_REGEX.defaultIfNull(params)
+                    withToolTop("Regex used to determine the beginning match") {
+                      textInput {
+                        name = BEGIN_REGEX.arg; size = textWidth; required = true
+                        value = BEGIN_REGEX.defaultIfNull(params)
+                      }
                     }
                   }
                 }
                 tr {
                   td { +"Begin Occurrence:" }
                   td {
-                    val isSelected = BEGIN_OCCURRENCE.defaultIfBlank(params).toInt()
-                    select { name = BEGIN_OCCURRENCE.arg; size = "1"; occurrenceOptions(isSelected) }
+                    withToolTop("Number of matches for the beginning match") {
+                      val isSelected = BEGIN_OCCURRENCE.defaultIfBlank(params).toInt()
+                      select("occurrence") { name = BEGIN_OCCURRENCE.arg; size = "1"; occurrenceOptions(isSelected) }
+                    }
                   }
                 }
+
                 tr {
-                  td { +"Begin Offset:" }
+                  td { +"Begin Offset: " }
                   td {
-                    textInput {
-                      name = BEGIN_OFFSET.arg; size = offsetWidth; required = true; value =
-                      BEGIN_OFFSET.defaultIfNull(params)
+                    withToolTop("Number of lines above or below the beginning match") {
+                      textInput {
+                        name = BEGIN_OFFSET.arg; size = offsetWidth; required = true
+                        value = BEGIN_OFFSET.defaultIfNull(params)
+                      }
                     }
                   }
                 }
                 tr {
                   td { +"Begin Search Direction:" }
                   td {
-                    span {
-                      val isChecked = BEGIN_TOPDOWN.defaultIfBlank(params).toBoolean()
-                      style = "text-align:center"
-                      radioInput {
-                        id = "begin_topdown"; name = BEGIN_TOPDOWN.arg; value = "true"; checked = isChecked
+                    withToolTop("Direction to evaluate the file for the beginning match") {
+                      span {
+                        val isChecked = BEGIN_TOPDOWN.defaultIfBlank(params).toBoolean()
+                        style = "text-align:center"
+                        radioInput {
+                          id = "begin_topdown"; name = BEGIN_TOPDOWN.arg; value = "true"; checked = isChecked
+                        }
+                        label {
+                          htmlFor = "begin_topdown"; +" Top-down "
+                        }
+                        radioInput {
+                          id = "begin_bottomup"; name = BEGIN_TOPDOWN.arg; value = "false"; checked = !isChecked
+                        }
+                        label { htmlFor = "begin_bottomup"; +" Bottom-up " }
                       }
-                      label {
-                        htmlFor = "begin_topdown"; +" Top-down "
-                      }
-                      radioInput {
-                        id = "begin_bottomup"; name = BEGIN_TOPDOWN.arg; value = "false"; checked = !isChecked
-                      }
-                      label { htmlFor = "begin_bottomup"; +" Bottom-up " }
                     }
                   }
                 }
-                tr {
-                  td { id = "optional" }
-                  td { id = "optional"; +"⬇ End values are optional ⬇" }
-                }
+//                tr {
+//                  td { id = "optional" }
+//                  td { id = "optional"; +"⬇ End values are optional ⬇" }
+//                }
                 tr {
                   td { +"End Regex:" }
                   td {
-                    textInput {
-                      name = END_REGEX.arg; size = textWidth; value =
-                      END_REGEX.defaultIfNull(params)
+                    withToolTop("Optional regex used to determine the ending match") {
+                      textInput {
+                        name = END_REGEX.arg; size = textWidth; value = END_REGEX.defaultIfNull(params)
+                      }
                     }
                   }
                 }
                 tr {
                   td { +"End Occurrence:" }
                   td {
-                    val isSelected = END_OCCURRENCE.defaultIfBlank(params).toInt()
-                    select { name = END_OCCURRENCE.arg; size = "1"; occurrenceOptions(isSelected) }
+                    withToolTop("Optional number of matches for the ending match") {
+                      val isSelected = END_OCCURRENCE.defaultIfBlank(params).toInt()
+                      select("occurrence") { name = END_OCCURRENCE.arg; size = "1"; occurrenceOptions(isSelected) }
+                    }
                   }
                 }
                 tr {
                   td { +"End Offset:" }
                   td {
-                    textInput {
-                      name = END_OFFSET.arg; size = offsetWidth; value =
-                      END_OFFSET.defaultIfNull(params)
+                    withToolTop("Optional number of lines above or below the ending match") {
+                      textInput {
+                        name = END_OFFSET.arg; size = offsetWidth; value = END_OFFSET.defaultIfNull(params)
+                      }
                     }
                   }
                 }
                 tr {
                   td { +"End Search Direction:" }
                   td {
-                    span {
-                      val isChecked = END_TOPDOWN.defaultIfBlank(params).toBoolean()
-                      style = "text-align:center"
-                      radioInput {
-                        id = "end_topdown"; name = END_TOPDOWN.arg; value = "true"; checked = isChecked
+                    withToolTop("Optional direction to evaluate the file for the ending match") {
+                      span {
+                        val isChecked = END_TOPDOWN.defaultIfBlank(params).toBoolean()
+                        style = "text-align:center"
+                        radioInput {
+                          id = "end_topdown"; name = END_TOPDOWN.arg; value = "true"; checked = isChecked
+                        }
+                        label {
+                          htmlFor = "end_topdown"; +" Top-down "
+                        }
+                        radioInput {
+                          id = "end_bottomup"; name = END_TOPDOWN.arg; value = "false"; checked = !isChecked
+                        }
+                        label { htmlFor = "end_bottomup"; +" Bottom-up " }
                       }
-                      label {
-                        htmlFor = "end_topdown"; +" Top-down "
-                      }
-                      radioInput {
-                        id = "end_bottomup"; name = END_TOPDOWN.arg; value = "false"; checked = !isChecked
-                      }
-                      label { htmlFor = "end_bottomup"; +" Bottom-up " }
                     }
                   }
                 }
@@ -195,24 +206,20 @@ object Form {
                   td { }
                   td {
                     style = "padding-top:10"
-                    submitInput(classes = "button") {
-                      value = "Generate URL"
-                    }
+                    submitInput(classes = "button") { value = "Generate URL" }
                   }
                 }
               }
             }
-
             br {}
             div {
               style = "padding-left: 25px;"
-
               if (params.hasValues()) {
                 val srcrefUrl = Urls.srcrefToGithubUrl(params, prefix = urlPrefix)
                 val isValid = errorMsg.isEmpty()
                 span {
                   button(classes = "button") {
-                    onClick = "window.open('${Urls.EDIT}','_self')"
+                    onClick = "window.open('$EDIT', '_self')"
                     +"Reset Values"
                   }
                   if (isValid) {
@@ -267,5 +274,32 @@ object Form {
         }
       }.serialize()
     }
+  }
+
+  private inline fun FlowOrPhrasingContent.withToolTop(
+    msg: String,
+    crossinline block: FlowOrPhrasingContent.() -> Unit
+  ) {
+    span {
+      block()
+      span("tooltip") {
+        span("spacer") {}
+        img { src = "images/question.png"; width = "18"; height = "18" }
+        span("tooltiptext") { +msg }
+      }
+    }
+  }
+
+  private fun SELECT.occurrenceOptions(isSelected: Int) {
+    option { +" 1st "; value = "1"; selected = isSelected == 1 }
+    option { +" 2nd "; value = "2"; selected = isSelected == 2 }
+    option { +" 3rd "; value = "3"; selected = isSelected == 3 }
+    option { +" 4th "; value = "4"; selected = isSelected == 4 }
+    option { +" 5th "; value = "5"; selected = isSelected == 5 }
+    option { +" 6th "; value = "6"; selected = isSelected == 6 }
+    option { +" 7th "; value = "7"; selected = isSelected == 7 }
+    option { +" 8th "; value = "8"; selected = isSelected == 8 }
+    option { +" 9th "; value = "9"; selected = isSelected == 9 }
+    option { +" 10th "; value = "10"; selected = isSelected == 10 }
   }
 }

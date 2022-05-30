@@ -40,19 +40,20 @@ The resulting _srcref_ URL leads to this
 
 ### Query Parameters
 
-| Parameter | Default   | Required | Description                                                |
-|-----------|-----------|----------|------------------------------------------------------------|
-| _account_ |           | Yes      | GitHub account or organization name                        |
-| _repo_    |           | Yes      | Repo name                                                  |
-| _branch_  | "master"  | Yes      | Branch name                                                |
-| _bregex_  |           | Yes      | The regex used to determine the beginning match            |
-| _boccur_  | 1         | Yes      | The number of matches for the beginning match              |
-| _boffset_ | 0         | Yes      | The number of lines above or below the beginning match     |
-| _btopd_   | true      | Yes      | The direction to evaluate the file for the beginning match |
-| _eregex_  |           | No       | The regex used to determine the ending match               |
-| _eoccur_  | 1         | No       | The number of matches for the ending match                 |
-| _eoffset_ | 0         | No       | The number of lines above or below the ending match        |
-| _etopd_   | true      | No       | The direction to evaluate the file for the ending match    |
+| Parameter | Default  | Required | Description                                                |
+|-----------|----------|----------|------------------------------------------------------------|
+| _account_ |          | Yes      | GitHub account or organization name                        |
+| _repo_    |          | Yes      | Repo name                                                  |
+| _branch_  | "master" | Yes      | Branch name                                                |
+| _path_    |          | Yes      | File path in repo                                          |
+| _bregex_  |          | Yes      | The regex used to determine the beginning match            |
+| _boccur_  | 1        | Yes      | The number of matches for the beginning match              |
+| _boffset_ | 0        | Yes      | The number of lines above or below the beginning match     |
+| _btopd_   | true     | Yes      | The direction to evaluate the file for the beginning match |
+| _eregex_  |          | No       | The regex used to determine the ending match               |
+| _eoccur_  | 1        | No       | The number of matches for the ending match                 |
+| _eoffset_ | 0        | No       | The number of lines above or below the ending match        |
+| _etopd_   | true     | No       | The direction to evaluate the file for the ending match    |
 
 ## Editing a _srcref_ URL
 

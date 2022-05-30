@@ -1,13 +1,13 @@
 package com.pambrose.srcref
 
 import com.github.pambrose.common.response.*
-import com.pambrose.srcref.Urls.CACHE
-import com.pambrose.srcref.Urls.EDIT
-import com.pambrose.srcref.Urls.ERROR
-import com.pambrose.srcref.Urls.GITHUB
+import com.pambrose.srcref.Endpoints.CACHE
+import com.pambrose.srcref.Endpoints.EDIT
+import com.pambrose.srcref.Endpoints.ERROR
+import com.pambrose.srcref.Endpoints.GITHUB
+import com.pambrose.srcref.Endpoints.PING
+import com.pambrose.srcref.Endpoints.VERSION
 import com.pambrose.srcref.Urls.MSG
-import com.pambrose.srcref.Urls.PING
-import com.pambrose.srcref.Urls.VERSION
 import com.pambrose.srcref.Urls.githubRangeUrl
 import com.pambrose.srcref.pages.Cache.displayCache
 import com.pambrose.srcref.pages.Common.urlPrefix
@@ -25,39 +25,39 @@ object Routes : KLogging() {
   fun Application.routes() {
     routing {
       get("/") {
-        redirectTo { EDIT }
+        redirectTo { EDIT.path }
       }
 
-      get(EDIT) {
+      get(EDIT.path) {
         val params = readQueryParams()
         logger.info { params }
         displayForm(params)
       }
 
-      get(GITHUB) {
+      get(GITHUB.path) {
         val params = readQueryParams()
         logger.info { params }
-        if (call.request.queryParameters.contains(EDIT))
+        if (call.request.queryParameters.contains(EDIT.path))
           displayForm(params)
         else
           redirectTo { githubRangeUrl(params, urlPrefix).first }
       }
 
-      get(ERROR) {
+      get(ERROR.path) {
         val params = readQueryParams()
         val msg = readMsg()
         displayError(params, msg)
       }
 
-      get(CACHE) {
+      get(CACHE.path) {
         displayCache()
       }
 
-      get(VERSION) {
+      get(VERSION.path) {
         displayVersion()
       }
 
-      get(PING) {
+      get(PING.path) {
         call.respondText("pong", Plain)
       }
 
@@ -72,7 +72,7 @@ object Routes : KLogging() {
 
   private fun PipelineCall.readQueryParams() =
     buildMap {
-      QueryArgs
+      QueryParams
         .values()
         .map { it.arg }
         .forEach { arg -> put(arg, call.request.queryParameters[arg]) }

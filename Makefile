@@ -1,4 +1,4 @@
-VERSION=1.0.4
+VERSION=1.0.5
 
 default: versioncheck
 
@@ -27,16 +27,13 @@ run-docker:
 build-docker:
 	docker build -t pambrose/srcref:${VERSION} .
 
-run-docker:
-	docker run --rm --env-file=docker_env_vars -p 8080:8080 pambrose/srcref:${VERSION}
-
 PLATFORMS := linux/amd64
-IMAGE_PREFIX := pambrose/srcref
+IMAGE_NAME := pambrose/srcref
 
 docker-push:
 	# prepare multiarch
 	docker buildx use buildx 2>/dev/null || docker buildx create --use --name=buildx
-	docker buildx build --platform ${PLATFORMS} --push -t ${IMAGE_PREFIX}:latest -t ${IMAGE_PREFIX}:${VERSION} .
+	docker buildx build --platform ${PLATFORMS} --push -t ${IMAGE_NAME}:latest -t ${IMAGE_NAME}:${VERSION} .
 
 release: clean build uberjar docker-push
 

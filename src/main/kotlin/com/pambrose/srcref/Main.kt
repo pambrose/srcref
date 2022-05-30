@@ -1,5 +1,6 @@
 package com.pambrose.srcref
 
+import com.pambrose.srcref.Endpoints.PING
 import com.pambrose.srcref.Routes.routes
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -13,12 +14,17 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.util.pipeline.*
 import mu.*
+import org.slf4j.event.*
 
 object SrcRef : KLogging() {
   @JvmStatic
   fun main(args: Array<String>) {
     embeddedServer(CIO, port = System.getenv("PORT")?.toInt() ?: 8080) {
-      install(CallLogging)
+      install(CallLogging) {
+        level = Level.INFO
+        // Do not log ping calls
+        filter { call -> !call.request.path().startsWith("/${PING.path}") }
+      }
       install(DefaultHeaders) { header("X-Engine", "Ktor") }
       install(StatusPages) {
         status(HttpStatusCode.NotFound) { call, status ->

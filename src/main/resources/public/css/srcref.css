@@ -3,8 +3,11 @@ form {
 }
 
 table {
-    border-collapse: collapse;
     border: 2px solid black;
+    border-collapse: separate;
+    border-spacing: 10px 2px;
+    padding-top: 10px;
+    padding-bottom: 5px;
 }
 
 td {
@@ -132,3 +135,44 @@ a.top-right:hover {
     text-decoration-color: #238BD2;
 }
 
+.spacer {
+    padding-left: 30px;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip img {
+    vertical-align: text-top;
+    border-radius: 50%; /* eliminates the white border */
+}
+
+.tooltip img:hover {
+    background-color: #F57F00; /* inverse of desired blue color */
+    filter: invert(100%);
+    border-radius: 50%; /* eliminates the white border */
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+.occurrence {
+    width: 4.8em;
+}
