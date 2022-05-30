@@ -32,7 +32,7 @@ object Urls {
       .filter { it.isNotBlank() }
       .joinToString("&")
 
-  internal fun Map<String, String?>.missingEndRegex() = this[END_REGEX.arg]?.isBlank() ?: true
+  private fun Map<String, String?>.missingEndRegex() = this[END_REGEX.arg]?.isBlank() ?: true
 
   internal fun srcrefToGithubUrl(
     params: Map<String, String?>,

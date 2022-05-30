@@ -26,7 +26,7 @@ import kotlinx.html.dom.*
 object Form {
   internal suspend fun PipelineCall.displayForm(params: Map<String, String?>) {
 
-    // This is called early because it is suspending and we cannot suspend inside document construction
+    // This is called early because it is suspending, and we cannot suspend inside document construction
     val (githubUrl, errorMsg) = Urls.githubRangeUrl(params, urlPrefix)
 
     respondWith {
