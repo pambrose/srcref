@@ -150,7 +150,7 @@ a.top-right:hover {
 }
 
 .tooltip img:hover {
-    background-color: #F57F00;
+    background-color: #F57F00; /* inverse of desired blue color */
     filter: invert(100%);
     border-radius: 50%; /* eliminates the white border */
 }
