@@ -1,7 +1,7 @@
 package com.pambrose.srcref
 
+import com.pambrose.srcref.Endpoints.PING
 import com.pambrose.srcref.Routes.routes
-import com.pambrose.srcref.Urls.PING
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.cio.*
@@ -23,7 +23,7 @@ object SrcRef : KLogging() {
       install(CallLogging) {
         level = Level.INFO
         // Do not log ping calls
-        filter { call -> !call.request.path().startsWith("/$PING") }
+        filter { call -> !call.request.path().startsWith("/${PING.path}") }
       }
       install(DefaultHeaders) { header("X-Engine", "Ktor") }
       install(StatusPages) {

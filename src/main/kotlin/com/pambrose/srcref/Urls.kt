@@ -2,18 +2,20 @@ package com.pambrose.srcref
 
 import com.github.pambrose.common.util.*
 import com.pambrose.srcref.ContentCache.Companion.fetchContent
-import com.pambrose.srcref.QueryArgs.ACCOUNT
-import com.pambrose.srcref.QueryArgs.BEGIN_OCCURRENCE
-import com.pambrose.srcref.QueryArgs.BEGIN_OFFSET
-import com.pambrose.srcref.QueryArgs.BEGIN_REGEX
-import com.pambrose.srcref.QueryArgs.BEGIN_TOPDOWN
-import com.pambrose.srcref.QueryArgs.BRANCH
-import com.pambrose.srcref.QueryArgs.END_OCCURRENCE
-import com.pambrose.srcref.QueryArgs.END_OFFSET
-import com.pambrose.srcref.QueryArgs.END_REGEX
-import com.pambrose.srcref.QueryArgs.END_TOPDOWN
-import com.pambrose.srcref.QueryArgs.PATH
-import com.pambrose.srcref.QueryArgs.REPO
+import com.pambrose.srcref.Endpoints.ERROR
+import com.pambrose.srcref.Endpoints.GITHUB
+import com.pambrose.srcref.QueryParams.ACCOUNT
+import com.pambrose.srcref.QueryParams.BEGIN_OCCURRENCE
+import com.pambrose.srcref.QueryParams.BEGIN_OFFSET
+import com.pambrose.srcref.QueryParams.BEGIN_REGEX
+import com.pambrose.srcref.QueryParams.BEGIN_TOPDOWN
+import com.pambrose.srcref.QueryParams.BRANCH
+import com.pambrose.srcref.QueryParams.END_OCCURRENCE
+import com.pambrose.srcref.QueryParams.END_OFFSET
+import com.pambrose.srcref.QueryParams.END_REGEX
+import com.pambrose.srcref.QueryParams.END_TOPDOWN
+import com.pambrose.srcref.QueryParams.PATH
+import com.pambrose.srcref.QueryParams.REPO
 import com.pambrose.srcref.SrcRef.logger
 import com.pambrose.srcref.pages.Common.hasValues
 import org.apache.commons.text.StringEscapeUtils.escapeHtml4
@@ -21,25 +23,24 @@ import java.util.regex.*
 import kotlin.time.*
 
 object Urls {
-  internal const val EDIT = "edit"
-  internal const val GITHUB = "github"
-  internal const val ERROR = "error"
-  internal const val CACHE = "cache"
-  internal const val VERSION = "version"
-  internal const val PING = "ping"
   internal const val MSG = "msg"
   internal const val RAW_PREFIX = "https://raw.githubusercontent.com"
 
-  internal fun Map<String, String?>.toQueryParams() =
-    map { (k, v) -> if (v.isNotNull()) "$k=${v.encode()}" else "" }
+  internal fun Map<String, String?>.toQueryParams(ignoreEndParams: Boolean) =
+    filter { if (ignoreEndParams) it.key !in QueryParams.optionalParams else true }
+      .map { (k, v) -> if (v.isNotNull()) "$k=${v.encode()}" else "" }
       .filter { it.isNotBlank() }
       .joinToString("&")
+
+  internal fun Map<String, String?>.missingEndRegex() = this[END_REGEX.arg]?.isBlank() ?: true
 
   internal fun srcrefToGithubUrl(
     params: Map<String, String?>,
     escapeHtml4: Boolean = false,
     prefix: String,
-  ): String = "$prefix/$GITHUB?${params.toQueryParams()}".let { if (escapeHtml4) escapeHtml4(it) else it }
+  ) =
+    "$prefix/$GITHUB?${params.toQueryParams(params.missingEndRegex())}"
+      .let { if (escapeHtml4) escapeHtml4(it) else it }
 
   internal inline fun String?.toInt(block: () -> String) =
     try {
@@ -48,7 +49,7 @@ object Urls {
       throw IllegalArgumentException(block())
     }
 
-  // This returns an url and an error message
+  // This returns a url and an error message
   internal suspend fun githubRangeUrl(params: Map<String, String?>, prefix: String): Pair<String, String> =
     try {
       if (!params.hasValues()) {
@@ -95,7 +96,7 @@ object Urls {
     } catch (e: Throwable) {
       val errorMsg = "${e::class.simpleName}: ${e.message}"
       logger.info { "Input problem: $errorMsg $params" }
-      "$prefix/$ERROR?$MSG=${errorMsg.encode()}&${params.toQueryParams()}" to errorMsg
+      "$prefix/$ERROR?$MSG=${errorMsg.encode()}&${params.toQueryParams(false)}" to errorMsg
     }
 
   private fun githubSourceUrl(

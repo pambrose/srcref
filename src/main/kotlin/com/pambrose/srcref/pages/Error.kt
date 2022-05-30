@@ -2,6 +2,7 @@ package com.pambrose.srcref.pages
 
 import com.github.pambrose.common.response.*
 import com.pambrose.srcref.*
+import com.pambrose.srcref.Endpoints.EDIT
 import com.pambrose.srcref.Urls.toQueryParams
 import com.pambrose.srcref.pages.Common.commonHead
 import com.pambrose.srcref.pages.Common.githubIcon
@@ -29,7 +30,7 @@ object Error {
               div {
                 style = "padding-top: 20px;"
                 button(classes = "button") {
-                  onClick = "window.open('/${Urls.EDIT}?${params.toQueryParams()}', '_self')"
+                  onClick = "window.open('/$EDIT?${params.toQueryParams(false)}', '_self')"
                   +"Edit Values"
                 }
               }

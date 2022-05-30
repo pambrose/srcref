@@ -2,18 +2,19 @@ package com.pambrose.srcref.pages
 
 import com.github.pambrose.common.response.*
 import com.pambrose.srcref.*
-import com.pambrose.srcref.QueryArgs.ACCOUNT
-import com.pambrose.srcref.QueryArgs.BEGIN_OCCURRENCE
-import com.pambrose.srcref.QueryArgs.BEGIN_OFFSET
-import com.pambrose.srcref.QueryArgs.BEGIN_REGEX
-import com.pambrose.srcref.QueryArgs.BEGIN_TOPDOWN
-import com.pambrose.srcref.QueryArgs.BRANCH
-import com.pambrose.srcref.QueryArgs.END_OCCURRENCE
-import com.pambrose.srcref.QueryArgs.END_OFFSET
-import com.pambrose.srcref.QueryArgs.END_REGEX
-import com.pambrose.srcref.QueryArgs.END_TOPDOWN
-import com.pambrose.srcref.QueryArgs.PATH
-import com.pambrose.srcref.QueryArgs.REPO
+import com.pambrose.srcref.Endpoints.EDIT
+import com.pambrose.srcref.QueryParams.ACCOUNT
+import com.pambrose.srcref.QueryParams.BEGIN_OCCURRENCE
+import com.pambrose.srcref.QueryParams.BEGIN_OFFSET
+import com.pambrose.srcref.QueryParams.BEGIN_REGEX
+import com.pambrose.srcref.QueryParams.BEGIN_TOPDOWN
+import com.pambrose.srcref.QueryParams.BRANCH
+import com.pambrose.srcref.QueryParams.END_OCCURRENCE
+import com.pambrose.srcref.QueryParams.END_OFFSET
+import com.pambrose.srcref.QueryParams.END_REGEX
+import com.pambrose.srcref.QueryParams.END_TOPDOWN
+import com.pambrose.srcref.QueryParams.PATH
+import com.pambrose.srcref.QueryParams.REPO
 import com.pambrose.srcref.pages.Common.commonHead
 import com.pambrose.srcref.pages.Common.githubIcon
 import com.pambrose.srcref.pages.Common.hasValues
@@ -47,15 +48,15 @@ object Form {
             val textWidth = "40"
             val offsetWidth = "6"
             form {
-              action = "/${Urls.EDIT}"
+              action = "/$EDIT"
               method = FormMethod.get
               table {
                 tr {
                   td { +"Org Name/Username:" }
                   td {
                     textInput {
-                      name = ACCOUNT.arg; size = textWidth; required = true; value =
-                      ACCOUNT.defaultIfNull(params)
+                      name = ACCOUNT.arg; size = textWidth; required = true
+                      value = ACCOUNT.defaultIfNull(params)
                     }
                   }
                 }
@@ -63,8 +64,8 @@ object Form {
                   td { +"Repo Name:" }
                   td {
                     textInput {
-                      name = REPO.arg; size = textWidth; required = true; value =
-                      REPO.defaultIfNull(params)
+                      name = REPO.arg; size = textWidth; required = true
+                      value = REPO.defaultIfNull(params)
                     }
                   }
                 }
@@ -72,8 +73,8 @@ object Form {
                   td { +"Branch Name:" }
                   td {
                     textInput {
-                      name = BRANCH.arg; size = textWidth; required = true; value =
-                      BRANCH.defaultIfNull(params)
+                      name = BRANCH.arg; size = textWidth; required = true
+                      value = BRANCH.defaultIfNull(params)
                     }
                   }
                 }
@@ -82,8 +83,8 @@ object Form {
                   td {
                     withToolTop("File path in repo") {
                       textInput {
-                        name = PATH.arg; size = "70"; required = true; value =
-                        PATH.defaultIfNull(params)
+                        name = PATH.arg; size = "70"; required = true
+                        value = PATH.defaultIfNull(params)
                       }
                     }
                   }
@@ -93,8 +94,8 @@ object Form {
                   td {
                     withToolTop("Regex used to determine the beginning match") {
                       textInput {
-                        name = BEGIN_REGEX.arg; size = textWidth; required = true; value =
-                        BEGIN_REGEX.defaultIfNull(params)
+                        name = BEGIN_REGEX.arg; size = textWidth; required = true
+                        value = BEGIN_REGEX.defaultIfNull(params)
                       }
                     }
                   }
@@ -150,8 +151,7 @@ object Form {
                   td {
                     withToolTop("Optional regex used to determine the ending match") {
                       textInput {
-                        name = END_REGEX.arg; size = textWidth; value =
-                        END_REGEX.defaultIfNull(params)
+                        name = END_REGEX.arg; size = textWidth; value = END_REGEX.defaultIfNull(params)
                       }
                     }
                   }
@@ -170,8 +170,7 @@ object Form {
                   td {
                     withToolTop("Optional number of lines above or below the ending match") {
                       textInput {
-                        name = END_OFFSET.arg; size = offsetWidth; value =
-                        END_OFFSET.defaultIfNull(params)
+                        name = END_OFFSET.arg; size = offsetWidth; value = END_OFFSET.defaultIfNull(params)
                       }
                     }
                   }
@@ -201,9 +200,7 @@ object Form {
                   td { }
                   td {
                     style = "padding-top:10"
-                    submitInput(classes = "button") {
-                      value = "Generate URL"
-                    }
+                    submitInput(classes = "button") { value = "Generate URL" }
                   }
                 }
               }
@@ -216,7 +213,7 @@ object Form {
                 val isValid = errorMsg.isEmpty()
                 span {
                   button(classes = "button") {
-                    onClick = "window.open('${Urls.EDIT}','_self')"
+                    onClick = "window.open('$EDIT', '_self')"
                     +"Reset Values"
                   }
                   if (isValid) {
