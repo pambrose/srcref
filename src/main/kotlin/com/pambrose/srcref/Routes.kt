@@ -6,6 +6,7 @@ import com.pambrose.srcref.Urls.EDIT
 import com.pambrose.srcref.Urls.ERROR
 import com.pambrose.srcref.Urls.GITHUB
 import com.pambrose.srcref.Urls.MSG
+import com.pambrose.srcref.Urls.PING
 import com.pambrose.srcref.Urls.VERSION
 import com.pambrose.srcref.Urls.githubRangeUrl
 import com.pambrose.srcref.pages.Cache.displayCache
@@ -13,8 +14,10 @@ import com.pambrose.srcref.pages.Common.urlPrefix
 import com.pambrose.srcref.pages.Error.displayError
 import com.pambrose.srcref.pages.Form.displayForm
 import com.pambrose.srcref.pages.Version.displayVersion
+import io.ktor.http.ContentType.Text.Plain
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import mu.*
 
@@ -52,6 +55,10 @@ object Routes : KLogging() {
 
       get(VERSION) {
         displayVersion()
+      }
+
+      get(PING) {
+        call.respondText("pong", Plain)
       }
 
       static("/") {
