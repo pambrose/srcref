@@ -146,10 +146,13 @@ a.top-right:hover {
 
 .tooltip img {
     vertical-align: text-top;
+    border-radius: 50%; /* eliminates the white border */
 }
 
 .tooltip img:hover {
-    background-color: #0A80FE;
+    background-color: #F57F00;
+    filter: invert(100%);
+    border-radius: 50%; /* eliminates the white border */
 }
 
 .tooltip .tooltiptext {
