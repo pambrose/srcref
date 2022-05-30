@@ -9,7 +9,7 @@ plugins {
 }
 
 group = 'com.github.pambrose.srcref'
-version = '1.0.4'
+version = '1.0.5'
 
 buildConfig {
     buildConfigField('String', 'NAME', "\"${project.name}\"")
