@@ -25,6 +25,7 @@ object Urls {
   internal const val GITHUB = "github"
   internal const val ERROR = "error"
   internal const val CACHE = "cache"
+  internal const val VERSION = "version"
   internal const val MSG = "msg"
   internal const val RAW_PREFIX = "https://raw.githubusercontent.com"
 
