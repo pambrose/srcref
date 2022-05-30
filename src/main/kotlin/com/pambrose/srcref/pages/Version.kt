@@ -21,9 +21,10 @@ object Version {
           body {
             githubIcon()
             div {
-              style = "padding-left: 20px;"
-              h2 { +"Version: $VERSION" }
-              h2 { +"Release Date: $RELEASE_DATE" }
+              style = "padding-left: 20px; padding-top: 40px;"
+              h2 { +"srcref Version" }
+              p { +"Version: $VERSION" }
+              p { +"Release Date: $RELEASE_DATE" }
             }
           }
         }
