@@ -24,7 +24,7 @@ object SrcRef : KLogging() {
   @JvmStatic
   fun main(args: Array<String>) {
     logger.apply {
-      info { getBanner("banners/srcref.txt", this) }
+      info { getBanner("banners/srcref.banner", this) }
       info { SrcRef::class.versionDesc() }
     }
 
