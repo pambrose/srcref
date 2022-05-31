@@ -51,169 +51,97 @@ object Form {
               action = "/$EDIT"
               method = FormMethod.get
               table {
-                tr {
-                  td { +"Username/Org Name:" }
-                  td {
-                    withToolTop("GitHub username or organization name") {
-                      textInput {
-                        name = ACCOUNT.arg; size = textWidth; required = true
-                        value = ACCOUNT.defaultIfNull(params)
-                      }
+                formElement("Username/Org Name:", "GitHub username or organization name") {
+                  textInput {
+                    name = ACCOUNT.arg; size = textWidth; required = true
+                    value = ACCOUNT.defaultIfNull(params)
+                  }
+                }
+                formElement("Repo Name:", "GitHub repository name") {
+                  textInput {
+                    name = REPO.arg; size = textWidth; required = true
+                    value = REPO.defaultIfNull(params)
+                  }
+                }
+                formElement("Branch Name:", "GitHub branch name") {
+                  textInput {
+                    name = BRANCH.arg; size = textWidth; required = true
+                    value = BRANCH.defaultIfNull(params)
+                  }
+                }
+                formElement("File Path:", "File path in repository") {
+                  textInput {
+                    name = PATH.arg; size = "70"; required = true
+                    value = PATH.defaultIfNull(params)
+                  }
+                }
+                formElement("Begin Regex:", "Regex used to determine the beginning match") {
+                  textInput {
+                    name = BEGIN_REGEX.arg; size = textWidth; required = true
+                    value = BEGIN_REGEX.defaultIfNull(params)
+                  }
+                }
+                formElement("Begin Occurrence:", "Number of matches for the beginning match") {
+                  val isSelected = BEGIN_OCCURRENCE.defaultIfBlank(params).toInt()
+                  select("occurrence") { name = BEGIN_OCCURRENCE.arg; size = "1"; occurrenceOptions(isSelected) }
+                }
+                formElement("Begin Offset:", "Number of lines above or below the beginning match") {
+                  textInput {
+                    name = BEGIN_OFFSET.arg; size = offsetWidth; required = true
+                    value = BEGIN_OFFSET.defaultIfNull(params)
+                  }
+                }
+                formElement("Begin Search Direction:", "Direction to evaluate the file for the beginning match") {
+                  span {
+                    val isChecked = BEGIN_TOPDOWN.defaultIfBlank(params).toBoolean()
+                    style = "text-align:center"
+                    "begin_topdown".also { lab ->
+                      radioInput { id = lab; name = BEGIN_TOPDOWN.arg; value = "true"; checked = isChecked }
+                      label { htmlFor = lab; +" Top-down " }
+                    }
+                    "begin_bottomup".also { lab ->
+                      radioInput { id = lab; name = BEGIN_TOPDOWN.arg; value = "false"; checked = !isChecked }
+                      label { htmlFor = lab; +" Bottom-up " }
                     }
                   }
                 }
-                tr {
-                  td { +"Repo Name:" }
-                  td {
-                    withToolTop("GitHub repository name") {
-                      textInput {
-                        name = REPO.arg; size = textWidth; required = true
-                        value = REPO.defaultIfNull(params)
-                      }
+                formElement("End Regex:", "Optional regex used to determine the ending match") {
+                  textInput {
+                    name = END_REGEX.arg; size = textWidth; value = END_REGEX.defaultIfNull(params)
+                  }
+                }
+                formElement("End Occurrence:", "Optional number of matches for the ending match") {
+                  val isSelected = END_OCCURRENCE.defaultIfBlank(params).toInt()
+                  select("occurrence") { name = END_OCCURRENCE.arg; size = "1"; occurrenceOptions(isSelected) }
+                }
+                formElement("End Offset:", "Optional number of lines above or below the ending match") {
+                  textInput {
+                    name = END_OFFSET.arg; size = offsetWidth; value = END_OFFSET.defaultIfNull(params)
+                  }
+                }
+                formElement("End Search Direction:", "Optional direction to evaluate the file for the ending match") {
+                  span {
+                    val isChecked = END_TOPDOWN.defaultIfBlank(params).toBoolean()
+                    style = "text-align:center"
+                    "end_topdown".also { lab ->
+                      radioInput { id = lab; name = END_TOPDOWN.arg; value = "true"; checked = isChecked }
+                      label { htmlFor = lab; +" Top-down " }
+                    }
+                    "end_bottomup".also { lab ->
+                      radioInput { id = lab; name = END_TOPDOWN.arg; value = "false"; checked = !isChecked }
+                      label { htmlFor = lab; +" Bottom-up " }
                     }
                   }
                 }
-                tr {
-                  td { +"Branch Name:" }
-                  td {
-                    withToolTop("GitHub branch name") {
-                      textInput {
-                        name = BRANCH.arg; size = textWidth; required = true
-                        value = BRANCH.defaultIfNull(params)
-                      }
-                    }
-                  }
-                }
-                tr {
-                  td { +"File Path:" }
-                  td {
-                    withToolTop("File path in repository") {
-                      textInput {
-                        name = PATH.arg; size = "70"; required = true
-                        value = PATH.defaultIfNull(params)
-                      }
-                    }
-                  }
-                }
-                tr {
-                  td { +"Begin Regex:" }
-                  td {
-                    withToolTop("Regex used to determine the beginning match") {
-                      textInput {
-                        name = BEGIN_REGEX.arg; size = textWidth; required = true
-                        value = BEGIN_REGEX.defaultIfNull(params)
-                      }
-                    }
-                  }
-                }
-                tr {
-                  td { +"Begin Occurrence:" }
-                  td {
-                    withToolTop("Number of matches for the beginning match") {
-                      val isSelected = BEGIN_OCCURRENCE.defaultIfBlank(params).toInt()
-                      select("occurrence") { name = BEGIN_OCCURRENCE.arg; size = "1"; occurrenceOptions(isSelected) }
-                    }
-                  }
-                }
-
-                tr {
-                  td { +"Begin Offset: " }
-                  td {
-                    withToolTop("Number of lines above or below the beginning match") {
-                      textInput {
-                        name = BEGIN_OFFSET.arg; size = offsetWidth; required = true
-                        value = BEGIN_OFFSET.defaultIfNull(params)
-                      }
-                    }
-                  }
-                }
-                tr {
-                  td { +"Begin Search Direction:" }
-                  td {
-                    withToolTop("Direction to evaluate the file for the beginning match") {
-                      span {
-                        val isChecked = BEGIN_TOPDOWN.defaultIfBlank(params).toBoolean()
-                        style = "text-align:center"
-                        radioInput {
-                          id = "begin_topdown"; name = BEGIN_TOPDOWN.arg; value = "true"; checked = isChecked
-                        }
-                        label {
-                          htmlFor = "begin_topdown"; +" Top-down "
-                        }
-                        radioInput {
-                          id = "begin_bottomup"; name = BEGIN_TOPDOWN.arg; value = "false"; checked = !isChecked
-                        }
-                        label { htmlFor = "begin_bottomup"; +" Bottom-up " }
-                      }
-                    }
-                  }
-                }
-//                tr {
-//                  td { id = "optional" }
-//                  td { id = "optional"; +"⬇ End values are optional ⬇" }
-//                }
-                tr {
-                  td { +"End Regex:" }
-                  td {
-                    withToolTop("Optional regex used to determine the ending match") {
-                      textInput {
-                        name = END_REGEX.arg; size = textWidth; value = END_REGEX.defaultIfNull(params)
-                      }
-                    }
-                  }
-                }
-                tr {
-                  td { +"End Occurrence:" }
-                  td {
-                    withToolTop("Optional number of matches for the ending match") {
-                      val isSelected = END_OCCURRENCE.defaultIfBlank(params).toInt()
-                      select("occurrence") { name = END_OCCURRENCE.arg; size = "1"; occurrenceOptions(isSelected) }
-                    }
-                  }
-                }
-                tr {
-                  td { +"End Offset:" }
-                  td {
-                    withToolTop("Optional number of lines above or below the ending match") {
-                      textInput {
-                        name = END_OFFSET.arg; size = offsetWidth; value = END_OFFSET.defaultIfNull(params)
-                      }
-                    }
-                  }
-                }
-                tr {
-                  td { +"End Search Direction:" }
-                  td {
-                    withToolTop("Optional direction to evaluate the file for the ending match") {
-                      span {
-                        val isChecked = END_TOPDOWN.defaultIfBlank(params).toBoolean()
-                        style = "text-align:center"
-                        radioInput {
-                          id = "end_topdown"; name = END_TOPDOWN.arg; value = "true"; checked = isChecked
-                        }
-                        label {
-                          htmlFor = "end_topdown"; +" Top-down "
-                        }
-                        radioInput {
-                          id = "end_bottomup"; name = END_TOPDOWN.arg; value = "false"; checked = !isChecked
-                        }
-                        label { htmlFor = "end_bottomup"; +" Bottom-up " }
-                      }
-                    }
-                  }
-                }
-                tr {
-                  td { }
-                  td {
-                    style = "padding-top:10"
-                    submitInput(classes = "button") { value = "Generate URL" }
-                  }
+                formElement("") {
+                  style = "padding-top:10"
+                  submitInput(classes = "button") { value = "Generate URL" }
                 }
               }
             }
-            br {}
+
             div {
-              style = "padding-left: 25px;"
+              style = "padding-left: 25px; padding-top: 18px"
               if (params.hasValues()) {
                 val srcrefUrl = Urls.srcrefToGithubUrl(params, prefix = urlPrefix)
                 val isValid = errorMsg.isEmpty()
@@ -238,9 +166,12 @@ object Form {
                 }
 
                 if (isValid) {
-                  p { +"Embed this URL in your docs:" }
+                  div { style = "padding-top: 17px; padding-bottom: 10px;"; +"Embed this URL in your docs:" }
                   textArea { id = "srcrefUrl"; rows = "4"; +srcrefUrl; cols = widthVal; readonly = true }
-                  p { +"to reach this GitHub page:" }
+                  div {
+                    style =
+                      "padding-top: 10px; padding-bottom: 10px;"; +"To dynamically generate this GitHub permalink:"
+                  }
                   textArea { rows = "2"; +githubUrl; cols = widthVal; readonly = true }
                 } else {
                   h2 { +"Exception:" }
@@ -264,8 +195,7 @@ object Form {
                       endTopDown = true,
                       prefix = "",
                     )
-                  onClick =
-                    "window.open('${"$url&edit=true"}','_self')"
+                  onClick = "window.open('${"$url&edit=true"}','_self')"
                   +"Example Values"
                 }
               }
@@ -276,10 +206,29 @@ object Form {
     }
   }
 
+  private inline fun TABLE.formElement(label: String, crossinline block: TD.() -> Unit) =
+    tr {
+      td { +label }
+      td {
+        block()
+      }
+    }
+
+  private inline fun TABLE.formElement(
+    label: String,
+    tooltip: String,
+    crossinline block: FlowOrPhrasingContent.() -> Unit
+  ) =
+    formElement(label) {
+      withToolTop(tooltip) {
+        block()
+      }
+    }
+
   private inline fun FlowOrPhrasingContent.withToolTop(
     msg: String,
     crossinline block: FlowOrPhrasingContent.() -> Unit
-  ) {
+  ) =
     span {
       block()
       span("tooltip") {
@@ -288,7 +237,6 @@ object Form {
         span("tooltiptext") { +msg }
       }
     }
-  }
 
   private fun SELECT.occurrenceOptions(isSelected: Int) {
     option { +" 1st "; value = "1"; selected = isSelected == 1 }

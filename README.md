@@ -68,7 +68,7 @@ You can generate _srcref_ URLs programmatically with the `srcrefUrl()` call
 Add this to your gradle dependencies:
 
 ```
-implementation "com.github.pambrose:srcref:1.0.3"
+implementation "com.github.pambrose:srcref:1.0.6"
 ```
 
 ## Deploying Your Own _srcref_ Server
