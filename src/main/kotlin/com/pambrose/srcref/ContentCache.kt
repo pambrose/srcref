@@ -1,6 +1,7 @@
 package com.pambrose.srcref
 
 import com.github.pambrose.common.util.*
+import com.pambrose.srcref.Urls.RAW_PREFIX
 import com.pambrose.srcref.Urls.toInt
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -97,7 +98,7 @@ internal class ContentCache {
         }.let { client ->
           client.get(url) {
             if (cacheItem.isNotNull() && cacheItem.etag.isNotBlank()) {
-              logger.info { "Setting ETag: ${cacheItem.etag} for url: $url" }
+              logger.info { "Setting ETag: ${cacheItem.etag} for url: ${url.removePrefix(RAW_PREFIX)}" }
               headers.append(HttpHeaders.IfNoneMatch, cacheItem.etag)
             }
           }
@@ -114,7 +115,7 @@ internal class ContentCache {
 
       return if (response.status == HttpStatusCode.NotModified && cacheItem.isNotNull()) {
         cacheItem.run {
-          logger.info { "Returning cached content for ETag: $etag and url: $url" }
+          logger.info { "Returning cached content for ETag: $etag and url: ${url.removePrefix(RAW_PREFIX)}" }
           markReferenced()
           pageLines
         }
@@ -130,7 +131,7 @@ internal class ContentCache {
         val etag = response.headers[HttpHeaders.ETag] ?: ""
         val pageLines = response.body<String>().lines()
         if (etag.isNotBlank()) {
-          logger.info { "Adding item to content cache -- ETag: $etag and url: $url" }
+          logger.info { "Adding item to content cache -- ETag: $etag and url: ${url.removePrefix(RAW_PREFIX)}" }
           val now = Monotonic.markNow()
           contentCache[url] =
             CacheContent(

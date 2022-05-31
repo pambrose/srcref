@@ -15,7 +15,6 @@ import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
-import io.ktor.util.pipeline.*
 import mu.*
 import org.slf4j.event.*
 
@@ -50,5 +49,3 @@ object SrcRef : KLogging() {
     }.start(wait = true)
   }
 }
-
-internal typealias PipelineCall = PipelineContext<Unit, ApplicationCall>

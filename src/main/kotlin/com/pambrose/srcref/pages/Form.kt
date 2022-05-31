@@ -151,20 +151,17 @@ object Form {
                     +"Reset Values"
                   }
                   if (isValid) {
-                    div {
-                      id = "snackbar"
-                      +"URL Copied!"
-                    }
                     button(classes = "button") {
-                      style = "margin-left: 12px;"
+                      style = "margin-left: 10px;"
                       onClick = "copyUrl()"
                       +"Copy URL"
                     }
                     button(classes = "button") {
-                      style = "margin-left: 12px;";
+                      style = "margin-left: 10px;";
                       onClick = "window.open('$srcrefUrl', '_blank')"
                       +"View GitHub Permalink"
                     }
+                    div { id = "snackbar"; +"URL Copied!" }
                   }
                 }
 
