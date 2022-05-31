@@ -41,7 +41,7 @@ object Form {
             githubIcon()
 
             div {
-              style = "padding-left: 25px; padding-top: 10px;"
+              style = "padding-left: 25px; padding-top: 5px;"
               h2 { +"srcref - Dynamic Line-Specific GitHub Permalinks" }
             }
 
@@ -141,7 +141,7 @@ object Form {
             }
 
             div {
-              style = "padding-left: 25px; padding-top: 18px"
+              style = "padding-left: 25px; padding-top: 15px"
               if (params.hasValues()) {
                 val srcrefUrl = Urls.srcrefToGithubUrl(params, prefix = urlPrefix)
                 val isValid = errorMsg.isEmpty()
