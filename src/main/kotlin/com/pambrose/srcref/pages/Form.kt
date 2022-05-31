@@ -15,10 +15,10 @@ import com.pambrose.srcref.QueryParams.END_REGEX
 import com.pambrose.srcref.QueryParams.END_TOPDOWN
 import com.pambrose.srcref.QueryParams.PATH
 import com.pambrose.srcref.QueryParams.REPO
+import com.pambrose.srcref.pages.Common.URL_PREFIX
 import com.pambrose.srcref.pages.Common.commonHead
 import com.pambrose.srcref.pages.Common.githubIcon
 import com.pambrose.srcref.pages.Common.hasValues
-import com.pambrose.srcref.pages.Common.urlPrefix
 import com.pambrose.srcref.pages.Common.widthVal
 import kotlinx.html.*
 import kotlinx.html.dom.*
@@ -27,7 +27,7 @@ object Form {
   internal suspend fun PipelineCall.displayForm(params: Map<String, String?>) {
 
     // This is called early because it is suspending, and we cannot suspend inside document construction
-    val (githubUrl, errorMsg) = Urls.githubRangeUrl(params, urlPrefix)
+    val (githubUrl, errorMsg) = Urls.githubRangeUrl(params, URL_PREFIX)
 
     respondWith {
       document {
@@ -143,7 +143,7 @@ object Form {
             div {
               style = "padding-left: 25px; padding-top: 15px"
               if (params.hasValues()) {
-                val srcrefUrl = Urls.srcrefToGithubUrl(params, prefix = urlPrefix)
+                val srcrefUrl = Urls.srcrefToGithubUrl(params, prefix = URL_PREFIX)
                 val isValid = errorMsg.isEmpty()
                 span {
                   button(classes = "button") {

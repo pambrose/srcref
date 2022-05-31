@@ -10,7 +10,7 @@ import com.pambrose.srcref.Endpoints.VERSION
 import com.pambrose.srcref.Urls.MSG
 import com.pambrose.srcref.Urls.githubRangeUrl
 import com.pambrose.srcref.pages.Cache.displayCache
-import com.pambrose.srcref.pages.Common.urlPrefix
+import com.pambrose.srcref.pages.Common.URL_PREFIX
 import com.pambrose.srcref.pages.Error.displayError
 import com.pambrose.srcref.pages.Form.displayForm
 import com.pambrose.srcref.pages.Version.displayVersion
@@ -24,8 +24,9 @@ import mu.*
 object Routes : KLogging() {
   fun Application.routes() {
     routing {
+      // This will redirect to www subdomain
       get("/") {
-        redirectTo { EDIT.path }
+        redirectTo { "$URL_PREFIX/${EDIT.path}" }
       }
 
       get(EDIT.path) {
@@ -40,7 +41,7 @@ object Routes : KLogging() {
         if (call.request.queryParameters.contains(EDIT.path))
           displayForm(params)
         else
-          redirectTo { githubRangeUrl(params, urlPrefix).first }
+          redirectTo { githubRangeUrl(params, URL_PREFIX).first }
       }
 
       get(ERROR.path) {

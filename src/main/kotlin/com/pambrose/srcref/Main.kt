@@ -33,7 +33,7 @@ object Main : KLogging() {
         // Do not log ping calls
         filter { call -> !call.request.path().startsWith("/${PING.path}") }
       }
-      install(DefaultHeaders) { header("X-Engine", "Ktor") }
+      install(DefaultHeaders)
       install(StatusPages) {
         status(HttpStatusCode.NotFound) { call, status ->
           val msg = "Page not found: ${call.request.path()}"
