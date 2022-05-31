@@ -73,6 +73,8 @@ implementation "com.github.pambrose:srcref:1.0.6"
 
 ## Deploying Your Own _srcref_ Server
 
+[![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/{REPO-OWNER}/{REPO-NAME}/tree/{BRANCH-NAME})
+
 These are the environment variables you need to set to deploy your own _srcref_ server:
 
 | Env Var          | Default                  | Description                                                 |

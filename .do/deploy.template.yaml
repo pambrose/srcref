@@ -1,0 +1,14 @@
+spec:
+  name: srcref
+  services:
+    - name: srcref
+      git:
+        branch: 1.0.6
+        repo_clone_url: https://github.com/pambrose/srcref.git
+      envs:
+        - key: PORT
+          value: "8080"
+          type: MESSAGE
+        - key: PREFIX
+          value: "https://your-srcref.com"
+          type: MESSAGE
