@@ -19,12 +19,12 @@ import mu.*
 import org.slf4j.event.*
 
 @Version(version = BuildConfig.VERSION, date = BuildConfig.RELEASE_DATE)
-object SrcRef : KLogging() {
+object Main : KLogging() {
   @JvmStatic
   fun main(args: Array<String>) {
     logger.apply {
       info { getBanner("banners/srcref.banner", this) }
-      info { SrcRef::class.versionDesc() }
+      info { Main::class.versionDesc() }
     }
 
     embeddedServer(CIO, port = System.getenv("PORT")?.toInt() ?: 8080) {

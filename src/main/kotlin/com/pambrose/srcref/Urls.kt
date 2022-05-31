@@ -4,6 +4,7 @@ import com.github.pambrose.common.util.*
 import com.pambrose.srcref.ContentCache.Companion.fetchContent
 import com.pambrose.srcref.Endpoints.ERROR
 import com.pambrose.srcref.Endpoints.GITHUB
+import com.pambrose.srcref.Main.logger
 import com.pambrose.srcref.QueryParams.ACCOUNT
 import com.pambrose.srcref.QueryParams.BEGIN_OCCURRENCE
 import com.pambrose.srcref.QueryParams.BEGIN_OFFSET
@@ -16,7 +17,6 @@ import com.pambrose.srcref.QueryParams.END_REGEX
 import com.pambrose.srcref.QueryParams.END_TOPDOWN
 import com.pambrose.srcref.QueryParams.PATH
 import com.pambrose.srcref.QueryParams.REPO
-import com.pambrose.srcref.SrcRef.logger
 import com.pambrose.srcref.pages.Common.hasValues
 import org.apache.commons.text.StringEscapeUtils.escapeHtml4
 import java.util.regex.*

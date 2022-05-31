@@ -157,7 +157,7 @@ object Form {
                       +"Copy URL"
                     }
                     button(classes = "button") {
-                      style = "margin-left: 10px;";
+                      style = "margin-left: 10px;"
                       onClick = "window.open('$srcrefUrl', '_blank')"
                       +"View GitHub Permalink"
                     }
