@@ -169,8 +169,8 @@ object Form {
                   div { style = "padding-top: 17px; padding-bottom: 10px;"; +"Embed this URL in your docs:" }
                   textArea { id = "srcrefUrl"; rows = "4"; +srcrefUrl; cols = widthVal; readonly = true }
                   div {
-                    style =
-                      "padding-top: 10px; padding-bottom: 10px;"; +"To dynamically generate this GitHub permalink:"
+                    style = "padding-top: 10px; padding-bottom: 10px;"
+                    +"To dynamically generate this GitHub permalink:"
                   }
                   textArea { rows = "2"; +githubUrl; cols = widthVal; readonly = true }
                 } else {
@@ -220,12 +220,12 @@ object Form {
     crossinline block: FlowOrPhrasingContent.() -> Unit
   ) =
     formElement(label) {
-      withToolTop(tooltip) {
+      withToolTip(tooltip) {
         block()
       }
     }
 
-  private inline fun FlowOrPhrasingContent.withToolTop(
+  private inline fun FlowOrPhrasingContent.withToolTip(
     msg: String,
     crossinline block: FlowOrPhrasingContent.() -> Unit
   ) =

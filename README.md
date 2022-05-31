@@ -65,10 +65,41 @@ You can generate _srcref_ URLs programmatically with the `srcrefUrl()` call
 ([example](https://www.srcref.com/github?account=kslides&repo=kslides&branch=master&path=kslides-core%2Fsrc%2Fmain%2Fkotlin%2Fcom%2Fkslides%2FPresentation.kt&bregex=srcrefUrl%5C%28&boccur=1&boffset=0&btopd=true&eregex=escapeHtml4+%3D+true&eoccur=1&eoffset=1&etopd=true))
 .
 
-Add this to your gradle dependencies:
+For Gradle:
 
+```groovy
+allprojects {
+   repositories {
+      maven { url 'https://jitpack.io' }
+   }
+}
 ```
-implementation "com.github.pambrose:srcref:1.0.6"
+
+```groovy
+dependencies {
+   implementation 'com.github.pambrose:srcref:1.0.6'
+}
+```
+
+For Maven:
+
+```xml
+
+<repositories>
+   <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+   </repository>
+</repositories>
+```
+
+```xml
+
+<dependency>
+   <groupId>com.github.pambrose</groupId>
+   <artifactId>srcref</artifactId>
+   <version>1.0.6</version>
+</dependency>
 ```
 
 ## Deploying Your Own _srcref_ Server
