@@ -155,10 +155,13 @@ object Form {
                       id = "snackbar"
                       +"URL Copied!"
                     }
-                    +" "
-                    button(classes = "button") { onClick = "copyUrl()"; +"Copy URL" }
-                    +" "
                     button(classes = "button") {
+                      style = "margin-left: 12px;"
+                      onClick = "copyUrl()"
+                      +"Copy URL"
+                    }
+                    button(classes = "button") {
+                      style = "margin-left: 12px;";
                       onClick = "window.open('$srcrefUrl', '_blank')"
                       +"View GitHub Permalink"
                     }
