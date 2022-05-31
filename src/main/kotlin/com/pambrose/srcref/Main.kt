@@ -1,5 +1,8 @@
 package com.pambrose.srcref
 
+import com.github.pambrose.common.util.*
+import com.github.pambrose.common.util.Version.Companion.versionDesc
+import com.github.pambrose.srcref.srcref.*
 import com.pambrose.srcref.Endpoints.PING
 import com.pambrose.srcref.Routes.routes
 import io.ktor.http.*
@@ -16,9 +19,15 @@ import io.ktor.util.pipeline.*
 import mu.*
 import org.slf4j.event.*
 
+@Version(version = BuildConfig.VERSION, date = BuildConfig.RELEASE_DATE)
 object SrcRef : KLogging() {
   @JvmStatic
   fun main(args: Array<String>) {
+    logger.apply {
+      info { getBanner("banners/srcref.txt", this) }
+      info { SrcRef::class.versionDesc() }
+    }
+
     embeddedServer(CIO, port = System.getenv("PORT")?.toInt() ?: 8080) {
       install(CallLogging) {
         level = Level.INFO
