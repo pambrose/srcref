@@ -14,7 +14,7 @@ object What {
         append.html {
           head {
             commonHead()
-            title { +"What is this?" }
+            title { +"What is srcref?" }
           }
           body {
             githubIcon()
@@ -22,7 +22,7 @@ object What {
               "https://github.com/pambrose/srcref/blob/master/src/main/kotlin/com/pambrose/srcref/Main.kt#L23-L39"
             div("page-indent") {
               id = "whatisthis"
-              h2 { +"What is this?" }
+              h2 { +"What is srcref?" }
               p {
                 span {
                   +"Line-specific GitHub permalinks look like this: "
@@ -64,7 +64,7 @@ object What {
                 val pattern = "https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html"
                 +"For example, these "
                 a { href = edit; target = "_blank"; +"values" }
-                +" will produce a srcref URL that, when clicked, will highlight the lines between the first occurrence of"
+                +" produce a srcref URL that, when clicked, will highlight the lines between the first occurrence of"
                 b { +""" "install\(CallLogging\)" """ }
                 +"and 3 lines beyond the first occurrence of"
                 b { +""" "install\(Compression\)" """ }
