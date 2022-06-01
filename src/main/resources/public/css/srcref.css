@@ -13,6 +13,12 @@ table {
 
 td {
     padding: 5px;
+    font-size: 120%;
+}
+
+/* Size of the form inputs */
+input[type="text"] {
+    font-size: 80%;
 }
 
 a.top-right {
@@ -175,7 +181,8 @@ a.top-right:hover {
 }
 
 .occurrence {
-    width: 4.8em;
+    width: 70px;
+    font-size: 110%;
 }
 
 .backlink a:link {
@@ -187,9 +194,9 @@ a.top-right:hover {
     color: red;
 }
 
-#why p {
+#whatisthis p {
     width: 50%;
-    font-size: 125%;
+    font-size: 120%;
     line-height: 1.30;
 }
 

@@ -14,7 +14,7 @@ import com.pambrose.srcref.pages.Common.URL_PREFIX
 import com.pambrose.srcref.pages.Edit.displayEdit
 import com.pambrose.srcref.pages.Error.displayError
 import com.pambrose.srcref.pages.Version.displayVersion
-import com.pambrose.srcref.pages.Why.displayWhy
+import com.pambrose.srcref.pages.What.displayWhat
 import io.ktor.http.ContentType.Text.Plain
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
@@ -49,7 +49,7 @@ object Routes : KLogging() {
         displayError(params, msg)
       }
 
-      get(Endpoints.WHY.path) { displayWhy() }
+      get(Endpoints.WHAT.path) { displayWhat() }
 
       get(CACHE.path) { displayCache() }
 

@@ -7,8 +7,8 @@ import com.pambrose.srcref.pages.Common.githubIcon
 import kotlinx.html.*
 import kotlinx.html.dom.*
 
-object Why {
-  internal suspend fun PipelineCall.displayWhy() {
+object What {
+  internal suspend fun PipelineCall.displayWhat() {
     respondWith {
       document {
         append.html {
@@ -21,7 +21,7 @@ object Why {
             val url =
               "https://github.com/pambrose/srcref/blob/master/src/main/kotlin/com/pambrose/srcref/Main.kt#L23-L39"
             div("page-indent") {
-              id = "why"
+              id = "whatisthis"
               h2 { +"What is this?" }
               p {
                 span {
@@ -62,9 +62,9 @@ object Why {
                 val edit =
                   "https://www.srcref.com/github?account=pambrose&repo=srcref&branch=master&path=src%2Fmain%2Fkotlin%2Fcom%2Fpambrose%2Fsrcref%2FMain.kt&bregex=install%5C%28CallLogging%5C%29&boccur=1&boffset=0&btopd=true&eregex=install%5C%28Compression%5C%29&eoccur=1&eoffset=3&etopd=true&edit=true"
                 val pattern = "https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html"
-                +"For example, these"
-                a { href = edit; target = "_blank"; +" values " }
-                +"will produce a srcref URL that, when clicked, will highlight the lines between the first occurrence of"
+                +"For example, these "
+                a { href = edit; target = "_blank"; +"values" }
+                +" will produce a srcref URL that, when clicked, will highlight the lines between the first occurrence of"
                 b { +""" "install\(CallLogging\)" """ }
                 +"and 3 lines beyond the first occurrence of"
                 b { +""" "install\(Compression\)" """ }

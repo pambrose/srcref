@@ -3,7 +3,7 @@ package com.pambrose.srcref.pages
 import com.github.pambrose.common.response.*
 import com.pambrose.srcref.*
 import com.pambrose.srcref.Endpoints.EDIT
-import com.pambrose.srcref.Endpoints.WHY
+import com.pambrose.srcref.Endpoints.WHAT
 import com.pambrose.srcref.QueryParams.ACCOUNT
 import com.pambrose.srcref.QueryParams.BEGIN_OCCURRENCE
 import com.pambrose.srcref.QueryParams.BEGIN_OFFSET
@@ -45,7 +45,7 @@ object Edit {
               h2 {
                 span {
                   +"srcref - Dynamic Line-Specific GitHub Permalinks"
-                  a { href = "/$WHY"; style = "padding-left: 25px; font-size: 75%;"; +"(What is this?)" }
+                  a { href = "/$WHAT"; style = "padding-left: 25px; font-size: 75%;"; +"(What is this?)" }
                 }
               }
 
