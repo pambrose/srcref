@@ -14,7 +14,7 @@ object Why {
         append.html {
           head {
             commonHead()
-            title { +"Why use srcref?" }
+            title { +"What is this?" }
           }
           body {
             githubIcon()
@@ -22,7 +22,7 @@ object Why {
               "https://github.com/pambrose/srcref/blob/master/src/main/kotlin/com/pambrose/srcref/Main.kt#L23-L39"
             div("page-indent") {
               id = "why"
-              h2 { +"Why use srcref?" }
+              h2 { +"What is this?" }
               p {
                 span {
                   +"Line-specific GitHub permalinks look like this: "
@@ -48,8 +48,8 @@ object Why {
                 +"""
                  srcref attempts to help this problem by using regular expressions to define the
                  beginning and end of the range of lines to be highlighted. In addition, 
-                 you can specify the occurrence of each match and an offset, above or below a final match, to 
-                 define the desired range. 
+                 you can specify the occurrence of each match, an offset, above or below a final match, 
+                 and whether to search top-down or bottom-up, to define the desired range. 
                  """.trimIndent()
               }
               p {
@@ -59,15 +59,24 @@ object Why {
                  """.trimIndent()
               }
               p {
+                val edit =
+                  "https://www.srcref.com/github?account=pambrose&repo=srcref&branch=master&path=src%2Fmain%2Fkotlin%2Fcom%2Fpambrose%2Fsrcref%2FMain.kt&bregex=install%5C%28CallLogging%5C%29&boccur=1&boffset=0&btopd=true&eregex=install%5C%28Compression%5C%29&eoccur=1&eoffset=3&etopd=true&edit=true"
                 val pattern = "https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html"
-                span {
-                  +"The regex values use "
-                  a { href = pattern; target = "_blank"; +"this syntax" }
-                  +""". Remember to protect regex characters like "()", "[]" and "{}" by prefixing them with a "\". """
-                  +"Use "
-                  a { href = "https://regex101.com"; target = "_blank"; +"regex101.com" }
-                  +" to assist in creating regex values."
-                }
+                +"For example, these"
+                a { href = edit; target = "_blank"; +" values " }
+                +"will produce a srcref URL that, when clicked, will highlight the lines between the first occurrence of"
+                b { +""" "install\(CallLogging\)" """ }
+                +"and 3 lines beyond the first occurrence of"
+                b { +""" "install\(Compression\)" """ }
+                +"""in the specified file. Notice that the "()" characters are escaped because we want their literal 
+                  value, not their regex interpretation. 
+                """.trimIndent()
+                +"The regex values use "
+                a { href = pattern; target = "_blank"; +"this syntax" }
+                +""". As mentioned, characters like "()", "[]" and "{}" may require escaping. """
+                +"Use "
+                a { href = "https://regex101.com"; target = "_blank"; +"regex101.com" }
+                +" to assist in creating regex values."
               }
               p("backlink") {
                 a { href = "/$EDIT"; +"⬅ Back" }

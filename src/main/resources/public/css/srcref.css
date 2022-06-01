@@ -190,5 +190,6 @@ a.top-right:hover {
 #why p {
     width: 50%;
     font-size: 125%;
+    line-height: 1.30;
 }
 

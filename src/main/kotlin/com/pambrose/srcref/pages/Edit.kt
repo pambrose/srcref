@@ -45,7 +45,7 @@ object Edit {
               h2 {
                 span {
                   +"srcref - Dynamic Line-Specific GitHub Permalinks"
-                  a { href = "/$WHY"; style = "padding-left: 25px; font-size: 75%;"; +"(why use srcref?)" }
+                  a { href = "/$WHY"; style = "padding-left: 25px; font-size: 75%;"; +"(What is this?)" }
                 }
               }
 
