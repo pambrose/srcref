@@ -1,7 +1,6 @@
 package com.pambrose.srcref.pages
 
 import com.github.pambrose.common.response.*
-import com.pambrose.srcref.*
 import com.pambrose.srcref.ContentCache.Companion.contentCache
 import com.pambrose.srcref.Urls.RAW_PREFIX
 import com.pambrose.srcref.pages.Common.commonHead
@@ -20,8 +19,7 @@ object Cache {
           }
           body {
             githubIcon()
-            div {
-              style = "padding-left: 20px;"
+            div("page-indent") {
               h2 { +"srcref Content Cache" }
               h3 { +"Cache Size: ${contentCache.size}" }
               if (contentCache.size > 0)

@@ -16,9 +16,9 @@ but you can run your own instance as well.
 ## Usage
 
 1) Enter the _srcref_ information in the form [here](https://www.srcref.com).
-   The `Regex` values use [this syntax](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html).
+   The `regex` values use [this syntax](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html).
    Remember to protect regex characters like `()`, `[]` and `{}` by prefixing them with a `\`.
-   Use [regex101.com](https://regex101.com) to assist creating regex values.
+   Use [regex101.com](https://regex101.com) to assist in creating regex values.
 2) If the _End_ _Regex_ field is empty, the _srcref_ URL will highlight a single line on GitHub.
 3) Click the "Generate URL" button to generate the _srcref_ URL.
 4) Click the "View GitHub Permalink" button to verify the line-specific GitHub permalink.

@@ -19,8 +19,7 @@ object Version {
           }
           body {
             githubIcon()
-            div {
-              style = "padding-left: 20px; padding-top: 5px;"
+            div("page-indent") {
               h2 { +"srcref Version" }
               p { +"Version: $VERSION" }
               p { +"Release Date: $RELEASE_DATE" }

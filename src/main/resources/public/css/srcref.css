@@ -1,5 +1,6 @@
-form {
+.page-indent {
     padding-left: 25px;
+    padding-top: 5px;
 }
 
 table {
@@ -20,8 +21,8 @@ a.top-right {
     width: clamp(50px, 8vmax, 80px);
     line-height: 0;
     color: rgba(255, 255, 255, 0.5);
-    top: 15px;
-    right: 15px;
+    top: 10px;
+    right: 10px;
 }
 
 a.top-right path {
@@ -176,3 +177,18 @@ a.top-right:hover {
 .occurrence {
     width: 4.8em;
 }
+
+.backlink a:link {
+    text-decoration: none;
+}
+
+.backlink a:hover {
+    cursor: pointer;
+    color: red;
+}
+
+#why p {
+    width: 50%;
+    font-size: 125%;
+}
+
