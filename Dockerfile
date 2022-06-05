@@ -23,4 +23,4 @@ EXPOSE 8080
 
 CMD []
 # Launch java to execute the jar with defaults intended for containers.
-ENTRYPOINT ["java", "-server", "-XX:+UseContainerSupport", "-Xmx2048m", "-Dlogback.configurationFile=/app/src/main/resources/logback.xml", "-jar", "/app/srcref.jar"]
+ENTRYPOINT ["java", "-server", "-XX:+UseContainerSupport", "-Xmx2048m", "-Dlogback.configurationFile=/app/src/main/resources/logback-srcref.xml", "-jar", "/app/srcref.jar"]
