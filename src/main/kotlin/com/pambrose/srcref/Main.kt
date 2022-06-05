@@ -1,5 +1,8 @@
 package com.pambrose.srcref
 
+import com.github.pambrose.common.util.*
+import com.github.pambrose.common.util.Version.Companion.versionDesc
+import com.github.pambrose.srcref.srcref.*
 import com.pambrose.srcref.Endpoints.PING
 import com.pambrose.srcref.Routes.routes
 import io.ktor.http.*
@@ -12,20 +15,24 @@ import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
-import io.ktor.util.pipeline.*
 import mu.*
 import org.slf4j.event.*
 
-object SrcRef : KLogging() {
+@Version(version = BuildConfig.VERSION, date = BuildConfig.RELEASE_DATE)
+object Main : KLogging() {
   @JvmStatic
   fun main(args: Array<String>) {
+    logger.apply {
+      info { getBanner("banners/srcref.banner", this) }
+      info { Main::class.versionDesc() }
+    }
+
     embeddedServer(CIO, port = System.getenv("PORT")?.toInt() ?: 8080) {
       install(CallLogging) {
         level = Level.INFO
-        // Do not log ping calls
         filter { call -> !call.request.path().startsWith("/${PING.path}") }
       }
-      install(DefaultHeaders) { header("X-Engine", "Ktor") }
+      install(DefaultHeaders)
       install(StatusPages) {
         status(HttpStatusCode.NotFound) { call, status ->
           val msg = "Page not found: ${call.request.path()}"
@@ -41,5 +48,3 @@ object SrcRef : KLogging() {
     }.start(wait = true)
   }
 }
-
-internal typealias PipelineCall = PipelineContext<Unit, ApplicationCall>

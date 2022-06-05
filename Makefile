@@ -1,4 +1,4 @@
-VERSION=1.0.5
+VERSION=1.0.6
 
 default: versioncheck
 
@@ -27,7 +27,7 @@ run-docker:
 build-docker:
 	docker build -t pambrose/srcref:${VERSION} .
 
-PLATFORMS := linux/amd64
+PLATFORMS := linux/amd64,linux/arm64/v8
 IMAGE_NAME := pambrose/srcref
 
 docker-push:

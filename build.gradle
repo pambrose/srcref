@@ -9,15 +9,15 @@ plugins {
 }
 
 group = 'com.github.pambrose.srcref'
-version = '1.0.5'
+version = '1.0.6'
 
 buildConfig {
     buildConfigField('String', 'NAME', "\"${project.name}\"")
     buildConfigField('String', 'VERSION', "\"${project.version}\"")
-    buildConfigField('String', 'RELEASE_DATE', "\"05/30/2022\"")
+    buildConfigField('String', 'RELEASE_DATE', "\"06/05/2022\"")
 }
 
-def mainName = "com.pambrose.srcref.SrcRef"
+def mainName = "com.pambrose.srcref.Main"
 
 application {
     mainClassName = mainName

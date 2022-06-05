@@ -16,16 +16,16 @@ but you can run your own instance as well.
 ## Usage
 
 1) Enter the _srcref_ information in the form [here](https://www.srcref.com).
-   The `Regex` values use [this syntax](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html).
+   The `regex` values use [this syntax](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html).
    Remember to protect regex characters like `()`, `[]` and `{}` by prefixing them with a `\`.
-   Use [regex101.com](https://regex101.com) to assist creating regex values.
+   Use [regex101.com](https://regex101.com) to assist in creating regex values.
 2) If the _End_ _Regex_ field is empty, the _srcref_ URL will highlight a single line on GitHub.
 3) Click the "Generate URL" button to generate the _srcref_ URL.
 4) Click the "View GitHub Permalink" button to verify the line-specific GitHub permalink.
 5) Click the "Copy URL" button to copy the _srcref_ URL to your clipboard.
 6) Paste the _srcref_ URL into your documentation.
 
-### Example
+## Example
 
 To highlight all the lines from the first occurrence
 of `install(CallLogging)` to 3 lines beyond the first occurrence of `install(Compression)` in
@@ -34,11 +34,11 @@ create a _srcref_ URL using
 [these values](https://www.srcref.com/edit?account=pambrose&repo=srcref&branch=master&path=src%2Fmain%2Fkotlin%2Fcom%2Fpambrose%2Fsrcref%2FMain.kt&bregex=install%5C%28CallLogging%5C%29&boccur=1&boffset=0&btopd=true&eregex=install%5C%28Compression%5C%29&eoccur=1&eoffset=3&etopd=false)
 .
 
-The resulting _srcref_ URL leads to this
+The corresponding _srcref_ URL generates this
 [GitHub permalink](https://www.srcref.com/github?account=pambrose&repo=srcref&branch=master&path=src%2Fmain%2Fkotlin%2Fcom%2Fpambrose%2Fsrcref%2FMain.kt&bregex=install%5C%28CallLogging%5C%29&boccur=1&boffset=0&btopd=true&eregex=install%5C%28Compression%5C%29&eoccur=1&eoffset=3&etopd=false)
 .
 
-### Query Parameters
+## Query Parameters
 
 | Parameter | Default  | Required | Description                                                |
 |-----------|----------|----------|------------------------------------------------------------|
@@ -61,25 +61,56 @@ The resulting _srcref_ URL leads to this
 
 ## Programmatic Usage
 
-You can generate _srcref_ URLs programmatically with the `srcrefUrl()` call
-([example](https://www.srcref.com/github?account=kslides&repo=kslides&branch=master&path=kslides-core%2Fsrc%2Fmain%2Fkotlin%2Fcom%2Fkslides%2FPresentation.kt&bregex=srcrefUrl%5C%28&boccur=1&boffset=0&btopd=true&eregex=escapeHtml4+%3D+true&eoccur=1&eoffset=1&etopd=true))
+_srcref_ URLs can be generated programmatically with the `srcrefUrl()` call, as seen here
+([here](https://www.srcref.com/github?account=kslides&repo=kslides&branch=master&path=kslides-core%2Fsrc%2Fmain%2Fkotlin%2Fcom%2Fkslides%2FPresentation.kt&bregex=srcrefUrl%5C%28&boccur=1&boffset=0&btopd=true&eregex=escapeHtml4+%3D+true&eoccur=1&eoffset=1&etopd=true))
 .
 
-Add this to your gradle dependencies:
+For Gradle:
 
+```groovy
+allprojects {
+   repositories {
+      maven { url 'https://jitpack.io' }
+   }
+}
 ```
-implementation "com.github.pambrose:srcref:1.0.3"
+
+```groovy
+dependencies {
+   implementation 'com.github.pambrose:srcref:1.0.6'
+}
 ```
 
-## Deploying Your Own _srcref_ Server
+For Maven:
 
-These are the environment variables you need to set to deploy your own _srcref_ server:
+```xml
+
+<repositories>
+   <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+   </repository>
+</repositories>
+```
+
+```xml
+
+<dependency>
+   <groupId>com.github.pambrose</groupId>
+   <artifactId>srcref</artifactId>
+   <version>1.0.6</version>
+</dependency>
+```
+
+## Deploying a _srcref_ server
+
+Environment variables available with a _srcref_ server:
 
 | Env Var          | Default                  | Description                                                 |
 |------------------|--------------------------|-------------------------------------------------------------|
 | _PORT_           | 8080                     | HTTP port to listen on                                      |
 | _PREFIX_         | "https://www.srcref.com" | Prefix for URLs                                             |
-| _MAX_LENGTH_     | 5MB (5242880)            | Maximum allowed file size                                   |
+| _MAX_LENGTH_     | 5MB                      | Maximum allowed file size                                   |
 | _MAX_CACHE_SIZE_ | 2048                     | Maximum cache size before evictions                         |
 | _DEFAULT_BRANCH_ | "master"                 | Default branch name to use if _branch_ parameter is missing |
 

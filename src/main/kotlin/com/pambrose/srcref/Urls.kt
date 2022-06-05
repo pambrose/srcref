@@ -4,6 +4,7 @@ import com.github.pambrose.common.util.*
 import com.pambrose.srcref.ContentCache.Companion.fetchContent
 import com.pambrose.srcref.Endpoints.ERROR
 import com.pambrose.srcref.Endpoints.GITHUB
+import com.pambrose.srcref.Main.logger
 import com.pambrose.srcref.QueryParams.ACCOUNT
 import com.pambrose.srcref.QueryParams.BEGIN_OCCURRENCE
 import com.pambrose.srcref.QueryParams.BEGIN_OFFSET
@@ -16,7 +17,6 @@ import com.pambrose.srcref.QueryParams.END_REGEX
 import com.pambrose.srcref.QueryParams.END_TOPDOWN
 import com.pambrose.srcref.QueryParams.PATH
 import com.pambrose.srcref.QueryParams.REPO
-import com.pambrose.srcref.SrcRef.logger
 import com.pambrose.srcref.pages.Common.hasValues
 import org.apache.commons.text.StringEscapeUtils.escapeHtml4
 import java.util.regex.*
@@ -32,7 +32,7 @@ object Urls {
       .filter { it.isNotBlank() }
       .joinToString("&")
 
-  internal fun Map<String, String?>.missingEndRegex() = this[END_REGEX.arg]?.isBlank() ?: true
+  private fun Map<String, String?>.missingEndRegex() = this[END_REGEX.arg]?.isBlank() ?: true
 
   internal fun srcrefToGithubUrl(
     params: Map<String, String?>,
@@ -62,7 +62,7 @@ object Urls {
 
         val url = githubRawUrl(account, repo, path, branch)
         val (lines, duration) = measureTimedValue { fetchContent(url) }
-        logger.info("Read $url in $duration")
+        logger.info("Read ${url.removePrefix(RAW_PREFIX)} in $duration")
 
         val beginOffsetStr = BEGIN_OFFSET.defaultIfNull(params)
         val beginOffset = beginOffsetStr.toInt { "Invalid Begin Offset value: $beginOffsetStr" }

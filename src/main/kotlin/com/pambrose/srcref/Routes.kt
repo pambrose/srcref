@@ -10,10 +10,11 @@ import com.pambrose.srcref.Endpoints.VERSION
 import com.pambrose.srcref.Urls.MSG
 import com.pambrose.srcref.Urls.githubRangeUrl
 import com.pambrose.srcref.pages.Cache.displayCache
-import com.pambrose.srcref.pages.Common.urlPrefix
+import com.pambrose.srcref.pages.Common.URL_PREFIX
+import com.pambrose.srcref.pages.Edit.displayEdit
 import com.pambrose.srcref.pages.Error.displayError
-import com.pambrose.srcref.pages.Form.displayForm
 import com.pambrose.srcref.pages.Version.displayVersion
+import com.pambrose.srcref.pages.What.displayWhat
 import io.ktor.http.ContentType.Text.Plain
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
@@ -24,23 +25,22 @@ import mu.*
 object Routes : KLogging() {
   fun Application.routes() {
     routing {
-      get("/") {
-        redirectTo { EDIT.path }
-      }
+      // This will redirect to www subdomain
+      get("/") { redirectTo { "$URL_PREFIX/${EDIT.path}" } }
 
       get(EDIT.path) {
         val params = readQueryParams()
         logger.info { params }
-        displayForm(params)
+        displayEdit(params)
       }
 
       get(GITHUB.path) {
         val params = readQueryParams()
         logger.info { params }
         if (call.request.queryParameters.contains(EDIT.path))
-          displayForm(params)
+          displayEdit(params)
         else
-          redirectTo { githubRangeUrl(params, urlPrefix).first }
+          redirectTo { githubRangeUrl(params, URL_PREFIX).first }
       }
 
       get(ERROR.path) {
@@ -49,17 +49,13 @@ object Routes : KLogging() {
         displayError(params, msg)
       }
 
-      get(CACHE.path) {
-        displayCache()
-      }
+      get(Endpoints.WHAT.path) { displayWhat() }
 
-      get(VERSION.path) {
-        displayVersion()
-      }
+      get(CACHE.path) { displayCache() }
 
-      get(PING.path) {
-        call.respondText("pong", Plain)
-      }
+      get(VERSION.path) { displayVersion() }
+
+      get(PING.path) { call.respondText("pong", Plain) }
 
       static("/") {
         staticBasePackage = "public"
