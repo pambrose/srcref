@@ -89,6 +89,7 @@ task uberjar(type: Jar, dependsOn: shadowJar) {
 compileKotlin {
     kotlinOptions {
         jvmTarget = '1.8'
+        useIR = true
         freeCompilerArgs += ['-Xbackend-threads=8',
                              '-opt-in=kotlin.time.ExperimentalTime',
                              '-opt-in=kotlinx.coroutines.DelicateCoroutinesApi',
@@ -99,6 +100,7 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions {
         jvmTarget = '1.8'
+        useIR = true
         freeCompilerArgs += ['-Xbackend-threads=8']
     }
 }
