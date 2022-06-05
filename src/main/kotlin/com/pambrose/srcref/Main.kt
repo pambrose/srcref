@@ -30,7 +30,6 @@ object Main : KLogging() {
     embeddedServer(CIO, port = System.getenv("PORT")?.toInt() ?: 8080) {
       install(CallLogging) {
         level = Level.INFO
-        // Do not log ping calls
         filter { call -> !call.request.path().startsWith("/${PING.path}") }
       }
       install(DefaultHeaders)
