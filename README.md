@@ -2,7 +2,7 @@
 
 [![](https://jitpack.io/v/pambrose/srcref.svg)](https://jitpack.io/#pambrose/srcref)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/pambrose/srcref)
-[![Kotlin version](https://img.shields.io/badge/kotlin-1.6.21-red?logo=kotlin)](http://kotlinlang.org)
+[![Kotlin version](https://img.shields.io/badge/kotlin-1.7.0-red?logo=kotlin)](http://kotlinlang.org)
 
 It is problematic to embed line-specific GitHub permalinks in documentation because
 changes to the target file can invalidate the permalink line references.
@@ -11,7 +11,7 @@ _srcref_ is a simple utility that allows you to embed GitHub permalinks into you
 docs without worrying about the line numbers of the code changing.
 
 A public instance of _srcref_ is available at [www.srcref.com](https://www.srcref.com),
-but you can run your own instance as well.
+but you can run your own server as well.
 
 ## Usage
 
@@ -57,11 +57,11 @@ The corresponding _srcref_ URL generates this
 
 ## Editing a _srcref_ URL
 
-* Add `&edit` to a _srcref_ URL to edit it.
+Add `&edit` to a _srcref_ URL to edit it.
 
 ## Programmatic Usage
 
-_srcref_ URLs can be generated programmatically with the `srcrefUrl()` call, as seen
+_srcref_ URLs can be generated programmatically with the `srcrefUrl()` call. An example can be seen
 [here](https://www.srcref.com/github?account=kslides&repo=kslides&branch=master&path=kslides-core%2Fsrc%2Fmain%2Fkotlin%2Fcom%2Fkslides%2FPresentation.kt&bregex=srcrefUrl%5C%28&boccur=1&boffset=0&btopd=true&eregex=escapeHtml4+%3D+true&eoccur=1&eoffset=1&etopd=true)
 .
 
@@ -78,7 +78,7 @@ allprojects {
 
 ```groovy
 dependencies {
-   implementation 'com.github.pambrose:srcref:1.0.7'
+   implementation 'com.github.pambrose:srcref:1.0.8'
 }
 ```
 
@@ -103,7 +103,7 @@ dependencies {
 <dependency>
    <groupId>com.github.pambrose</groupId>
    <artifactId>srcref</artifactId>
-   <version>1.0.7</version>
+   <version>1.0.8</version>
 </dependency>
 ```
 
