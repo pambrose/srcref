@@ -1,6 +1,6 @@
 import com.pambrose.srcref.Urls.calcLineNumber
-import io.kotest.core.spec.style.*
-import io.kotest.matchers.*
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
 
 class FileTests : StringSpec(
   {
@@ -40,14 +40,15 @@ class FileTests : StringSpec(
 
           calcLineNumber(input, "aaa", 2, 0, false) shouldBe 2
           calcLineNumber(input, "aaa", 2, 1, false) shouldBe 3
-          calcLineNumber(input, "aaa", 2, 2, false) shouldBe 4
+      calcLineNumber(input, "aaa", 2, 2, false) shouldBe 4
 
-          calcLineNumber(input, "bbb", 1, 0, false) shouldBe 6
-          calcLineNumber(input, "bbb", 1, 1, false) shouldBe 7
-          calcLineNumber(input, "bbb", 1, 2, false) shouldBe 8
+      calcLineNumber(input, "bbb", 1, 0, false) shouldBe 6
+      calcLineNumber(input, "bbb", 1, 1, false) shouldBe 7
+      calcLineNumber(input, "bbb", 1, 2, false) shouldBe 8
 
-          calcLineNumber(input, "bbb", 2, 0, false) shouldBe 5
-          calcLineNumber(input, "bbb", 2, 1, false) shouldBe 6
-          calcLineNumber(input, "bbb", 2, 2, false) shouldBe 7
+      calcLineNumber(input, "bbb", 2, 0, false) shouldBe 5
+      calcLineNumber(input, "bbb", 2, 1, false) shouldBe 6
+      calcLineNumber(input, "bbb", 2, 2, false) shouldBe 7
     }
-  })
+  }
+)
