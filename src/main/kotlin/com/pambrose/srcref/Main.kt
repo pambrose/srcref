@@ -1,8 +1,9 @@
 package com.pambrose.srcref
 
-import com.github.pambrose.common.util.*
+import com.github.pambrose.common.util.Version
 import com.github.pambrose.common.util.Version.Companion.versionDesc
-import com.github.pambrose.srcref.srcref.*
+import com.github.pambrose.common.util.getBanner
+import com.github.pambrose.srcref.srcref.BuildConfig
 import com.pambrose.srcref.Endpoints.PING
 import com.pambrose.srcref.Routes.routes
 import io.ktor.http.*
@@ -15,8 +16,8 @@ import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
-import mu.*
-import org.slf4j.event.*
+import mu.KLogging
+import org.slf4j.event.Level
 
 @Version(version = BuildConfig.VERSION, date = BuildConfig.RELEASE_DATE)
 object Main : KLogging() {
@@ -31,6 +32,11 @@ object Main : KLogging() {
       install(CallLogging) {
         level = Level.INFO
         filter { call -> !call.request.path().startsWith("/${PING.path}") }
+        format { call ->
+          val path = call.request.path()
+          val userAgent = call.request.headers["User-Agent"]
+          "[$userAgent] $path"
+        }
       }
       install(DefaultHeaders)
       install(StatusPages) {

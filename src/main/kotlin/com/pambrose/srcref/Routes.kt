@@ -1,6 +1,7 @@
 package com.pambrose.srcref
 
-import com.github.pambrose.common.response.*
+import com.github.pambrose.common.response.PipelineCall
+import com.github.pambrose.common.response.redirectTo
 import com.pambrose.srcref.Endpoints.CACHE
 import com.pambrose.srcref.Endpoints.EDIT
 import com.pambrose.srcref.Endpoints.ERROR
@@ -12,7 +13,7 @@ import com.pambrose.srcref.Urls.githubRangeUrl
 import com.pambrose.srcref.pages.Cache.displayCache
 import com.pambrose.srcref.pages.Common.URL_PREFIX
 import com.pambrose.srcref.pages.Edit.displayEdit
-import com.pambrose.srcref.pages.Error.displayError
+import com.pambrose.srcref.pages.Error.displayException
 import com.pambrose.srcref.pages.Version.displayVersion
 import com.pambrose.srcref.pages.What.displayWhat
 import io.ktor.http.ContentType.Text.Plain
@@ -20,7 +21,7 @@ import io.ktor.server.application.*
 import io.ktor.server.http.content.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import mu.*
+import mu.KLogging
 
 object Routes : KLogging() {
   fun Application.routes() {
@@ -46,7 +47,7 @@ object Routes : KLogging() {
       get(ERROR.path) {
         val params = readQueryParams()
         val msg = readMsg()
-        displayError(params, msg)
+        displayException(params, msg)
       }
 
       get(Endpoints.WHAT.path) { displayWhat() }

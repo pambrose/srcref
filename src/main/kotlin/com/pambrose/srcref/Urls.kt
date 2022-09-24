@@ -1,6 +1,7 @@
 package com.pambrose.srcref
 
-import com.github.pambrose.common.util.*
+import com.github.pambrose.common.util.encode
+import com.github.pambrose.common.util.isNotNull
 import com.pambrose.srcref.ContentCache.Companion.fetchContent
 import com.pambrose.srcref.Endpoints.ERROR
 import com.pambrose.srcref.Endpoints.GITHUB
@@ -19,8 +20,8 @@ import com.pambrose.srcref.QueryParams.PATH
 import com.pambrose.srcref.QueryParams.REPO
 import com.pambrose.srcref.pages.Common.hasValues
 import org.apache.commons.text.StringEscapeUtils.escapeHtml4
-import java.util.regex.*
-import kotlin.time.*
+import java.util.regex.PatternSyntaxException
+import kotlin.time.measureTimedValue
 
 object Urls {
   internal const val MSG = "msg"
@@ -94,9 +95,9 @@ object Urls {
         githubSourceUrl(account, repo, branch, path, beginLinenum, endLinenum) to ""
       }
     } catch (e: Throwable) {
-      val errorMsg = "${e::class.simpleName}: ${e.message}"
-      logger.info { "Input problem: $errorMsg $params" }
-      "$prefix/$ERROR?$MSG=${errorMsg.encode()}&${params.toQueryParams(false)}" to errorMsg
+      val msg = "${e::class.simpleName}: ${e.message}"
+      logger.info { "Input problem: $msg $params" }
+      "$prefix/$ERROR?$MSG=${msg.encode()}&${params.toQueryParams(false)}" to msg
     }
 
   private fun githubSourceUrl(

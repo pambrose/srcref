@@ -30,7 +30,7 @@ import kotlinx.html.dom.*
 object Edit {
   internal suspend fun PipelineCall.displayEdit(params: Map<String, String?>) {
     // This is called early because it is suspending, and we cannot suspend inside document construction
-    val (githubUrl, errorMsg) = Urls.githubRangeUrl(params, URL_PREFIX)
+    val (githubUrl, msg) = Urls.githubRangeUrl(params, URL_PREFIX)
 
     respondWith {
       document {
@@ -150,7 +150,7 @@ object Edit {
                 style = "padding-top: 15px"
                 if (params.hasValues()) {
                   val srcrefUrl = Urls.srcrefToGithubUrl(params, prefix = URL_PREFIX)
-                  val isValid = errorMsg.isEmpty()
+                  val isValid = msg.isEmpty()
                   span {
                     button(classes = "button") {
                       onClick = "window.open('$EDIT', '_self')"
@@ -181,7 +181,7 @@ object Edit {
                     textArea { rows = "2"; +githubUrl; cols = widthVal; readonly = true }
                   } else {
                     h2 { +"Exception:" }
-                    textArea { rows = "3"; cols = widthVal; readonly = true; +errorMsg }
+                    textArea { rows = "3"; cols = widthVal; readonly = true; +msg }
                   }
                 } else {
                   button(classes = "button") {

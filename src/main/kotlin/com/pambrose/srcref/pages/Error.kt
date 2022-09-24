@@ -1,6 +1,7 @@
 package com.pambrose.srcref.pages
 
-import com.github.pambrose.common.response.*
+import com.github.pambrose.common.response.PipelineCall
+import com.github.pambrose.common.response.respondWith
 import com.pambrose.srcref.Endpoints.EDIT
 import com.pambrose.srcref.Urls.toQueryParams
 import com.pambrose.srcref.pages.Common.commonHead
@@ -10,13 +11,13 @@ import kotlinx.html.*
 import kotlinx.html.dom.*
 
 object Error {
-  internal suspend fun PipelineCall.displayError(params: Map<String, String?>, msg: String) {
+  internal suspend fun PipelineCall.displayException(params: Map<String, String?>, msg: String) {
     respondWith {
       document {
         append.html {
           head {
             commonHead()
-            title { +"srcref Error" }
+            title { +"srcref Exception" }
           }
           body {
             githubIcon()
