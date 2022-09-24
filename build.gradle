@@ -14,7 +14,7 @@ version = '1.0.10'
 buildConfig {
     buildConfigField('String', 'NAME', "\"${project.name}\"")
     buildConfigField('String', 'VERSION', "\"${project.version}\"")
-    buildConfigField('String', 'RELEASE_DATE', "\"08/26/2022\"")
+    buildConfigField('String', 'RELEASE_DATE', "\"09/23/2022\"")
 }
 
 def mainName = "com.pambrose.srcref.Main"
