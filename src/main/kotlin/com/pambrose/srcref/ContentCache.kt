@@ -1,6 +1,7 @@
 package com.pambrose.srcref
 
-import com.github.pambrose.common.util.*
+import com.github.pambrose.common.util.isNotNull
+import com.github.pambrose.common.util.simpleClassName
 import com.pambrose.srcref.Urls.RAW_PREFIX
 import com.pambrose.srcref.Urls.toInt
 import io.ktor.client.*
@@ -9,12 +10,13 @@ import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import kotlinx.coroutines.*
-import mu.*
-import java.util.concurrent.*
-import java.util.concurrent.atomic.*
-import kotlin.time.*
+import kotlinx.coroutines.newSingleThreadContext
+import mu.KLogging
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicInteger
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.TimeMark
 import kotlin.time.TimeSource.Monotonic
 
 internal class ContentCache {
@@ -140,7 +142,7 @@ internal class ContentCache {
               contentLength = length,
               referenced = now,
               created = now
-            )
+            ).apply { markReferenced() }
         }
         pageLines
       }
