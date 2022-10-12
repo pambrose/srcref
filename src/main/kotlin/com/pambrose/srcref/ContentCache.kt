@@ -115,36 +115,40 @@ internal class ContentCache {
           logger.warn { "Unanticipated content type: $contentType" }
       }
 
-      return if (response.status == HttpStatusCode.NotModified && cacheItem.isNotNull()) {
-        cacheItem.run {
-          logger.info { "Returning cached content for ETag: $etag and url: ${url.removePrefix(RAW_PREFIX)}" }
-          markReferenced()
-          pageLines
-        }
-      } else {
-        val contentLength = HttpHeaders.ContentLength
-        val length = response.headers[contentLength].toInt { "$contentLength header is null or not an integer" }
-        if (length >= contentCache.maxLength) {
-          val msg = "$contentLength exceeds maximum length: $length"
-          logger.warn { msg }
-          throw IllegalArgumentException(msg)
+      return when {
+        response.status == HttpStatusCode.NotModified && cacheItem.isNotNull() -> {
+          cacheItem.run {
+            logger.info { "Returning cached content for ETag: $etag and url: ${url.removePrefix(RAW_PREFIX)}" }
+            markReferenced()
+            pageLines
+          }
         }
 
-        val etag = response.headers[HttpHeaders.ETag] ?: ""
-        val pageLines = response.body<String>().lines()
-        if (etag.isNotBlank()) {
-          logger.info { "Adding item to content cache -- ETag: $etag and url: ${url.removePrefix(RAW_PREFIX)}" }
-          val now = Monotonic.markNow()
-          contentCache[url] =
-            CacheContent(
-              pageLines = pageLines,
-              etag = etag,
-              contentLength = length,
-              referenced = now,
-              created = now
-            ).apply { markReferenced() }
+        else -> {
+          val contentLength = HttpHeaders.ContentLength
+          val length = response.headers[contentLength].toInt { "$contentLength header is null or not an integer" }
+          if (length >= contentCache.maxLength) {
+            val msg = "$contentLength exceeds maximum length: $length"
+            logger.warn { msg }
+            throw IllegalArgumentException(msg)
+          }
+
+          val etag = response.headers[HttpHeaders.ETag] ?: ""
+          val pageLines = response.body<String>().lines()
+          if (etag.isNotBlank()) {
+            logger.info { "Adding item to content cache -- ETag: $etag and url: ${url.removePrefix(RAW_PREFIX)}" }
+            val now = Monotonic.markNow()
+            contentCache[url] =
+              CacheContent(
+                pageLines = pageLines,
+                etag = etag,
+                contentLength = length,
+                referenced = now,
+                created = now
+              ).apply { markReferenced() }
+          }
+          pageLines
         }
-        pageLines
       }
     }
   }

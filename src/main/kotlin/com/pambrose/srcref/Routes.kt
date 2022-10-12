@@ -58,6 +58,8 @@ object Routes : KLogging() {
 
       get(PING.path) { call.respondText("pong", Plain) }
 
+      get("robots.txt") { call.respondText("", Plain) }
+
       static("/") {
         staticBasePackage = "public"
         resources(".")
