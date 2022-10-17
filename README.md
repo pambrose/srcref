@@ -78,7 +78,7 @@ allprojects {
 
 ```groovy
 dependencies {
-   implementation 'com.github.pambrose:srcref:1.0.13'
+   implementation 'com.github.pambrose:srcref:1.0.14'
 }
 ```
 
@@ -103,7 +103,7 @@ dependencies {
 <dependency>
    <groupId>com.github.pambrose</groupId>
    <artifactId>srcref</artifactId>
-   <version>1.0.13</version>
+   <version>1.0.14</version>
 </dependency>
 ```
 
