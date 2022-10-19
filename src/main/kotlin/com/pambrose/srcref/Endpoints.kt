@@ -1,7 +1,7 @@
 package com.pambrose.srcref
 
 enum class Endpoints {
-  EDIT, GITHUB, EXCEPTION, WHAT, CACHE, VERSION, PING;
+  EDIT, GITHUB, ERROR, WHAT, CACHE, VERSION, PING;
 
   val path = name.lowercase()
 

@@ -4,7 +4,7 @@ import com.github.pambrose.common.response.PipelineCall
 import com.github.pambrose.common.response.redirectTo
 import com.pambrose.srcref.Endpoints.CACHE
 import com.pambrose.srcref.Endpoints.EDIT
-import com.pambrose.srcref.Endpoints.EXCEPTION
+import com.pambrose.srcref.Endpoints.ERROR
 import com.pambrose.srcref.Endpoints.GITHUB
 import com.pambrose.srcref.Endpoints.PING
 import com.pambrose.srcref.Endpoints.VERSION
@@ -44,7 +44,7 @@ object Routes : KLogging() {
           redirectTo { githubRangeUrl(params, URL_PREFIX).first }
       }
 
-      get(EXCEPTION.path) {
+      get(ERROR.path) {
         val params = readQueryParams()
         val msg = readMsg()
         displayException(params, msg)
@@ -58,7 +58,15 @@ object Routes : KLogging() {
 
       get(PING.path) { call.respondText("pong", Plain) }
 
-      get("robots.txt") { call.respondText("", Plain) }
+      get("robots.txt") {
+        call.respondText(
+          """
+            User-agent: *
+            Disallow: /error/
+          """.trimIndent(),
+          Plain
+        )
+      }
 
       static("/") {
         staticBasePackage = "public"
