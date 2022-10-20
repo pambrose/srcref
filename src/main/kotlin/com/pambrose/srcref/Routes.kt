@@ -63,6 +63,7 @@ object Routes : KLogging() {
           """
             User-agent: *
             Disallow: /error/
+            Disallow: /error
           """.trimIndent(),
           Plain
         )

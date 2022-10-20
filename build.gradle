@@ -10,12 +10,12 @@ plugins {
 
 group = 'com.github.pambrose.srcref'
 // Change version in Makefile as well
-version = '1.0.15'
+version = '1.0.16'
 
 buildConfig {
     buildConfigField('String', 'NAME', "\"${project.name}\"")
     buildConfigField('String', 'VERSION', "\"${project.version}\"")
-    buildConfigField('String', 'RELEASE_DATE', "\"10/16/2022\"")
+    buildConfigField('String', 'RELEASE_DATE', "\"10/19/2022\"")
 }
 
 def mainName = "com.pambrose.srcref.Main"
