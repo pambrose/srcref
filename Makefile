@@ -35,7 +35,7 @@ docker-push:
 	docker buildx use buildx 2>/dev/null || docker buildx create --use --name=buildx
 	docker buildx build --platform ${PLATFORMS} --push -t ${IMAGE_NAME}:latest -t ${IMAGE_NAME}:${VERSION} .
 
-release: clean build uberjar docker-push
+release: clean build uberjar build-docker docker-push
 
 dist:
 	./gradlew installDist

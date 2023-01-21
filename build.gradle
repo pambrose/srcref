@@ -15,7 +15,7 @@ version = '1.0.19'
 buildConfig {
     buildConfigField('String', 'NAME', "\"${project.name}\"")
     buildConfigField('String', 'VERSION', "\"${project.version}\"")
-    buildConfigField('String', 'RELEASE_DATE', "\"12/31/2022\"")
+    buildConfigField('String', 'RELEASE_DATE', "\"1/20/2023\"")
 }
 
 def mainName = "com.pambrose.srcref.Main"
@@ -47,7 +47,6 @@ dependencies {
 
     implementation "ch.qos.logback:logback-classic:$logback_version"
     implementation "io.github.microutils:kotlin-logging:$logging_version"
-    implementation "com.papertrailapp:logback-syslog4j:$papertrail_version"
 
     testImplementation "io.kotest:kotest-runner-junit5:$kotest_version"
 }
@@ -88,20 +87,16 @@ task uberjar(type: Jar, dependsOn: shadowJar) {
 }
 
 compileKotlin {
-    kotlinOptions {
-        jvmTarget = '17'
-        freeCompilerArgs += ['-Xbackend-threads=8',
-                             '-opt-in=kotlin.time.ExperimentalTime',
-                             '-opt-in=kotlinx.coroutines.DelicateCoroutinesApi',
-        ]
-    }
+    kotlinOptions.jvmTarget = '17'
+    kotlinOptions.freeCompilerArgs += ['-Xbackend-threads=8',
+                                       '-opt-in=kotlin.time.ExperimentalTime',
+                                       '-opt-in=kotlinx.coroutines.DelicateCoroutinesApi',
+    ]
 }
 
 compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = '17'
-        freeCompilerArgs += ['-Xbackend-threads=8']
-    }
+    kotlinOptions.jvmTarget = '17'
+    kotlinOptions.freeCompilerArgs += ['-Xbackend-threads=8']
 }
 
 kotlinter {
