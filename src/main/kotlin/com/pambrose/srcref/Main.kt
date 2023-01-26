@@ -6,7 +6,7 @@ import com.github.pambrose.common.util.getBanner
 import com.github.pambrose.srcref.srcref.BuildConfig
 import com.pambrose.srcref.Endpoints.PING
 import com.pambrose.srcref.Routes.routes
-import io.ktor.http.*
+import io.ktor.http.HttpStatusCode.Companion.NotFound
 import io.ktor.server.application.*
 import io.ktor.server.cio.*
 import io.ktor.server.engine.*
@@ -40,7 +40,7 @@ object Main : KLogging() {
       }
       install(DefaultHeaders)
       install(StatusPages) {
-        status(HttpStatusCode.NotFound) { call, status ->
+        status(NotFound) { call, status ->
           val msg = "Page not found: ${call.request.path()}"
           call.respondText(text = msg, status = status)
           logger.info { msg }
