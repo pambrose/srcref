@@ -10,7 +10,7 @@ plugins {
 
 group = 'com.github.pambrose.srcref'
 // Change version in Makefile as well
-version = '1.0.19'
+version = '1.0.20'
 
 buildConfig {
     buildConfigField('String', 'NAME', "\"${project.name}\"")

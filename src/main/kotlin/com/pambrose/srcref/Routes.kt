@@ -21,7 +21,7 @@ import io.ktor.server.application.*
 import io.ktor.server.http.content.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import mu.KLogging
+import mu.two.KLogging
 
 object Routes : KLogging() {
   fun Application.routes() {

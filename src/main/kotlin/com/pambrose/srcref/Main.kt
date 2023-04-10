@@ -16,7 +16,7 @@ import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
-import mu.KLogging
+import mu.two.KLogging
 import org.slf4j.event.Level
 
 @Version(version = BuildConfig.VERSION, date = BuildConfig.RELEASE_DATE)
