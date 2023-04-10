@@ -1,11 +1,11 @@
 plugins {
     id 'java'
     id 'application'
-    id 'org.jetbrains.kotlin.jvm' version '1.8.0'
+    id 'org.jetbrains.kotlin.jvm' version '1.8.20'
     id 'org.jmailen.kotlinter' version "3.13.0"
     id 'com.github.gmazzo.buildconfig' version '3.1.0'
-    id "com.github.ben-manes.versions" version '0.45.0'
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id "com.github.ben-manes.versions" version '0.46.0'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group = 'com.github.pambrose.srcref'
@@ -15,7 +15,7 @@ version = '1.0.19'
 buildConfig {
     buildConfigField('String', 'NAME', "\"${project.name}\"")
     buildConfigField('String', 'VERSION', "\"${project.version}\"")
-    buildConfigField('String', 'RELEASE_DATE', "\"1/20/2023\"")
+    buildConfigField('String', 'RELEASE_DATE', "\"04/10/2023\"")
 }
 
 def mainName = "com.pambrose.srcref.Main"
