@@ -11,7 +11,19 @@ plugins {
 
 group = 'com.github.pambrose.srcref'
 // Change version in Makefile and README.md as well
-version = '1.0.22'
+version = '1.0.23'
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'com.github.pambrose.srcref'
+            artifactId = 'srcref'
+            version = '1.0.23'
+
+            from components.java
+        }
+    }
+}
 
 buildConfig {
     buildConfigField('String', 'NAME', "\"${project.name}\"")
@@ -85,6 +97,11 @@ task uberjar(type: Jar, dependsOn: shadowJar) {
         attributes('Main-Class': mainName)
     }
     from zipTree(shadowJar.archiveFile)
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    from sourceSets.main.allSource
+    archiveClassifier = 'sources'
 }
 
 compileKotlin {
