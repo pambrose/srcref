@@ -10,7 +10,7 @@ plugins {
 }
 
 group = 'com.github.pambrose.srcref'
-// Change version in Makefile as well
+// Change version in Makefile and README.md as well
 version = '1.0.22'
 
 buildConfig {
