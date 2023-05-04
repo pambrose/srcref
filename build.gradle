@@ -2,9 +2,9 @@ plugins {
     id 'java'
     id 'application'
     id 'maven-publish'
-    id 'org.jetbrains.kotlin.jvm' version '1.8.20'
+    id 'org.jetbrains.kotlin.jvm' version '1.8.21'
     id 'org.jmailen.kotlinter' version "3.13.0"
-    id 'com.github.gmazzo.buildconfig' version '3.1.0'
+    id 'com.github.gmazzo.buildconfig' version '4.0.4'
     id "com.github.ben-manes.versions" version '0.46.0'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
@@ -18,7 +18,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId = 'com.github.pambrose.srcref'
             artifactId = 'srcref'
-            version = '1.0.23'
+            version = '1.0.24'
 
             from components.java
         }
@@ -28,7 +28,7 @@ publishing {
 buildConfig {
     buildConfigField('String', 'NAME', "\"${project.name}\"")
     buildConfigField('String', 'VERSION', "\"${project.version}\"")
-    buildConfigField('String', 'RELEASE_DATE', "\"04/10/2023\"")
+    buildConfigField('String', 'RELEASE_DATE', "\"05/04/2023\"")
 }
 
 def mainName = "com.pambrose.srcref.Main"

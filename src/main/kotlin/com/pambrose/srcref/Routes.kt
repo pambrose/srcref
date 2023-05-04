@@ -2,12 +2,7 @@ package com.pambrose.srcref
 
 import com.github.pambrose.common.response.PipelineCall
 import com.github.pambrose.common.response.redirectTo
-import com.pambrose.srcref.Endpoints.CACHE
-import com.pambrose.srcref.Endpoints.EDIT
-import com.pambrose.srcref.Endpoints.ERROR
-import com.pambrose.srcref.Endpoints.GITHUB
-import com.pambrose.srcref.Endpoints.PING
-import com.pambrose.srcref.Endpoints.VERSION
+import com.pambrose.srcref.Endpoints.*
 import com.pambrose.srcref.Urls.MSG
 import com.pambrose.srcref.Urls.githubRangeUrl
 import com.pambrose.srcref.pages.Cache.displayCache
@@ -22,6 +17,7 @@ import io.ktor.server.http.content.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import mu.two.KLogging
+import java.io.File
 
 object Routes : KLogging() {
   fun Application.routes() {
@@ -69,10 +65,11 @@ object Routes : KLogging() {
         )
       }
 
-      static("/") {
-        staticBasePackage = "public"
-        resources(".")
-      }
+      staticFiles("/", File("public"))
+//      static("/") {
+//        staticBasePackage = "public"
+//        resources(".")
+//      }
     }
   }
 
