@@ -11,7 +11,7 @@ plugins {
 
 group = 'com.github.pambrose.srcref'
 // Change version in Makefile and README.md as well
-version = '1.0.23'
+version = '1.0.24'
 
 publishing {
     publications {
@@ -28,7 +28,7 @@ publishing {
 buildConfig {
     buildConfigField('String', 'NAME', "\"${project.name}\"")
     buildConfigField('String', 'VERSION', "\"${project.version}\"")
-    buildConfigField('String', 'RELEASE_DATE', "\"05/04/2023\"")
+    buildConfigField('String', 'RELEASE_DATE', "\"05/07/2023\"")
 }
 
 def mainName = "com.pambrose.srcref.Main"
