@@ -2,33 +2,33 @@ plugins {
     id 'java'
     id 'application'
     id 'maven-publish'
-    id 'org.jetbrains.kotlin.jvm' version '1.8.21'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.0'
     id 'org.jmailen.kotlinter' version "3.13.0"
-    id 'com.github.gmazzo.buildconfig' version '4.0.4'
-    id "com.github.ben-manes.versions" version '0.46.0'
+    id 'com.github.gmazzo.buildconfig' version '4.1.1'
+    id "com.github.ben-manes.versions" version '0.47.0'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
-
-group = 'com.github.pambrose.srcref'
-// Change version in Makefile and README.md as well
-version = '1.0.26'
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
             groupId = 'com.github.pambrose.srcref'
             artifactId = 'srcref'
-            version = '1.0.26'
+            version = '1.1.0'
 
             from components.java
         }
     }
 }
 
+group = 'com.github.pambrose.srcref'
+// Change version in Makefile and README.md as well
+version = '1.1.0'
+
 buildConfig {
     buildConfigField('String', 'NAME', "\"${project.name}\"")
     buildConfigField('String', 'VERSION', "\"${project.version}\"")
-    buildConfigField('String', 'RELEASE_DATE', "\"05/16/2023\"")
+    buildConfigField('String', 'RELEASE_DATE', "\"07/12/2023\"")
 }
 
 def mainName = "com.pambrose.srcref.Main"
@@ -107,8 +107,11 @@ task sourcesJar(type: Jar, dependsOn: classes) {
     archiveClassifier = 'sources'
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 compileKotlin {
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_17
     kotlinOptions.freeCompilerArgs += ['-Xbackend-threads=8',
                                        '-opt-in=kotlin.time.ExperimentalTime',
                                        '-opt-in=kotlinx.coroutines.DelicateCoroutinesApi',
@@ -116,7 +119,6 @@ compileKotlin {
 }
 
 compileTestKotlin {
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_17
     kotlinOptions.freeCompilerArgs += ['-Xbackend-threads=8']
 }
 
