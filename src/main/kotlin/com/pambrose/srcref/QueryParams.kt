@@ -26,6 +26,6 @@ internal enum class QueryParams(
     (params[arg] ?: "").let { it.ifBlank { throw IllegalArgumentException("Missing: $arg value") } }
 
   companion object {
-    val optionalParams = values().filter { it.optional }.map { it.arg }
+    val optionalParams = entries.filter { it.optional }.map { it.arg }
   }
 }

@@ -72,8 +72,7 @@ object Routes : KLogging() {
 
     private fun PipelineCall.readQueryParams() =
         buildMap {
-            QueryParams
-                .values()
+            QueryParams.entries
                 .map { it.arg }
                 .forEach { arg -> put(arg, call.request.queryParameters[arg]) }
         }
