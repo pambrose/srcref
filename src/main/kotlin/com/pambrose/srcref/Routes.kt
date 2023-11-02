@@ -19,61 +19,62 @@ import io.ktor.server.routing.*
 import mu.two.KLogging
 
 object Routes : KLogging() {
-    fun Application.routes() {
-        routing {
-            // This will redirect to www subdomain
-            get("/") { redirectTo { "$URL_PREFIX/${EDIT.path}" } }
+  fun Application.routes() {
+    routing {
+      // This will redirect to www subdomain
+      get("/") { redirectTo { "$URL_PREFIX/${EDIT.path}" } }
 
-            get(EDIT.path) {
-                val params = readQueryParams()
-                logger.info { params }
-                displayEdit(params)
-            }
+      get(EDIT.path) {
+        val params = readQueryParams()
+        logger.info { params }
+        displayEdit(params)
+      }
 
-            get(GITHUB.path) {
-                val params = readQueryParams()
-                logger.info { params }
-                if (call.request.queryParameters.contains(EDIT.path))
-                    displayEdit(params)
-                else
-                    redirectTo { githubRangeUrl(params, URL_PREFIX).first }
-            }
+      get(GITHUB.path) {
+        val params = readQueryParams()
+        logger.info { params }
+        if (call.request.queryParameters.contains(EDIT.path)) {
+          displayEdit(params)
+        } else {
+          redirectTo { githubRangeUrl(params, URL_PREFIX).first }
+        }
+      }
 
-            get(ERROR.path) {
-                val params = readQueryParams()
-                val msg = readMsg()
-                displayException(params, msg)
-            }
+      get(ERROR.path) {
+        val params = readQueryParams()
+        val msg = readMsg()
+        displayException(params, msg)
+      }
 
-            get(WHAT.path) { displayWhat() }
+      get(WHAT.path) { displayWhat() }
 
-            get(CACHE.path) { displayCache() }
+      get(CACHE.path) { displayCache() }
 
-            get(VERSION.path) { displayVersion() }
+      get(VERSION.path) { displayVersion() }
 
-            get(PING.path) { call.respondText("pong", Plain) }
+      get(PING.path) { call.respondText("pong", Plain) }
 
-            get("robots.txt") {
-                call.respondText(
-                    """
+      get("robots.txt") {
+        call.respondText(
+          """
             User-agent: *
             Disallow: /error/
             Disallow: /error
           """.trimIndent(),
-                    Plain
-                )
-            }
+          Plain,
+        )
+      }
 
-            staticResources("/", "public")
-        }
+      staticResources("/", "public")
     }
+  }
 
-    private fun PipelineCall.readMsg() = call.request.queryParameters[MSG] ?: "Missing message value"
+  private fun PipelineCall.readMsg() = call.request.queryParameters[MSG] ?: "Missing message value"
 
-    private fun PipelineCall.readQueryParams() =
-        buildMap {
-            QueryParams.entries
-                .map { it.arg }
-                .forEach { arg -> put(arg, call.request.queryParameters[arg]) }
-        }
+  private fun PipelineCall.readQueryParams() =
+    buildMap {
+      QueryParams.entries
+        .map { it.arg }
+        .forEach { arg -> put(arg, call.request.queryParameters[arg]) }
+    }
 }

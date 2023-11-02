@@ -5,27 +5,18 @@ import com.github.pambrose.common.response.respondWith
 import com.pambrose.srcref.Api
 import com.pambrose.srcref.Endpoints.EDIT
 import com.pambrose.srcref.Endpoints.WHAT
-import com.pambrose.srcref.QueryParams.ACCOUNT
-import com.pambrose.srcref.QueryParams.BEGIN_OCCURRENCE
-import com.pambrose.srcref.QueryParams.BEGIN_OFFSET
-import com.pambrose.srcref.QueryParams.BEGIN_REGEX
-import com.pambrose.srcref.QueryParams.BEGIN_TOPDOWN
-import com.pambrose.srcref.QueryParams.BRANCH
-import com.pambrose.srcref.QueryParams.END_OCCURRENCE
-import com.pambrose.srcref.QueryParams.END_OFFSET
-import com.pambrose.srcref.QueryParams.END_REGEX
-import com.pambrose.srcref.QueryParams.END_TOPDOWN
-import com.pambrose.srcref.QueryParams.PATH
-import com.pambrose.srcref.QueryParams.REPO
+import com.pambrose.srcref.QueryParams.*
 import com.pambrose.srcref.Urls
 import com.pambrose.srcref.pages.Common.SrcRefDslTag
 import com.pambrose.srcref.pages.Common.URL_PREFIX
+import com.pambrose.srcref.pages.Common.WIDTH_VAL
 import com.pambrose.srcref.pages.Common.commonHead
 import com.pambrose.srcref.pages.Common.githubIcon
 import com.pambrose.srcref.pages.Common.hasValues
-import com.pambrose.srcref.pages.Common.widthVal
 import kotlinx.html.*
-import kotlinx.html.dom.*
+import kotlinx.html.dom.append
+import kotlinx.html.dom.document
+import kotlinx.html.dom.serialize
 
 object Edit {
   internal suspend fun PipelineCall.displayEdit(params: Map<String, String?>) {
@@ -47,7 +38,11 @@ object Edit {
               h2 {
                 span {
                   +"srcref - Dynamic Line-Specific GitHub Permalinks"
-                  a { href = "/$WHAT"; style = "padding-left: 25px; font-size: 75%;"; +"(What is srcref?)" }
+                  a {
+                    href = "/$WHAT"
+                    style = "padding-left: 25px; font-size: 75%;"
+                    +"(What is srcref?)"
+                  }
                 }
               }
 
@@ -59,41 +54,57 @@ object Edit {
                 table {
                   formElement("Username/Org Name:", "GitHub username or organization name") {
                     textInput {
-                      name = ACCOUNT.arg; size = textWidth; required = true
+                      name = ACCOUNT.arg
+                      size = textWidth
+                      required = true
                       value = ACCOUNT.defaultIfNull(params)
                     }
                   }
                   formElement("Repo Name:", "GitHub repository name") {
                     textInput {
-                      name = REPO.arg; size = textWidth; required = true
+                      name = REPO.arg
+                      size = textWidth
+                      required = true
                       value = REPO.defaultIfNull(params)
                     }
                   }
                   formElement("Branch Name:", "GitHub branch name") {
                     textInput {
-                      name = BRANCH.arg; size = textWidth; required = true
+                      name = BRANCH.arg
+                      size = textWidth
+                      required = true
                       value = BRANCH.defaultIfNull(params)
                     }
                   }
                   formElement("File Path:", "File path in repository") {
                     textInput {
-                      name = PATH.arg; size = "70"; required = true
+                      name = PATH.arg
+                      size = "70"
+                      required = true
                       value = PATH.defaultIfNull(params)
                     }
                   }
                   formElement("Begin Regex:", "Regex used to determine the beginning match") {
                     textInput {
-                      name = BEGIN_REGEX.arg; size = textWidth; required = true
+                      name = BEGIN_REGEX.arg
+                      size = textWidth
+                      required = true
                       value = BEGIN_REGEX.defaultIfNull(params)
                     }
                   }
                   formElement("Begin Occurrence:", "Number of matches for the beginning match") {
                     val isSelected = BEGIN_OCCURRENCE.defaultIfBlank(params).toInt()
-                    select("occurrence") { name = BEGIN_OCCURRENCE.arg; size = "1"; occurrenceOptions(isSelected) }
+                    select("occurrence") {
+                      name = BEGIN_OCCURRENCE.arg
+                      size = "1"
+                      occurrenceOptions(isSelected)
+                    }
                   }
                   formElement("Begin Offset:", "Number of lines above or below the beginning match") {
                     textInput {
-                      name = BEGIN_OFFSET.arg; size = offsetWidth; required = true
+                      name = BEGIN_OFFSET.arg
+                      size = offsetWidth
+                      required = true
                       value = BEGIN_OFFSET.defaultIfNull(params)
                     }
                   }
@@ -102,27 +113,51 @@ object Edit {
                       val isChecked = BEGIN_TOPDOWN.defaultIfBlank(params).toBoolean()
                       style = "text-align:center"
                       "begin_topdown".also { lab ->
-                        radioInput { id = lab; name = BEGIN_TOPDOWN.arg; value = "true"; checked = isChecked }
-                        label { htmlFor = lab; +" Top-down " }
+                        radioInput {
+                          id = lab
+                          name = BEGIN_TOPDOWN.arg
+                          value = "true"
+                          checked = isChecked
+                        }
+                        label {
+                          htmlFor = lab
+                          +" Top-down "
+                        }
                       }
                       "begin_bottomup".also { lab ->
-                        radioInput { id = lab; name = BEGIN_TOPDOWN.arg; value = "false"; checked = !isChecked }
-                        label { htmlFor = lab; +" Bottom-up " }
+                        radioInput {
+                          id = lab
+                          name = BEGIN_TOPDOWN.arg
+                          value = "false"
+                          checked = !isChecked
+                        }
+                        label {
+                          htmlFor = lab
+                          +" Bottom-up "
+                        }
                       }
                     }
                   }
                   formElement("End Regex:", "Optional regex used to determine the ending match") {
                     textInput {
-                      name = END_REGEX.arg; size = textWidth; value = END_REGEX.defaultIfNull(params)
+                      name = END_REGEX.arg
+                      size = textWidth
+                      value = END_REGEX.defaultIfNull(params)
                     }
                   }
                   formElement("End Occurrence:", "Optional number of matches for the ending match") {
                     val isSelected = END_OCCURRENCE.defaultIfBlank(params).toInt()
-                    select("occurrence") { name = END_OCCURRENCE.arg; size = "1"; occurrenceOptions(isSelected) }
+                    select("occurrence") {
+                      name = END_OCCURRENCE.arg
+                      size = "1"
+                      occurrenceOptions(isSelected)
+                    }
                   }
                   formElement("End Offset:", "Optional number of lines above or below the ending match") {
                     textInput {
-                      name = END_OFFSET.arg; size = offsetWidth; value = END_OFFSET.defaultIfNull(params)
+                      name = END_OFFSET.arg
+                      size = offsetWidth
+                      value = END_OFFSET.defaultIfNull(params)
                     }
                   }
                   formElement("End Search Direction:", "Optional direction to evaluate the file for the ending match") {
@@ -130,12 +165,28 @@ object Edit {
                       val isChecked = END_TOPDOWN.defaultIfBlank(params).toBoolean()
                       style = "text-align:center"
                       "end_topdown".also { lab ->
-                        radioInput { id = lab; name = END_TOPDOWN.arg; value = "true"; checked = isChecked }
-                        label { htmlFor = lab; +" Top-down " }
+                        radioInput {
+                          id = lab
+                          name = END_TOPDOWN.arg
+                          value = "true"
+                          checked = isChecked
+                        }
+                        label {
+                          htmlFor = lab
+                          +" Top-down "
+                        }
                       }
                       "end_bottomup".also { lab ->
-                        radioInput { id = lab; name = END_TOPDOWN.arg; value = "false"; checked = !isChecked }
-                        label { htmlFor = lab; +" Bottom-up " }
+                        radioInput {
+                          id = lab
+                          name = END_TOPDOWN.arg
+                          value = "false"
+                          checked = !isChecked
+                        }
+                        label {
+                          htmlFor = lab
+                          +" Bottom-up "
+                        }
                       }
                     }
                   }
@@ -167,21 +218,43 @@ object Edit {
                         onClick = "window.open('$srcrefUrl', '_blank')"
                         +"View GitHub Permalink"
                       }
-                      div { id = "snackbar"; +"URL Copied!" }
+                      div {
+                        id = "snackbar"
+                        +"URL Copied!"
+                      }
                     }
                   }
 
                   if (isValid) {
-                    div { style = "padding-top: 17px; padding-bottom: 10px;"; +"Embed this URL in your docs:" }
-                    textArea { id = "srcrefUrl"; rows = "4"; +srcrefUrl; cols = widthVal; readonly = true }
+                    div {
+                      style = "padding-top: 17px; padding-bottom: 10px;"
+                      +"Embed this URL in your docs:"
+                    }
+                    textArea {
+                      id = "srcrefUrl"
+                      rows = "4"
+                      +srcrefUrl
+                      cols = WIDTH_VAL
+                      readonly = true
+                    }
                     div {
                       style = "padding-top: 10px; padding-bottom: 10px;"
                       +"To dynamically generate this GitHub permalink:"
                     }
-                    textArea { rows = "2"; +githubUrl; cols = widthVal; readonly = true }
+                    textArea {
+                      rows = "2"
+                      cols = WIDTH_VAL
+                      readonly = true
+                      +githubUrl
+                    }
                   } else {
                     h2 { +"Exception:" }
-                    textArea { rows = "3"; cols = widthVal; readonly = true; +msg }
+                    textArea {
+                      rows = "3"
+                      cols = WIDTH_VAL
+                      readonly = true
+                      +msg
+                    }
                   }
                 } else {
                   button(classes = "button") {
@@ -214,50 +287,94 @@ object Edit {
   }
 
   @SrcRefDslTag
-  private inline fun TABLE.formElement(label: String, crossinline block: TD.() -> Unit) =
-    tr {
-      td { +label }
-      td {
-        block()
-      }
+  private inline fun TABLE.formElement(
+    label: String,
+    crossinline block: TD.() -> Unit,
+  ) = tr {
+    td { +label }
+    td {
+      block()
     }
+  }
 
   @SrcRefDslTag
   internal inline fun TABLE.formElement(
     label: String,
     tooltip: String,
-    crossinline block: FlowOrPhrasingContent.() -> Unit
-  ) =
-    formElement(label) {
-      withToolTip(tooltip) {
-        block()
-      }
+    crossinline block: FlowOrPhrasingContent.() -> Unit,
+  ) = formElement(label) {
+    withToolTip(tooltip) {
+      block()
     }
+  }
 
   @SrcRefDslTag
   private inline fun FlowOrPhrasingContent.withToolTip(
     msg: String,
-    crossinline block: FlowOrPhrasingContent.() -> Unit
-  ) =
-    span {
-      block()
-      span("tooltip") {
-        span("spacer") {}
-        img { src = "images/question.png"; width = "18"; height = "18" }
-        span("tooltiptext") { +msg }
+    crossinline block: FlowOrPhrasingContent.() -> Unit,
+  ) = span {
+    block()
+    span("tooltip") {
+      span("spacer") {}
+      img {
+        src = "images/question.png"
+        width = "18"
+        height = "18"
       }
+      span("tooltiptext") { +msg }
     }
+  }
 
   private fun SELECT.occurrenceOptions(isSelected: Int) {
-    option { +" 1st "; value = "1"; selected = isSelected == 1 }
-    option { +" 2nd "; value = "2"; selected = isSelected == 2 }
-    option { +" 3rd "; value = "3"; selected = isSelected == 3 }
-    option { +" 4th "; value = "4"; selected = isSelected == 4 }
-    option { +" 5th "; value = "5"; selected = isSelected == 5 }
-    option { +" 6th "; value = "6"; selected = isSelected == 6 }
-    option { +" 7th "; value = "7"; selected = isSelected == 7 }
-    option { +" 8th "; value = "8"; selected = isSelected == 8 }
-    option { +" 9th "; value = "9"; selected = isSelected == 9 }
-    option { +" 10th "; value = "10"; selected = isSelected == 10 }
+    option {
+      +" 1st "
+      value = "1"
+      selected = isSelected == 1
+    }
+    option {
+      +" 2nd "
+      value = "2"
+      selected = isSelected == 2
+    }
+    option {
+      +" 3rd "
+      value = "3"
+      selected = isSelected == 3
+    }
+    option {
+      +" 4th "
+      value = "4"
+      selected = isSelected == 4
+    }
+    option {
+      +" 5th "
+      value = "5"
+      selected = isSelected == 5
+    }
+    option {
+      +" 6th "
+      value = "6"
+      selected = isSelected == 6
+    }
+    option {
+      +" 7th "
+      value = "7"
+      selected = isSelected == 7
+    }
+    option {
+      +" 8th "
+      value = "8"
+      selected = isSelected == 8
+    }
+    option {
+      +" 9th "
+      value = "9"
+      selected = isSelected == 9
+    }
+    option {
+      +" 10th "
+      value = "10"
+      selected = isSelected == 10
+    }
   }
 }

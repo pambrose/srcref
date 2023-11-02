@@ -49,7 +49,10 @@ internal class ContentCache {
 
   fun remove(url: String) = contentMap.remove(url)
 
-  operator fun set(url: String, value: CacheContent) {
+  operator fun set(
+    url: String,
+    value: CacheContent,
+  ) {
     contentMap[url] = value
   }
 
@@ -83,11 +86,11 @@ internal class ContentCache {
 
     private fun String.isInvalidContentType() =
       startsWith("application/") ||
-          startsWith("image/") ||
-          startsWith("video/") ||
-          startsWith("model/") ||
-          startsWith("font/") ||
-          startsWith("audio/")
+        startsWith("image/") ||
+        startsWith("video/") ||
+        startsWith("model/") ||
+        startsWith("font/") ||
+        startsWith("audio/")
 
     internal suspend fun fetchContent(url: String): List<String> {
       val cacheItem = contentCache[url]
@@ -111,8 +114,9 @@ internal class ContentCache {
           val msg = "Invalid content type: $contentType"
           logger.warn { msg }
           throw IllegalArgumentException(msg)
-        } else if (!contentType.startsWith("text/"))
+        } else if (!contentType.startsWith("text/")) {
           logger.warn { "Unanticipated content type: $contentType" }
+        }
       }
 
       return when {
@@ -144,7 +148,7 @@ internal class ContentCache {
                 etag = etag,
                 contentLength = length,
                 referenced = now,
-                created = now
+                created = now,
               ).apply { markReferenced() }
           }
           pageLines

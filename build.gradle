@@ -2,10 +2,10 @@ plugins {
     id 'java'
     id 'application'
     id 'maven-publish'
-    id 'org.jetbrains.kotlin.jvm' version '1.9.0'
-    id 'org.jmailen.kotlinter' version "3.13.0"
+  id 'org.jetbrains.kotlin.jvm' version '1.9.20'
+  id 'org.jmailen.kotlinter' version "4.0.0"
     id 'com.github.gmazzo.buildconfig' version '4.1.2'
-    id "com.github.ben-manes.versions" version '0.47.0'
+  id "com.github.ben-manes.versions" version '0.49.0'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
@@ -14,7 +14,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId = 'com.github.pambrose.srcref'
             artifactId = 'srcref'
-            version = '1.1.1'
+          version = '1.2.0'
 
             from components.java
         }
@@ -23,12 +23,12 @@ publishing {
 
 group = 'com.github.pambrose.srcref'
 // Change version in Makefile and README.md as well
-version = '1.1.1'
+version = '1.2.0'
 
 buildConfig {
     buildConfigField('String', 'NAME', "\"${project.name}\"")
     buildConfigField('String', 'VERSION', "\"${project.version}\"")
-    buildConfigField('String', 'RELEASE_DATE', "\"08/07/2023\"")
+  buildConfigField('String', 'RELEASE_DATE', "\"11/01/2023\"")
 }
 
 def mainName = "com.pambrose.srcref.Main"
@@ -125,13 +125,4 @@ compileTestKotlin {
 kotlinter {
     ignoreFailures = false
     reporters = ['checkstyle', 'plain']
-    experimentalRules = false
-    disabledRules = ["no-wildcard-imports",
-                     "indent",
-                     "final-newline",
-                     "comment-spacing",
-                     "max-line-length",
-                     "no-multi-spaces",
-                     "wrapping",
-                     "multiline-if-else",]
 }

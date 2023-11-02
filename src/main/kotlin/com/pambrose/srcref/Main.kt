@@ -48,7 +48,10 @@ object Main : KLogging() {
       }
       install(Compression) {
         gzip { priority = 1.0 }
-        deflate { priority = 10.0; minimumSize(1024) }
+        deflate {
+          priority = 10.0
+          minimumSize(1024)
+        }
       }
       routes()
     }.start(wait = true)
