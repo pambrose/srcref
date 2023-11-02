@@ -1,5 +1,6 @@
 package com.pambrose.srcref
 
+import com.codahale.metrics.jvm.ThreadDump
 import com.github.pambrose.common.response.PipelineCall
 import com.github.pambrose.common.response.redirectTo
 import com.pambrose.srcref.Endpoints.*
@@ -17,6 +18,8 @@ import io.ktor.server.http.content.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import mu.two.KLogging
+import java.io.ByteArrayOutputStream
+import java.lang.management.ManagementFactory
 
 object Routes : KLogging() {
   fun Application.routes() {
@@ -54,6 +57,21 @@ object Routes : KLogging() {
 
       get(PING.path) { call.respondText("pong", Plain) }
 
+      get(THREADDUMP.path) {
+        try {
+          ByteArrayOutputStream()
+            .apply {
+              use { ThreadDumpInfo.threadDump.dump(true, true, it) }
+            }.let { baos ->
+              String(baos.toByteArray(), Charsets.UTF_8)
+            }
+        } catch (e: NoClassDefFoundError) {
+          "Sorry, your runtime environment does not allow dump threads."
+        }.also {
+          call.respondText(it, Plain)
+        }
+      }
+
       get("robots.txt") {
         call.respondText(
           """
@@ -77,4 +95,8 @@ object Routes : KLogging() {
         .map { it.arg }
         .forEach { arg -> put(arg, call.request.queryParameters[arg]) }
     }
+
+  private object ThreadDumpInfo {
+    val threadDump by lazy { ThreadDump(ManagementFactory.getThreadMXBean()) }
+  }
 }

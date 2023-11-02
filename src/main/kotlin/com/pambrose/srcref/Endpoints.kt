@@ -8,6 +8,7 @@ enum class Endpoints {
   CACHE,
   VERSION,
   PING,
+  THREADDUMP,
   ;
 
   val path = name.lowercase()
