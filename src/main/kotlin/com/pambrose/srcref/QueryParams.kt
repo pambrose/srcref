@@ -3,7 +3,7 @@ package com.pambrose.srcref
 internal enum class QueryParams(
   internal val arg: String,
   private val defaultValue: String,
-  private val optional: Boolean
+  private val optional: Boolean,
 ) {
   ACCOUNT("account", "", false),
   REPO("repo", "", false),
@@ -16,7 +16,8 @@ internal enum class QueryParams(
   END_REGEX("eregex", "", true),
   END_OCCURRENCE("eoccur", "1", true),
   END_OFFSET("eoffset", "0", true),
-  END_TOPDOWN("etopd", "true", true);
+  END_TOPDOWN("etopd", "true", true),
+  ;
 
   fun defaultIfNull(params: Map<String, String?>) = params[arg] ?: defaultValue
 

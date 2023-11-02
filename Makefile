@@ -1,8 +1,11 @@
-VERSION=1.1.0
+VERSION=1.2.0
 
 default: versioncheck
 
 build-all: clean stage
+
+stop:
+	./gradlew --stop
 
 clean:
 	./gradlew clean
@@ -50,4 +53,4 @@ versioncheck:
 	./gradlew dependencyUpdates
 
 upgrade-wrapper:
-	./gradlew wrapper --gradle-version=8.2.1 --distribution-type=bin
+	./gradlew wrapper --gradle-version=8.4 --distribution-type=bin

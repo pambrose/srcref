@@ -1,17 +1,6 @@
 package com.pambrose.srcref
 
-import com.pambrose.srcref.QueryParams.ACCOUNT
-import com.pambrose.srcref.QueryParams.BEGIN_OCCURRENCE
-import com.pambrose.srcref.QueryParams.BEGIN_OFFSET
-import com.pambrose.srcref.QueryParams.BEGIN_REGEX
-import com.pambrose.srcref.QueryParams.BEGIN_TOPDOWN
-import com.pambrose.srcref.QueryParams.BRANCH
-import com.pambrose.srcref.QueryParams.END_OCCURRENCE
-import com.pambrose.srcref.QueryParams.END_OFFSET
-import com.pambrose.srcref.QueryParams.END_REGEX
-import com.pambrose.srcref.QueryParams.END_TOPDOWN
-import com.pambrose.srcref.QueryParams.PATH
-import com.pambrose.srcref.QueryParams.REPO
+import com.pambrose.srcref.QueryParams.*
 import com.pambrose.srcref.Urls.srcrefToGithubUrl
 
 @Suppress("unused")

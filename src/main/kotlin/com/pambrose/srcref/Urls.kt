@@ -6,18 +6,7 @@ import com.pambrose.srcref.ContentCache.Companion.fetchContent
 import com.pambrose.srcref.Endpoints.ERROR
 import com.pambrose.srcref.Endpoints.GITHUB
 import com.pambrose.srcref.Main.logger
-import com.pambrose.srcref.QueryParams.ACCOUNT
-import com.pambrose.srcref.QueryParams.BEGIN_OCCURRENCE
-import com.pambrose.srcref.QueryParams.BEGIN_OFFSET
-import com.pambrose.srcref.QueryParams.BEGIN_REGEX
-import com.pambrose.srcref.QueryParams.BEGIN_TOPDOWN
-import com.pambrose.srcref.QueryParams.BRANCH
-import com.pambrose.srcref.QueryParams.END_OCCURRENCE
-import com.pambrose.srcref.QueryParams.END_OFFSET
-import com.pambrose.srcref.QueryParams.END_REGEX
-import com.pambrose.srcref.QueryParams.END_TOPDOWN
-import com.pambrose.srcref.QueryParams.PATH
-import com.pambrose.srcref.QueryParams.REPO
+import com.pambrose.srcref.QueryParams.*
 import com.pambrose.srcref.pages.Common.hasValues
 import org.apache.commons.text.StringEscapeUtils.escapeHtml4
 import java.util.regex.PatternSyntaxException
@@ -39,9 +28,8 @@ object Urls {
     params: Map<String, String?>,
     escapeHtml4: Boolean = false,
     prefix: String,
-  ) =
-    "$prefix/$GITHUB?${params.toQueryParams(params.missingEndRegex())}"
-      .let { if (escapeHtml4) escapeHtml4(it) else it }
+  ) = "$prefix/$GITHUB?${params.toQueryParams(params.missingEndRegex())}"
+    .let { if (escapeHtml4) escapeHtml4(it) else it }
 
   internal inline fun String?.toInt(block: () -> String) =
     try {
@@ -51,7 +39,10 @@ object Urls {
     }
 
   // This returns a url and an error message
-  internal suspend fun githubRangeUrl(params: Map<String, String?>, prefix: String): Pair<String, String> =
+  internal suspend fun githubRangeUrl(
+    params: Map<String, String?>,
+    prefix: String,
+  ): Pair<String, String> =
     try {
       if (!params.hasValues()) {
         "" to ""
@@ -112,8 +103,12 @@ object Urls {
     return "https://github.com/$username/$repoName/blob/$branchName/$path#L$beginLineNum$suffix"
   }
 
-  private fun githubRawUrl(username: String, repoName: String, path: String = "", branchName: String) =
-    "$RAW_PREFIX/$username/$repoName/$branchName/$path"
+  private fun githubRawUrl(
+    username: String,
+    repoName: String,
+    path: String = "",
+    branchName: String,
+  ) = "$RAW_PREFIX/$username/$repoName/$branchName/$path"
 
   internal fun calcLineNumber(
     lines: List<String>,
@@ -121,26 +116,29 @@ object Urls {
     occurrence: Int,
     offset: Int,
     topDown: Boolean,
-    desc: String = ""
-  ) =
-    try {
-      val regex = Regex(pattern)
-      ((if (topDown) lines else lines.asReversed())
+    desc: String = "",
+  ) = try {
+    val regex = Regex(pattern)
+    (
+      (if (topDown) lines else lines.asReversed())
         .asSequence()
         .mapIndexed { index, s -> (if (topDown) index else (lines.size - index - 1)) to s.contains(regex) }
         .filter { it.second }
         .drop(occurrence - 1)
-        .first().first) + offset + 1
-    } catch (e: Throwable) {
-      when (e) {
-        is PatternSyntaxException ->
-          throw IllegalArgumentException("Invalid regex:\"${pattern}\" - ${e.message}")
-        is NoSuchElementException ->
-          throw IllegalArgumentException("Required matches ($occurrence) not found for $desc regex: \"$pattern\"")
-        else -> {
-          logger.error { "Error in calcLineNumber(): ${e::class.simpleName}: ${e.message}" }
-          throw e
-        }
+        .first().first
+      ) + offset + 1
+  } catch (e: Throwable) {
+    when (e) {
+      is PatternSyntaxException ->
+        throw IllegalArgumentException("Invalid regex:\"${pattern}\" - ${e.message}")
+
+      is NoSuchElementException ->
+        throw IllegalArgumentException("Required matches ($occurrence) not found for $desc regex: \"$pattern\"")
+
+      else -> {
+        logger.error { "Error in calcLineNumber(): ${e::class.simpleName}: ${e.message}" }
+        throw e
       }
     }
+  }
 }
