@@ -270,7 +270,7 @@ object Edit {
                         beginTopDown = true,
                         endRegex = "install\\(Compression\\)",
                         endOccurrence = 1,
-                        endOffset = 3,
+                        endOffset = 6,
                         endTopDown = true,
                         prefix = "",
                       )
