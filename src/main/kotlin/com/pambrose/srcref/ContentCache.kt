@@ -66,7 +66,7 @@ internal class ContentCache {
 
       newSingleThreadContext("Cache Cleanup").executor.execute {
         while (true) {
-          try {
+          runCatching {
             val overflow = contentCache.size - contentCache.maxCacheSize
             if (overflow > 0) {
               logger.info { "Cache size: ${contentCache.size} exceeds max: ${contentCache.maxCacheSize}" }
@@ -76,7 +76,7 @@ internal class ContentCache {
                   contentCache.remove(k)
                 }
             }
-          } catch (e: Throwable) {
+          }.onFailure { e ->
             logger.error(e) { "Exception in Cache Cleanup ${e.simpleClassName} ${e.message}" }
           }
           Thread.sleep(5.minutes.inWholeMilliseconds)

@@ -6,7 +6,18 @@ import com.pambrose.srcref.ContentCache.Companion.fetchContent
 import com.pambrose.srcref.Endpoints.ERROR
 import com.pambrose.srcref.Endpoints.GITHUB
 import com.pambrose.srcref.Main.logger
-import com.pambrose.srcref.QueryParams.*
+import com.pambrose.srcref.QueryParams.ACCOUNT
+import com.pambrose.srcref.QueryParams.BEGIN_OCCURRENCE
+import com.pambrose.srcref.QueryParams.BEGIN_OFFSET
+import com.pambrose.srcref.QueryParams.BEGIN_REGEX
+import com.pambrose.srcref.QueryParams.BEGIN_TOPDOWN
+import com.pambrose.srcref.QueryParams.BRANCH
+import com.pambrose.srcref.QueryParams.END_OCCURRENCE
+import com.pambrose.srcref.QueryParams.END_OFFSET
+import com.pambrose.srcref.QueryParams.END_REGEX
+import com.pambrose.srcref.QueryParams.END_TOPDOWN
+import com.pambrose.srcref.QueryParams.PATH
+import com.pambrose.srcref.QueryParams.REPO
 import com.pambrose.srcref.pages.Common.hasValues
 import org.apache.commons.text.StringEscapeUtils.escapeHtml4
 import java.util.regex.PatternSyntaxException
@@ -43,7 +54,7 @@ object Urls {
     params: Map<String, String?>,
     prefix: String,
   ): Pair<String, String> =
-    try {
+    runCatching {
       if (!params.hasValues()) {
         "" to ""
       } else {
@@ -85,7 +96,7 @@ object Urls {
           }
         githubSourceUrl(account, repo, branch, path, beginLinenum, endLinenum) to ""
       }
-    } catch (e: Throwable) {
+    }.getOrElse { e ->
       val msg = "${e::class.simpleName}: ${e.message}"
       logger.info { "Input problem: $msg $params" }
       "$prefix/$ERROR?$MSG=${msg.encode()}&${params.toQueryParams(false)}" to msg
@@ -117,28 +128,29 @@ object Urls {
     offset: Int,
     topDown: Boolean,
     desc: String = "",
-  ) = try {
-    val regex = Regex(pattern)
-    (
-      (if (topDown) lines else lines.asReversed())
-        .asSequence()
-        .mapIndexed { index, s -> (if (topDown) index else (lines.size - index - 1)) to s.contains(regex) }
-        .filter { it.second }
-        .drop(occurrence - 1)
-        .first().first
-      ) + offset + 1
-  } catch (e: Throwable) {
-    when (e) {
-      is PatternSyntaxException ->
-        throw IllegalArgumentException("Invalid regex:\"${pattern}\" - ${e.message}")
+  ): Int =
+    runCatching {
+      val regex = Regex(pattern)
+      (
+        (if (topDown) lines else lines.asReversed())
+          .asSequence()
+          .mapIndexed { index, s -> (if (topDown) index else (lines.size - index - 1)) to s.contains(regex) }
+          .filter { it.second }
+          .drop(occurrence - 1)
+          .first().first
+        ) + offset + 1
+    }.getOrElse { e ->
+      throw when (e) {
+        is PatternSyntaxException ->
+          IllegalArgumentException("Invalid regex:\"${pattern}\" - ${e.message}")
 
-      is NoSuchElementException ->
-        throw IllegalArgumentException("Required matches ($occurrence) not found for $desc regex: \"$pattern\"")
+        is NoSuchElementException ->
+          IllegalArgumentException("Required matches ($occurrence) not found for $desc regex: \"$pattern\"")
 
-      else -> {
-        logger.error { "Error in calcLineNumber(): ${e::class.simpleName}: ${e.message}" }
-        throw e
+        else -> {
+          logger.error { "Error in calcLineNumber(): ${e::class.simpleName}: ${e.message}" }
+          e
+        }
       }
     }
-  }
 }
