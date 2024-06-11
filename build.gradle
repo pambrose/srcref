@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'application'
     id 'maven-publish'
-    id 'org.jetbrains.kotlin.jvm' version '1.9.22'
+    id 'org.jetbrains.kotlin.jvm' version '2.0.0'
     id 'org.jmailen.kotlinter' version "4.3.0"
     id 'com.github.gmazzo.buildconfig' version '5.3.5'
     id "com.github.ben-manes.versions" version '0.51.0'
@@ -15,7 +15,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId = 'com.github.pambrose.srcref'
             artifactId = 'srcref'
-            version = '1.5.0'
+            version = '1.6.0'
 
             from components.java
         }
@@ -24,12 +24,12 @@ publishing {
 
 group = 'com.github.pambrose.srcref'
 // Change version in Makefile and README.md as well
-version = '1.5.0'
+version = '1.6.0'
 
 buildConfig {
     buildConfigField('String', 'NAME', "\"${project.name}\"")
     buildConfigField('String', 'VERSION', "\"${project.version}\"")
-    buildConfigField('String', 'RELEASE_DATE', "\"03/31/2024\"")
+    buildConfigField('String', 'RELEASE_DATE', "\"06/11/2024\"")
 }
 
 def mainName = "com.pambrose.srcref.Main"
@@ -48,6 +48,8 @@ repositories {
 // targetCompatibility = JavaVersion.VERSION_17
 
 dependencies {
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0"
+
     implementation "io.ktor:ktor-server:$ktor_version"
     implementation "io.ktor:ktor-server-cio:$ktor_version"
     implementation "io.ktor:ktor-server-html-builder:$ktor_version"
@@ -66,7 +68,7 @@ dependencies {
     implementation "org.apache.commons:commons-text:$text_version"
 
     implementation "ch.qos.logback:logback-classic:$logback_version"
-    implementation "io.github.microutils:kotlin-logging:$logging_version"
+    implementation "io.github.oshai:kotlin-logging-jvm:$logging_version"
 
     testImplementation "io.kotest:kotest-runner-junit5:$kotest_version"
 }

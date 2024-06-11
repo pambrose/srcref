@@ -3,7 +3,14 @@ package com.pambrose.srcref
 import com.codahale.metrics.jvm.ThreadDump
 import com.github.pambrose.common.response.PipelineCall
 import com.github.pambrose.common.response.redirectTo
-import com.pambrose.srcref.Endpoints.*
+import com.pambrose.srcref.Endpoints.CACHE
+import com.pambrose.srcref.Endpoints.EDIT
+import com.pambrose.srcref.Endpoints.ERROR
+import com.pambrose.srcref.Endpoints.GITHUB
+import com.pambrose.srcref.Endpoints.PING
+import com.pambrose.srcref.Endpoints.THREADDUMP
+import com.pambrose.srcref.Endpoints.VERSION
+import com.pambrose.srcref.Endpoints.WHAT
 import com.pambrose.srcref.Urls.MSG
 import com.pambrose.srcref.Urls.githubRangeUrl
 import com.pambrose.srcref.pages.Cache.displayCache
@@ -12,16 +19,18 @@ import com.pambrose.srcref.pages.Edit.displayEdit
 import com.pambrose.srcref.pages.Error.displayException
 import com.pambrose.srcref.pages.Version.displayVersion
 import com.pambrose.srcref.pages.What.displayWhat
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.http.ContentType.Text.Plain
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import mu.two.KLogging
 import java.io.ByteArrayOutputStream
 import java.lang.management.ManagementFactory
 
-object Routes : KLogging() {
+object Routes {
+  private val logger = KotlinLogging.logger {}
+
   fun Application.routes() {
     routing {
       // This will redirect to www subdomain

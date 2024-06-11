@@ -65,7 +65,7 @@ object Urls {
 
         val url = githubRawUrl(account, repo, path, branch)
         val (lines, duration) = measureTimedValue { fetchContent(url) }
-        logger.info("Read ${url.removePrefix(RAW_PREFIX)} in $duration")
+        logger.info { "Read ${url.removePrefix(RAW_PREFIX)} in $duration" }
 
         val beginOffsetStr = BEGIN_OFFSET.defaultIfNull(params)
         val beginOffset = beginOffsetStr.toInt { "Invalid Begin Offset value: $beginOffsetStr" }

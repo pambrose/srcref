@@ -4,16 +4,16 @@ import com.github.pambrose.common.util.isNotNull
 import com.github.pambrose.common.util.simpleClassName
 import com.pambrose.srcref.Urls.RAW_PREFIX
 import com.pambrose.srcref.Urls.toInt
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import kotlinx.coroutines.newSingleThreadContext
-import mu.two.KLogging
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.concurrent.thread
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.TimeMark
@@ -58,13 +58,14 @@ internal class ContentCache {
 
   operator fun get(url: String): CacheContent? = contentMap[url]
 
-  companion object : KLogging() {
+  companion object {
+    private val logger = KotlinLogging.logger {}
     internal val contentCache = ContentCache()
 
     init {
       logger.info { "Starting cache cleanup thread" }
 
-      newSingleThreadContext("Cache Cleanup").executor.execute {
+      thread(name = "Cache Cleanup") {
         while (true) {
           runCatching {
             val overflow = contentCache.size - contentCache.maxCacheSize
