@@ -2,6 +2,7 @@
 build
 .gradle
 secrets
+.kotlin
 
 ### Kotlin template
 # Compiled class file
