@@ -44,9 +44,6 @@ repositories {
     maven { url = 'https://jitpack.io' }
 }
 
-// sourceCompatibility = JavaVersion.VERSION_17
-// targetCompatibility = JavaVersion.VERSION_17
-
 dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0"
 
@@ -71,6 +68,26 @@ dependencies {
     implementation "io.github.oshai:kotlin-logging-jvm:$logging_version"
 
     testImplementation "io.kotest:kotest-runner-junit5:$kotest_version"
+}
+
+kotlin {
+    jvmToolchain(17)
+}
+
+compileKotlin {
+    kotlinOptions {
+        freeCompilerArgs += ['-Xbackend-threads=8',
+                             '-opt-in=kotlin.time.ExperimentalTime',
+                             '-opt-in=kotlinx.coroutines.DelicateCoroutinesApi',
+        ]
+    }
+
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        freeCompilerArgs += ['-Xbackend-threads=8']
+    }
 }
 
 test {
@@ -122,21 +139,6 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 //        archiveFileName.set("srcref2.jar")
 //    }
 //}
-
-kotlin {
-    jvmToolchain(17)
-}
-
-compileKotlin {
-    kotlinOptions.freeCompilerArgs += ['-Xbackend-threads=8',
-                                       '-opt-in=kotlin.time.ExperimentalTime',
-                                       '-opt-in=kotlinx.coroutines.DelicateCoroutinesApi',
-    ]
-}
-
-compileTestKotlin {
-    kotlinOptions.freeCompilerArgs += ['-Xbackend-threads=8']
-}
 
 kotlinter {
     ignoreFailures = false
