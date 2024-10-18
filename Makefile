@@ -12,7 +12,7 @@ clean:
 
 compile: build
 
-build:
+build:	clean
 	./gradlew build -xtest
 
 tests:
