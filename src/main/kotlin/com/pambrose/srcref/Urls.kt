@@ -71,12 +71,12 @@ object Urls {
         val beginOffset = beginOffsetStr.toInt { "Invalid Begin Offset value: $beginOffsetStr" }
         val beginLinenum =
           calcLineNumber(
-            lines,
-            BEGIN_REGEX.required(params),
-            BEGIN_OCCURRENCE.defaultIfNull(params).toInt(),
-            beginOffset,
-            BEGIN_TOPDOWN.defaultIfNull(params).toBoolean(),
-            "begin",
+            lines = lines,
+            pattern = BEGIN_REGEX.required(params),
+            occurrence = BEGIN_OCCURRENCE.defaultIfNull(params).toInt(),
+            offset = beginOffset,
+            topDown = BEGIN_TOPDOWN.defaultIfNull(params).toBoolean(),
+            desc = "begin",
           ).also { if (it < 1) throw IllegalArgumentException("Begin line number is less than 1") }
 
         val endLinenum =
@@ -86,12 +86,12 @@ object Urls {
             val endOffsetStr = END_OFFSET.defaultIfNull(params)
             val endOffset = endOffsetStr.toInt { "Invalid End Offset value: $endOffsetStr" }
             calcLineNumber(
-              lines,
-              END_REGEX.defaultIfNull(params),
-              END_OCCURRENCE.defaultIfNull(params).toInt(),
-              endOffset,
-              END_TOPDOWN.defaultIfNull(params).toBoolean(),
-              "end",
+              lines = lines,
+              pattern = END_REGEX.defaultIfNull(params),
+              occurrence = END_OCCURRENCE.defaultIfNull(params).toInt(),
+              offset = endOffset,
+              topDown = END_TOPDOWN.defaultIfNull(params).toBoolean(),
+              desc = "end",
             ).also { if (it < 1) throw IllegalArgumentException("End line number is less than 1") }
           }
         githubSourceUrl(account, repo, branch, path, beginLinenum, endLinenum) to ""
