@@ -1,19 +1,28 @@
 package com.pambrose.srcref.pages
 
-import com.github.pambrose.common.response.PipelineCall
 import com.github.pambrose.common.response.respondWith
 import com.pambrose.srcref.Endpoints.EDIT
 import com.pambrose.srcref.Urls.toQueryParams
 import com.pambrose.srcref.pages.Common.WIDTH_VAL
 import com.pambrose.srcref.pages.Common.commonHead
 import com.pambrose.srcref.pages.Common.githubIcon
-import kotlinx.html.*
+import io.ktor.server.routing.RoutingContext
+import kotlinx.html.body
+import kotlinx.html.button
+import kotlinx.html.div
 import kotlinx.html.dom.append
 import kotlinx.html.dom.document
 import kotlinx.html.dom.serialize
+import kotlinx.html.h2
+import kotlinx.html.head
+import kotlinx.html.html
+import kotlinx.html.onClick
+import kotlinx.html.p
+import kotlinx.html.textArea
+import kotlinx.html.title
 
 object Error {
-  internal suspend fun PipelineCall.displayException(
+  internal suspend fun RoutingContext.displayException(
     params: Map<String, String?>,
     msg: String,
   ) {

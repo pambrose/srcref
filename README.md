@@ -2,7 +2,7 @@
 
 [![](https://jitpack.io/v/pambrose/srcref.svg)](https://jitpack.io/#pambrose/srcref)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/pambrose/srcref)
-[![Kotlin version](https://img.shields.io/badge/kotlin-2.0.21-red?logo=kotlin)](http://kotlinlang.org)
+[![Kotlin version](https://img.shields.io/badge/kotlin-2.1.0-red?logo=kotlin)](http://kotlinlang.org)
 
 It is problematic to embed line-specific GitHub permalinks in documentation because
 changes to the target file can invalidate the permalink line references.
@@ -78,7 +78,7 @@ allprojects {
 
 ```groovy
 dependencies {
-  implementation 'com.github.pambrose:srcref:1.8.0'
+  implementation 'com.github.pambrose:srcref:1.9.0'
 }
 ```
 
@@ -103,7 +103,7 @@ dependencies {
 <dependency>
    <groupId>com.github.pambrose</groupId>
    <artifactId>srcref</artifactId>
-  <version>1.8.0</version>
+  <version>1.9.0</version>
 </dependency>
 ```
 

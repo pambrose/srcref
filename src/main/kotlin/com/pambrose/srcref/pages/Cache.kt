@@ -1,18 +1,30 @@
 package com.pambrose.srcref.pages
 
-import com.github.pambrose.common.response.PipelineCall
 import com.github.pambrose.common.response.respondWith
 import com.pambrose.srcref.ContentCache.Companion.contentCache
 import com.pambrose.srcref.Urls.RAW_PREFIX
 import com.pambrose.srcref.pages.Common.commonHead
 import com.pambrose.srcref.pages.Common.githubIcon
-import kotlinx.html.*
+import io.ktor.server.routing.RoutingContext
+import kotlinx.html.body
+import kotlinx.html.div
 import kotlinx.html.dom.append
 import kotlinx.html.dom.document
 import kotlinx.html.dom.serialize
+import kotlinx.html.h2
+import kotlinx.html.h3
+import kotlinx.html.head
+import kotlinx.html.html
+import kotlinx.html.id
+import kotlinx.html.style
+import kotlinx.html.table
+import kotlinx.html.td
+import kotlinx.html.th
+import kotlinx.html.title
+import kotlinx.html.tr
 
 object Cache {
-  internal suspend fun PipelineCall.displayCache() {
+  internal suspend fun RoutingContext.displayCache() {
     respondWith {
       document {
         append.html {

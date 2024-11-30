@@ -9,15 +9,19 @@ import com.pambrose.srcref.Main.logger
 import com.pambrose.srcref.Routes.routes
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.http.HttpStatusCode.Companion.NotFound
-import io.ktor.server.application.*
-import io.ktor.server.cio.*
-import io.ktor.server.engine.*
-import io.ktor.server.plugins.callloging.*
-import io.ktor.server.plugins.compression.*
-import io.ktor.server.plugins.defaultheaders.*
-import io.ktor.server.plugins.statuspages.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
+import io.ktor.server.application.Application
+import io.ktor.server.application.install
+import io.ktor.server.cio.CIO
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.plugins.calllogging.CallLogging
+import io.ktor.server.plugins.compression.Compression
+import io.ktor.server.plugins.compression.deflate
+import io.ktor.server.plugins.compression.gzip
+import io.ktor.server.plugins.compression.minimumSize
+import io.ktor.server.plugins.defaultheaders.DefaultHeaders
+import io.ktor.server.plugins.statuspages.StatusPages
+import io.ktor.server.request.path
+import io.ktor.server.response.respondText
 import org.slf4j.event.Level
 
 @Version(version = BuildConfig.VERSION, date = BuildConfig.RELEASE_DATE)

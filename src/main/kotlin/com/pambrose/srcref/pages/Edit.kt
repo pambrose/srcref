@@ -1,11 +1,21 @@
 package com.pambrose.srcref.pages
 
-import com.github.pambrose.common.response.PipelineCall
 import com.github.pambrose.common.response.respondWith
 import com.pambrose.srcref.Api
 import com.pambrose.srcref.Endpoints.EDIT
 import com.pambrose.srcref.Endpoints.WHAT
-import com.pambrose.srcref.QueryParams.*
+import com.pambrose.srcref.QueryParams.ACCOUNT
+import com.pambrose.srcref.QueryParams.BEGIN_OCCURRENCE
+import com.pambrose.srcref.QueryParams.BEGIN_OFFSET
+import com.pambrose.srcref.QueryParams.BEGIN_REGEX
+import com.pambrose.srcref.QueryParams.BEGIN_TOPDOWN
+import com.pambrose.srcref.QueryParams.BRANCH
+import com.pambrose.srcref.QueryParams.END_OCCURRENCE
+import com.pambrose.srcref.QueryParams.END_OFFSET
+import com.pambrose.srcref.QueryParams.END_REGEX
+import com.pambrose.srcref.QueryParams.END_TOPDOWN
+import com.pambrose.srcref.QueryParams.PATH
+import com.pambrose.srcref.QueryParams.REPO
 import com.pambrose.srcref.Urls
 import com.pambrose.srcref.pages.Common.SrcRefDslTag
 import com.pambrose.srcref.pages.Common.URL_PREFIX
@@ -13,13 +23,43 @@ import com.pambrose.srcref.pages.Common.WIDTH_VAL
 import com.pambrose.srcref.pages.Common.commonHead
 import com.pambrose.srcref.pages.Common.githubIcon
 import com.pambrose.srcref.pages.Common.hasValues
-import kotlinx.html.*
+import io.ktor.server.routing.RoutingContext
+import kotlinx.html.FlowOrPhrasingContent
+import kotlinx.html.FormMethod
+import kotlinx.html.SELECT
+import kotlinx.html.TABLE
+import kotlinx.html.TD
+import kotlinx.html.a
+import kotlinx.html.body
+import kotlinx.html.button
+import kotlinx.html.div
 import kotlinx.html.dom.append
 import kotlinx.html.dom.document
 import kotlinx.html.dom.serialize
+import kotlinx.html.form
+import kotlinx.html.h2
+import kotlinx.html.head
+import kotlinx.html.html
+import kotlinx.html.id
+import kotlinx.html.img
+import kotlinx.html.label
+import kotlinx.html.onClick
+import kotlinx.html.option
+import kotlinx.html.radioInput
+import kotlinx.html.script
+import kotlinx.html.select
+import kotlinx.html.span
+import kotlinx.html.style
+import kotlinx.html.submitInput
+import kotlinx.html.table
+import kotlinx.html.td
+import kotlinx.html.textArea
+import kotlinx.html.textInput
+import kotlinx.html.title
+import kotlinx.html.tr
 
 object Edit {
-  internal suspend fun PipelineCall.displayEdit(params: Map<String, String?>) {
+  internal suspend fun RoutingContext.displayEdit(params: Map<String, String?>) {
     // This is called early because it is suspending, and we cannot suspend inside document construction
     val (githubUrl, msg) = Urls.githubRangeUrl(params, URL_PREFIX)
 

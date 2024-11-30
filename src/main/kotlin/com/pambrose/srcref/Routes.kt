@@ -1,7 +1,6 @@
 package com.pambrose.srcref
 
 import com.codahale.metrics.jvm.ThreadDump
-import com.github.pambrose.common.response.PipelineCall
 import com.github.pambrose.common.response.redirectTo
 import com.pambrose.srcref.Endpoints.CACHE
 import com.pambrose.srcref.Endpoints.EDIT
@@ -21,10 +20,12 @@ import com.pambrose.srcref.pages.Version.displayVersion
 import com.pambrose.srcref.pages.What.displayWhat
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.http.ContentType.Text.Plain
-import io.ktor.server.application.*
-import io.ktor.server.http.content.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.server.application.Application
+import io.ktor.server.http.content.staticResources
+import io.ktor.server.response.respondText
+import io.ktor.server.routing.RoutingContext
+import io.ktor.server.routing.get
+import io.ktor.server.routing.routing
 import java.io.ByteArrayOutputStream
 import java.lang.management.ManagementFactory
 
@@ -96,9 +97,9 @@ object Routes {
     }
   }
 
-  private fun PipelineCall.readMsg() = call.request.queryParameters[MSG] ?: "Missing message value"
+  private fun RoutingContext.readMsg() = call.request.queryParameters[MSG] ?: "Missing message value"
 
-  private fun PipelineCall.readQueryParams() =
+  private fun RoutingContext.readQueryParams() =
     buildMap {
       QueryParams.entries
         .map { it.arg }
