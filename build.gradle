@@ -46,7 +46,7 @@ repositories {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
 
     implementation "io.ktor:ktor-server:$ktor_version"
     implementation "io.ktor:ktor-server-cio:$ktor_version"

@@ -1,7 +1,7 @@
 package com.pambrose.srcref
 
-import com.github.pambrose.common.util.Version2
-import com.github.pambrose.common.util.Version2.Companion.versionDesc2
+import com.github.pambrose.common.util.Version
+import com.github.pambrose.common.util.Version.Companion.versionDesc
 import com.github.pambrose.common.util.getBanner
 import com.github.pambrose.srcref.srcref.BuildConfig
 import com.pambrose.srcref.Endpoints.PING
@@ -24,7 +24,7 @@ import io.ktor.server.request.path
 import io.ktor.server.response.respondText
 import org.slf4j.event.Level
 
-@Version2(
+@Version(
   version = BuildConfig.VERSION,
   releaseDate = BuildConfig.RELEASE_DATE,
   buildTime = BuildConfig.BUILD_TIME,
@@ -37,7 +37,7 @@ object Main {
   fun main(args: Array<String>) {
     logger.apply {
       info { getBanner("banners/srcref.banner", this) }
-      info { Main::class.versionDesc2() }
+      info { Main::class.versionDesc() }
     }
 
     embeddedServer(
