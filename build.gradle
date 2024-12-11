@@ -30,6 +30,7 @@ buildConfig {
     buildConfigField('String', 'NAME', "\"${project.name}\"")
     buildConfigField('String', 'VERSION', "\"${project.version}\"")
     buildConfigField('String', 'RELEASE_DATE', "\"12/10/2024\"")
+    buildConfigField("long", "BUILD_TIME", "${System.currentTimeMillis()}L")
 }
 
 def mainName = "com.pambrose.srcref.Main"
