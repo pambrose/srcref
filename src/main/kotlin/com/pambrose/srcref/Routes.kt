@@ -4,9 +4,9 @@ import com.codahale.metrics.jvm.ThreadDump
 import com.github.pambrose.common.response.redirectTo
 import com.pambrose.srcref.Endpoints.CACHE
 import com.pambrose.srcref.Endpoints.EDIT
-import com.pambrose.srcref.Endpoints.ERROR
 import com.pambrose.srcref.Endpoints.GITHUB
 import com.pambrose.srcref.Endpoints.PING
+import com.pambrose.srcref.Endpoints.PROBLEM
 import com.pambrose.srcref.Endpoints.THREADDUMP
 import com.pambrose.srcref.Endpoints.VERSION
 import com.pambrose.srcref.Endpoints.WHAT
@@ -53,7 +53,7 @@ object Routes {
         }
       }
 
-      get(ERROR.path) {
+      get(PROBLEM.path) {
         val params = readQueryParams()
         val msg = readMsg()
         displayException(params, msg)

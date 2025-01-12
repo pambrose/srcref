@@ -3,8 +3,8 @@ package com.pambrose.srcref
 import com.github.pambrose.common.util.encode
 import com.github.pambrose.common.util.isNotNull
 import com.pambrose.srcref.ContentCache.Companion.fetchContent
-import com.pambrose.srcref.Endpoints.ERROR
 import com.pambrose.srcref.Endpoints.GITHUB
+import com.pambrose.srcref.Endpoints.PROBLEM
 import com.pambrose.srcref.Main.logger
 import com.pambrose.srcref.QueryParams.ACCOUNT
 import com.pambrose.srcref.QueryParams.BEGIN_OCCURRENCE
@@ -99,7 +99,7 @@ object Urls {
     }.getOrElse { e ->
       val msg = "${e::class.simpleName}: ${e.message}"
       logger.info { "Input problem: $msg $params" }
-      "$prefix/$ERROR?$MSG=${msg.encode()}&${params.toQueryParams(false)}" to msg
+      "$prefix/$PROBLEM?$MSG=${msg.encode()}&${params.toQueryParams(false)}" to msg
     }
 
   private fun githubSourceUrl(

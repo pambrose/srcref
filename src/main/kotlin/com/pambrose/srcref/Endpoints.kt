@@ -3,7 +3,7 @@ package com.pambrose.srcref
 enum class Endpoints {
   EDIT,
   GITHUB,
-  ERROR,
+  PROBLEM,
   WHAT,
   CACHE,
   VERSION,

@@ -51,9 +51,7 @@ object Main {
 fun Application.module() {
   install(CallLogging) {
     level = Level.INFO
-    filter { call ->
-      !call.request.path().startsWith("/${PING.path}") && !call.request.path().startsWith("/error")
-    }
+    filter { call -> !call.request.path().startsWith("/${PING.path}") }
     format { call ->
       val path = call.request.path()
       val userAgent = call.request.headers["User-Agent"]
