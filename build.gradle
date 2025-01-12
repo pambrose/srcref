@@ -15,7 +15,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId = 'com.github.pambrose.srcref'
             artifactId = 'srcref'
-            version = '1.9.2'
+            version = '1.9.3'
 
             from components.java
         }
@@ -24,12 +24,12 @@ publishing {
 
 group = 'com.github.pambrose.srcref'
 // Change version in Makefile and README.md as well
-version = '1.9.2'
+version = '1.9.3'
 
 buildConfig {
     buildConfigField('String', 'NAME', "\"${project.name}\"")
     buildConfigField('String', 'VERSION', "\"${project.version}\"")
-    buildConfigField('String', 'RELEASE_DATE', "\"12/19/2024\"")
+    buildConfigField('String', 'RELEASE_DATE', "\"01/11/2025\"")
     buildConfigField("long", "BUILD_TIME", "${System.currentTimeMillis()}L")
 }
 
