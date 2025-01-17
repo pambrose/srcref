@@ -56,8 +56,7 @@ fun Application.module() {
   install(CallLogging) {
     level = Level.INFO
     filter { call ->
-      val name = call.request.path()
-      !name.startsWithList(excludedEndpoints) && !name.endsWith(".php")
+      call.request.path().run { !startsWithList(excludedEndpoints) && !endsWith(".php") }
     }
     format { call ->
       val path = call.request.path()
