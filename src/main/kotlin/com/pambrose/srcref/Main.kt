@@ -5,6 +5,7 @@ import com.github.pambrose.common.util.Version.Companion.versionDesc
 import com.github.pambrose.common.util.getBanner
 import com.github.pambrose.srcref.srcref.BuildConfig
 import com.pambrose.srcref.Endpoints.PING
+import com.pambrose.srcref.Main.excludedEndpoints
 import com.pambrose.srcref.Main.logger
 import com.pambrose.srcref.Routes.routes
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -32,6 +33,7 @@ import org.slf4j.event.Level
 
 object Main {
   internal val logger = KotlinLogging.logger {}
+  internal val excludedEndpoints = listOf("/${PING.path}", "/error.php")
 
   @JvmStatic
   fun main(args: Array<String>) {
@@ -48,10 +50,14 @@ object Main {
   }
 }
 
+fun String.startsWithList(prefixes: Iterable<String>) = prefixes.any { startsWith(it) }
+
 fun Application.module() {
   install(CallLogging) {
     level = Level.INFO
-    filter { call -> !call.request.path().startsWith("/${PING.path}") }
+    filter { call ->
+      !call.request.path().startsWithList(excludedEndpoints)
+    }
     format { call ->
       val path = call.request.path()
       val userAgent = call.request.headers["User-Agent"]
