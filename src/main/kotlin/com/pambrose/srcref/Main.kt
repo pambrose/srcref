@@ -33,7 +33,7 @@ import org.slf4j.event.Level
 
 object Main {
   internal val logger = KotlinLogging.logger {}
-  internal val excludedEndpoints = listOf("/${PING.path}", "/error.php")
+  internal val excludedEndpoints = listOf("/${PING.path}")
 
   @JvmStatic
   fun main(args: Array<String>) {
@@ -56,7 +56,8 @@ fun Application.module() {
   install(CallLogging) {
     level = Level.INFO
     filter { call ->
-      !call.request.path().startsWithList(excludedEndpoints)
+      val name = call.request.path()
+      !name.startsWithList(excludedEndpoints) && !name.endsWith(".php")
     }
     format { call ->
       val path = call.request.path()
