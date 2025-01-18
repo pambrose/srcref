@@ -67,9 +67,13 @@ fun Application.module() {
   install(DefaultHeaders)
   install(StatusPages) {
     status(NotFound) { call, status ->
-      val msg = "Page not found: ${call.request.path()}"
-      call.respondText(text = msg, status = status)
-      logger.info { msg }
+      val filename = call.request.path()
+      if (!filename.endsWith(".php")) {
+        logger.info { "Request for $filename" }
+        val msg = "Page not found: $filename"
+        call.respondText(text = msg, status = status)
+        logger.info { msg }
+      }
     }
   }
   install(Compression) {
