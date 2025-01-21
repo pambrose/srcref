@@ -6,7 +6,6 @@ import com.github.pambrose.common.util.getBanner
 import com.github.pambrose.srcref.srcref.BuildConfig
 import com.pambrose.srcref.Endpoints.PING
 import com.pambrose.srcref.Main.excludedEndpoints
-import com.pambrose.srcref.Main.logger
 import com.pambrose.srcref.Routes.routes
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.http.HttpStatusCode.Companion.NotFound
@@ -68,12 +67,8 @@ fun Application.module() {
   install(StatusPages) {
     status(NotFound) { call, status ->
       val filename = call.request.path()
-      if (!filename.endsWith(".php")) {
-        logger.info { "Request for $filename" }
-        val msg = "Page not found: $filename"
-        call.respondText(text = msg, status = status)
-        logger.info { msg }
-      }
+      val msg = "Page not found: $filename"
+      call.respondText(text = msg, status = status)
     }
   }
   install(Compression) {
