@@ -2,7 +2,7 @@
 
 [![](https://jitpack.io/v/pambrose/srcref.svg)](https://jitpack.io/#pambrose/srcref)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/pambrose/srcref)
-[![Kotlin version](https://img.shields.io/badge/kotlin-2.1.10-red?logo=kotlin)](http://kotlinlang.org)
+[![Kotlin version](https://img.shields.io/badge/kotlin-2.1.20-red?logo=kotlin)](http://kotlinlang.org)
 
 It is problematic to embed line-specific GitHub permalinks in documentation because
 changes to the target file can invalidate the permalink line references.
