@@ -5,14 +5,25 @@ import com.github.pambrose.common.util.simpleClassName
 import com.pambrose.srcref.Urls.RAW_PREFIX
 import com.pambrose.srcref.Urls.toInt
 import io.github.oshai.kotlinlogging.KotlinLogging
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.*
-import io.ktor.client.request.*
-import io.ktor.http.*
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.HttpRequestRetry
+import io.ktor.client.request.get
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.atomic.AtomicInteger
+import kotlin.collections.List
+import kotlin.collections.Map
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.forEach
+import kotlin.collections.set
+import kotlin.collections.sortedBy
+import kotlin.collections.sortedByDescending
+import kotlin.collections.take
+import kotlin.concurrent.atomics.AtomicInt
+import kotlin.concurrent.atomics.plusAssign
 import kotlin.concurrent.thread
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
@@ -28,17 +39,17 @@ internal class ContentCache {
     internal val pageLines: List<String>,
     internal val etag: String,
     internal val contentLength: Int,
-    private val references: AtomicInteger = AtomicInteger(0),
+    private val references: AtomicInt = AtomicInt(0),
     private var referenced: TimeMark = Monotonic.markNow(),
     private val created: TimeMark = Monotonic.markNow(),
   ) {
     val age: Duration get() = created.elapsedNow()
     val lastReferenced: Duration get() = referenced.elapsedNow()
-    val hits get() = references.get()
+    val hits get() = references.load()
 
     fun markReferenced() {
       referenced = Monotonic.markNow()
-      references.incrementAndGet()
+      references += 1
     }
   }
 

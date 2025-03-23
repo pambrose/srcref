@@ -7,7 +7,6 @@ plugins {
     id 'com.github.gmazzo.buildconfig' version '5.5.4'
     id "com.github.ben-manes.versions" version '0.52.0'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
-//    id "io.ktor.plugin" version "2.3.7"
 }
 
 publishing {
@@ -15,7 +14,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId = 'com.github.pambrose.srcref'
             artifactId = 'srcref'
-            version = '1.9.5'
+            version = '1.9.6'
 
             from components.java
         }
@@ -24,7 +23,7 @@ publishing {
 
 group = 'com.github.pambrose.srcref'
 // Change version in Makefile and README.md as well
-version = '1.9.5'
+version = '1.9.6'
 
 buildConfig {
     buildConfigField('String', 'NAME', "\"${project.name}\"")
@@ -80,6 +79,7 @@ compileKotlin {
         freeCompilerArgs += ['-Xbackend-threads=8',
                              '-opt-in=kotlin.time.ExperimentalTime',
                              '-opt-in=kotlinx.coroutines.DelicateCoroutinesApi',
+                             "-opt-in=kotlin.concurrent.atomics.ExperimentalAtomicApi"
         ]
     }
 }
