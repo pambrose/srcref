@@ -3,7 +3,8 @@
         <encoder>
             <!-- <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} %-5level [%file:%line] - %msg%n%xEx</pattern>-->
             <!-- <pattern>%-5level [%file:%line] - %msg%n%xEx</pattern> -->
-            <pattern>%d{MM-dd HH:mm:ss.SSS} %-5level %logger{10} [%file:%line] - %msg%n%xEx</pattern>
+          <pattern>%-5level %logger{10} [%file:%line] - %msg%n%xEx</pattern>
+          <!--          <pattern>%d{MM-dd HH:mm:ss.SSS} %-5level %logger{10} [%file:%line] - %msg%n%xEx</pattern>-->
             <!--            <pattern>%-5level %logger{10} - %msg%n</pattern>-->
         </encoder>
     </appender>
