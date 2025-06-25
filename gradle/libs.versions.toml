@@ -1,0 +1,53 @@
+[versions]
+# Plugins
+kotlin = "2.2.0"
+kotlinter = "5.1.1"
+buildconfig = "5.6.7"
+versions = "0.52.0"
+shadow = "8.1.1"
+
+# Libraries
+coroutines = "1.10.2"
+css = "2025.6.11"
+dropwizard = "4.2.33"
+kotest = "6.0.0.M4"
+ktor = "3.2.0"
+logback = "1.5.18"
+logging = "7.0.7"
+text = "1.13.1"
+utils = "2.3.11"
+
+[libraries]
+# Kotlin
+kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlin-css = { module = "org.jetbrains.kotlin-wrappers:kotlin-css", version.ref = "css" }
+
+# Ktor
+ktor-server-core = { module = "io.ktor:ktor-server", version.ref = "ktor" }
+ktor-server-cio = { module = "io.ktor:ktor-server-cio", version.ref = "ktor" }
+ktor-server-html = { module = "io.ktor:ktor-server-html-builder", version.ref = "ktor" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
+
+# Utils
+utils-core = { module = "com.github.pambrose.common-utils:core-utils", version.ref = "utils" }
+utils-ktor-server = { module = "com.github.pambrose.common-utils:ktor-server-utils", version.ref = "utils" }
+
+# Metrics
+dropwizard-core = { module = "io.dropwizard.metrics:metrics-core", version.ref = "dropwizard" }
+dropwizard-jvm = { module = "io.dropwizard.metrics:metrics-jvm", version.ref = "dropwizard" }
+
+# Other
+commons-text = { module = "org.apache.commons:commons-text", version.ref = "text" }
+logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "logging" }
+
+# Testing
+kotest = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlinter = { id = "org.jmailen.kotlinter", version.ref = "kotlinter" }
+buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
+versions = { id = "com.github.ben-manes.versions", version.ref = "versions" }
+shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
