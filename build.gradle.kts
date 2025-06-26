@@ -56,8 +56,8 @@ dependencies {
 
   implementation(libs.kotlin.css)
 
-  implementation(libs.utils.core)
   implementation(libs.utils.ktor.server)
+  implementation(libs.utils.core)
 
   implementation(libs.dropwizard.core)
   implementation(libs.dropwizard.jvm)
@@ -93,35 +93,10 @@ tasks.test {
 tasks.register("stage") {
   dependsOn("uberjar", "build", "clean")
 }
+
 tasks.named("build") {
   mustRunAfter("clean")
 }
-
-val srcref by tasks.registering(Jar::class) {
-  dependsOn(tasks.shadowJar)
-  archiveFileName.set("srcref.jar")
-  manifest {
-    attributes("Main-Class" to "io.prometheus.Agent")
-  }
-  from(zipTree(tasks.shadowJar.get().archiveFile))
-}
-
-//
-//tasks.register<Jar>("uberjar") {
-//    dependsOn("shadowJar")
-//    isZip64 = true
-//    archiveFileName.set("srcref.jar")
-//    manifest {
-//        attributes(
-//            "Implementation-Title" to "srcref",
-//            "Implementation-Version" to version,
-//            "Built-Date" to java.util.Date(),
-//            "Built-JDK" to System.getProperty("java.version"),
-//            "Main-Class" to mainName
-//        )
-//    }
-//    from(zipTree(tasks.shadowJar.get().archiveFile))
-//}
 
 val uberjar by tasks.registering(Jar::class) {
   dependsOn(tasks.shadowJar)
@@ -132,14 +107,14 @@ val uberjar by tasks.registering(Jar::class) {
   from(zipTree(tasks.shadowJar.get().archiveFile))
 }
 
-tasks.shadowJar {
-  isZip64 = true
-  mergeServiceFiles()
-  exclude("META-INF/*.SF")
-  exclude("META-INF/*.DSA")
-  exclude("META-INF/*.RSA")
-  exclude("LICENSE*")
-}
+//tasks.shadowJar {
+//  isZip64 = true
+//  mergeServiceFiles()
+//  exclude("META-INF/*.SF")
+//  exclude("META-INF/*.DSA")
+//  exclude("META-INF/*.RSA")
+//  exclude("LICENSE*")
+//}
 
 tasks.register<Jar>("sourcesJar") {
   dependsOn("classes")
