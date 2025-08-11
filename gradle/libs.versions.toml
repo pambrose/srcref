@@ -8,9 +8,9 @@ shadow = "8.3.7"
 
 # Libraries
 coroutines = "1.10.2"
-css = "2025.7.15"
+css = "2025.8.9"
 dropwizard = "4.2.33"
-kotest = "6.0.0.M11"
+kotest = "6.0.0.M14"
 ktor = "3.2.3"
 logback = "1.5.18"
 logging = "7.0.12"
