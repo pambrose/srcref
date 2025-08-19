@@ -1,3 +1,6 @@
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 plugins {
   java
   application
@@ -24,18 +27,19 @@ publishing {
 group = "com.github.pambrose.srcref"
 // Change version in Makefile and README.md as well
 version = "1.9.7"
+val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
 
 buildConfig {
   buildConfigField("String", "NAME", "\"${project.name}\"")
   buildConfigField("String", "VERSION", "\"${project.version}\"")
-  buildConfigField("String", "RELEASE_DATE", "\"06/25/2025\"")
+  buildConfigField("String", "RELEASE_DATE", "\"${LocalDate.now().format(formatter)}\"")
   buildConfigField("long", "BUILD_TIME", "${System.currentTimeMillis()}L")
 }
 
 val mainName = "com.pambrose.srcref.Main"
 
 application {
-  mainClass.set(mainName)
+  mainClass = mainName
 }
 
 repositories {

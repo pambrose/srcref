@@ -15,6 +15,9 @@ compile: build
 build:	clean
 	./gradlew build -xtest
 
+run:
+	./gradlew run
+
 tests:
 	./gradlew --rerun-tasks check
 
