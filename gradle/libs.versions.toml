@@ -23,15 +23,17 @@ kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", 
 kotlin-css = { module = "org.jetbrains.kotlin-wrappers:kotlin-css", version.ref = "css" }
 
 # Ktor
-ktor-server-core = { module = "io.ktor:ktor-server", version.ref = "ktor" }
-ktor-server-cio = { module = "io.ktor:ktor-server-cio", version.ref = "ktor" }
-ktor-server-html = { module = "io.ktor:ktor-server-html-builder", version.ref = "ktor" }
-ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
-ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
+ktor-bom = { module = "io.ktor:ktor-bom", version.ref = "ktor" }
+ktor-server-core = { module = "io.ktor:ktor-server" }
+ktor-server-cio = { module = "io.ktor:ktor-server-cio" }
+ktor-server-html = { module = "io.ktor:ktor-server-html-builder" }
+ktor-client-core = { module = "io.ktor:ktor-client-core" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio" }
 
 # Utils
-utils-core = { module = "com.github.pambrose.common-utils:core-utils", version.ref = "utils" }
-utils-ktor-server = { module = "com.github.pambrose.common-utils:ktor-server-utils", version.ref = "utils" }
+utils-bom = { module = "com.github.pambrose.common-utils:common-utils-bom", version.ref = "utils" }
+utils-core = { module = "com.github.pambrose.common-utils:core-utils" }
+utils-ktor-server = { module = "com.github.pambrose.common-utils:ktor-server-utils" }
 
 # Metrics
 dropwizard-core = { module = "io.dropwizard.metrics:metrics-core", version.ref = "dropwizard" }
@@ -51,3 +53,18 @@ kotlinter = { id = "org.jmailen.kotlinter", version.ref = "kotlinter" }
 buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
 versions = { id = "com.github.ben-manes.versions", version.ref = "versions" }
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
+ktor-plugin = { id = "io.ktor.plugin", version.ref = "ktor" }
+
+[bundles]
+ktor = [
+  "ktor-server-core",
+  "ktor-server-cio",
+  "ktor-server-html",
+  "ktor-client-core",
+  "ktor-client-cio",
+]
+
+common-utils = [
+  "utils-core",
+  "utils-ktor-server",
+]

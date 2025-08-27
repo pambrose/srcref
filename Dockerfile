@@ -13,7 +13,7 @@ RUN chown -R $APPLICATION_USER /app
 # Mark this container to use the specified $APPLICATION_USER
 USER $APPLICATION_USER
 
-COPY ./build/libs/srcref.jar /app/srcref.jar
+COPY ./build/libs/srcref-all.jar /app/srcref-all.jar
 COPY src/main/resources /app/src/main/resources
 
 # Make /app the working directory
@@ -23,4 +23,4 @@ EXPOSE 8080
 
 CMD []
 # Launch java to execute the jar with defaults intended for containers.
-ENTRYPOINT ["java", "-server", "-XX:+UseContainerSupport", "-Xmx2048m", "-Dlogback.configurationFile=/app/src/main/resources/logback-srcref.xml", "-jar", "/app/srcref.jar"]
+ENTRYPOINT ["java", "-server", "-XX:+UseContainerSupport", "-Xmx2048m", "-Dlogback.configurationFile=/app/src/main/resources/logback-srcref.xml", "-jar", "/app/srcref-all.jar"]

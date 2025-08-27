@@ -22,10 +22,10 @@ tests:
 	./gradlew --rerun-tasks check
 
 uberjar:
-	./gradlew uberjar
+	./gradlew buildFatJar
 
 uber: uberjar
-	java -jar build/libs/srcref.jar
+	java -jar build/libs/srcref-all.jar
 
 run-docker:
 	docker run --rm --env-file=docker_env_vars -p 8080:8080 pambrose/srcref:${VERSION}

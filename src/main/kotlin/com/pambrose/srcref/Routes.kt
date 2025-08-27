@@ -34,7 +34,7 @@ object Routes {
 
   fun Application.routes() {
     routing {
-      // This will redirect to www subdomain
+      // This will redirect to the www subdomain
       get("/") { redirectTo { "$URL_PREFIX/${EDIT.path}" } }
 
       get(EDIT.path) {

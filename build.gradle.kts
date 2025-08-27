@@ -9,24 +9,13 @@ plugins {
   alias(libs.plugins.kotlinter)
   alias(libs.plugins.buildconfig)
   alias(libs.plugins.versions)
-  alias(libs.plugins.shadow)
+//  alias(libs.plugins.shadow)
+  alias(libs.plugins.ktor.plugin)
 }
 
-publishing {
-  publications {
-    create<MavenPublication>("mavenJava") {
-      groupId = "com.github.pambrose.srcref"
-      artifactId = "srcref"
-      version = "1.9.7"
-
-      from(components["java"])
-    }
-  }
-}
-
-group = "com.github.pambrose.srcref"
 // Change version in Makefile and README.md as well
 version = "1.9.7"
+group = "com.github.pambrose.srcref"
 val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
 
 buildConfig {
@@ -50,18 +39,13 @@ repositories {
 
 dependencies {
   implementation(libs.kotlin.coroutines)
-
-  implementation(libs.ktor.server.core)
-  implementation(libs.ktor.server.cio)
-  implementation(libs.ktor.server.html)
-
-  implementation(libs.ktor.client.core)
-  implementation(libs.ktor.client.cio)
-
   implementation(libs.kotlin.css)
 
-  implementation(libs.utils.ktor.server)
-  implementation(libs.utils.core)
+  implementation(platform(libs.ktor.bom))
+  implementation(libs.bundles.ktor)
+
+  implementation(platform(libs.utils.bom))
+  implementation(libs.bundles.common.utils)
 
   implementation(libs.dropwizard.core)
   implementation(libs.dropwizard.jvm)
@@ -84,6 +68,22 @@ kotlin {
   }
 }
 
+java {
+  withSourcesJar()
+}
+
+publishing {
+  publications {
+    create<MavenPublication>("mavenJava") {
+      groupId = "com.github.pambrose.srcref"
+      artifactId = "srcref"
+      version = "1.9.7"
+
+      from(components["java"])
+    }
+  }
+}
+
 tasks.test {
   useJUnitPlatform()
 
@@ -94,37 +94,19 @@ tasks.test {
   }
 }
 
-tasks.register("stage") {
-  dependsOn("uberjar", "build", "clean")
-}
+//tasks.register("stage") {
+//  dependsOn("uberjar", "build", "clean")
+//}
 
 tasks.named("build") {
   mustRunAfter("clean")
 }
 
-val uberjar by tasks.registering(Jar::class) {
-  dependsOn(tasks.shadowJar)
-  archiveFileName.set("srcref.jar")
-  manifest {
-    attributes("Main-Class" to mainName)
-  }
-  from(zipTree(tasks.shadowJar.get().archiveFile))
-}
-
-//tasks.shadowJar {
-//  isZip64 = true
-//  mergeServiceFiles()
-//  exclude("META-INF/*.SF")
-//  exclude("META-INF/*.DSA")
-//  exclude("META-INF/*.RSA")
-//  exclude("LICENSE*")
+//tasks.register<Jar>("sourcesJar") {
+//  dependsOn("classes")
+//  from(sourceSets.main.get().allSource)
+//  archiveClassifier.set("sources")
 //}
-
-tasks.register<Jar>("sourcesJar") {
-  dependsOn("classes")
-  from(sourceSets.main.get().allSource)
-  archiveClassifier.set("sources")
-}
 
 kotlinter {
   reporters = arrayOf("checkstyle", "plain")
