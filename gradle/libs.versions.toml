@@ -1,6 +1,6 @@
 [versions]
 # Plugins
-kotlin = "2.2.0"
+kotlin = "2.2.10"
 kotlinter = "5.2.0"
 buildconfig = "5.6.7"
 versions = "0.52.0"
@@ -8,14 +8,14 @@ shadow = "8.3.7"
 
 # Libraries
 coroutines = "1.10.2"
-css = "2025.8.9"
-dropwizard = "4.2.33"
-kotest = "6.0.0.M14"
+css = "2025.8.20"
+dropwizard = "4.2.34"
+kotest = "6.0.1"
 ktor = "3.2.3"
 logback = "1.5.18"
-logging = "7.0.12"
+logging = "7.0.13"
 text = "1.14.0"
-utils = "2.4.0"
+utils = "2.4.4"
 
 [libraries]
 # Kotlin
