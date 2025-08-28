@@ -15,7 +15,9 @@ import kotlinx.html.link
 import kotlinx.html.meta
 import kotlinx.html.title
 
-class PageTemplate(val titleTxt: String) : Template<HTML> {
+class PageTemplate(
+  val titleTxt: String,
+) : Template<HTML> {
   val script = Placeholder<HEAD>()
   val content = Placeholder<BODY>()
 
