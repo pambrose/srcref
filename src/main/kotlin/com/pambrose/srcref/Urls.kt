@@ -49,7 +49,7 @@ object Urls {
       throw IllegalArgumentException(block())
     }
 
-  // This returns a url and an error message
+  // This returns an url and an error message
   internal suspend fun githubRangeUrl(
     params: Map<String, String?>,
     prefix: String,

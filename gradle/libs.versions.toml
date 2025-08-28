@@ -4,11 +4,9 @@ kotlin = "2.2.10"
 kotlinter = "5.2.0"
 buildconfig = "5.6.7"
 versions = "0.52.0"
-shadow = "8.3.7"
 
 # Libraries
 coroutines = "1.10.2"
-css = "2025.8.20"
 dropwizard = "4.2.34"
 kotest = "6.0.1"
 ktor = "3.2.3"
@@ -20,7 +18,6 @@ utils = "2.4.4"
 [libraries]
 # Kotlin
 kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
-kotlin-css = { module = "org.jetbrains.kotlin-wrappers:kotlin-css", version.ref = "css" }
 
 # Ktor
 ktor-bom = { module = "io.ktor:ktor-bom", version.ref = "ktor" }
@@ -36,8 +33,9 @@ utils-core = { module = "com.github.pambrose.common-utils:core-utils" }
 utils-ktor-server = { module = "com.github.pambrose.common-utils:ktor-server-utils" }
 
 # Metrics
-dropwizard-core = { module = "io.dropwizard.metrics:metrics-core", version.ref = "dropwizard" }
-dropwizard-jvm = { module = "io.dropwizard.metrics:metrics-jvm", version.ref = "dropwizard" }
+dropwizard-bom = { module = "io.dropwizard.metrics:metrics-bom", version.ref = "dropwizard" }
+dropwizard-core = { module = "io.dropwizard.metrics:metrics-core" }
+dropwizard-jvm = { module = "io.dropwizard.metrics:metrics-jvm" }
 
 # Other
 commons-text = { module = "org.apache.commons:commons-text", version.ref = "text" }
@@ -52,7 +50,6 @@ kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinter = { id = "org.jmailen.kotlinter", version.ref = "kotlinter" }
 buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
 versions = { id = "com.github.ben-manes.versions", version.ref = "versions" }
-shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 ktor-plugin = { id = "io.ktor.plugin", version.ref = "ktor" }
 
 [bundles]
@@ -67,4 +64,9 @@ ktor = [
 common-utils = [
   "utils-core",
   "utils-ktor-server",
+]
+
+dropwizard = [
+  "dropwizard-core",
+  "dropwizard-jvm",
 ]

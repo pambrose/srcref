@@ -6,7 +6,7 @@ import com.github.pambrose.common.util.getBanner
 import com.github.pambrose.srcref.srcref.BuildConfig
 import com.pambrose.srcref.Endpoints.PING
 import com.pambrose.srcref.Main.excludedEndpoints
-import com.pambrose.srcref.Routes.routes
+import com.pambrose.srcref.Routes.configureRoutes
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.http.HttpStatusCode.Companion.NotFound
 import io.ktor.server.application.Application
@@ -82,5 +82,5 @@ fun Application.module() {
       minimumSize(1024)
     }
   }
-  routes()
+  configureRoutes()
 }

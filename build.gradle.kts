@@ -39,7 +39,6 @@ repositories {
 
 dependencies {
   implementation(libs.kotlin.coroutines)
-  implementation(libs.kotlin.css)
 
   implementation(platform(libs.ktor.bom))
   implementation(libs.bundles.ktor)
@@ -47,8 +46,8 @@ dependencies {
   implementation(platform(libs.utils.bom))
   implementation(libs.bundles.common.utils)
 
-  implementation(libs.dropwizard.core)
-  implementation(libs.dropwizard.jvm)
+  implementation(platform(libs.dropwizard.bom))
+  implementation(libs.bundles.dropwizard)
 
   implementation(libs.commons.text)
 

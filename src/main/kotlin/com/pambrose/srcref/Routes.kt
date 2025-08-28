@@ -32,7 +32,7 @@ import java.lang.management.ManagementFactory
 object Routes {
   private val logger = KotlinLogging.logger {}
 
-  fun Application.routes() {
+  fun Application.configureRoutes() {
     routing {
       // This will redirect to the www subdomain
       get("/") { redirectTo { "$URL_PREFIX/${EDIT.path}" } }
@@ -110,3 +110,4 @@ object Routes {
     val threadDump by lazy { ThreadDump(ManagementFactory.getThreadMXBean()) }
   }
 }
+
