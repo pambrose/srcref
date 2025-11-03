@@ -1,4 +1,4 @@
-VERSION=1.9.7
+VERSION=1.9.8
 
 default: versioncheck
 
@@ -56,4 +56,4 @@ versioncheck:
 	./gradlew dependencyUpdates
 
 upgrade-wrapper:
-	./gradlew wrapper --gradle-version=9.0.0 --distribution-type=bin
+	./gradlew wrapper --gradle-version=9.2.0 --distribution-type=bin
