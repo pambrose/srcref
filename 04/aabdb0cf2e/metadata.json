@@ -1,0 +1,32 @@
+{
+  "cli_version": "0.4.2",
+  "checkpoint_id": "04aabdb0cf2e",
+  "strategy": "manual-commit",
+  "branch": "bug-review",
+  "checkpoints_count": 3,
+  "files_touched": [
+    "build.gradle.kts",
+    "gradle/libs.versions.toml",
+    "src/test/kotlin/ContentCacheTests.kt",
+    "src/test/kotlin/QueryParamsTests.kt",
+    "src/test/kotlin/RoutesTests.kt",
+    "src/test/kotlin/UrlsTests.kt",
+    "src/test/kotlin/UtilTests.kt"
+  ],
+  "sessions": [
+    {
+      "metadata": "/04/aabdb0cf2e/0/metadata.json",
+      "transcript": "/04/aabdb0cf2e/0/full.jsonl",
+      "context": "/04/aabdb0cf2e/0/context.md",
+      "content_hash": "/04/aabdb0cf2e/0/content_hash.txt",
+      "prompt": "/04/aabdb0cf2e/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 29,
+    "cache_creation_tokens": 101635,
+    "cache_read_tokens": 2581789,
+    "output_tokens": 31009,
+    "api_call_count": 21
+  }
+}
