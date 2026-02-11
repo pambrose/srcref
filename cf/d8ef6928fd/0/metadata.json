@@ -1,0 +1,35 @@
+{
+  "cli_version": "0.4.2",
+  "checkpoint_id": "cfd8ef6928fd",
+  "session_id": "6837b282-17f5-48c2-8d64-332f627ed812",
+  "strategy": "manual-commit",
+  "created_at": "2026-02-11T19:30:39.546789Z",
+  "branch": "bug-review",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "src/main/kotlin/com/pambrose/srcref/ContentCache.kt",
+    "src/main/kotlin/com/pambrose/srcref/Urls.kt",
+    "src/main/kotlin/com/pambrose/srcref/pages/Cache.kt",
+    "src/test/kotlin/FileTests.kt"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "c7d05846-913d-4f9d-8c9a-d504e695c454",
+  "checkpoint_transcript_start": 130,
+  "transcript_lines_at_start": 130,
+  "token_usage": {
+    "input_tokens": 24,
+    "cache_creation_tokens": 40393,
+    "cache_read_tokens": 1381975,
+    "output_tokens": 3309,
+    "api_call_count": 20
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-02-11T19:30:39.505065Z",
+    "agent_lines": 0,
+    "human_added": 0,
+    "human_modified": 24,
+    "human_removed": 79,
+    "total_committed": 18,
+    "agent_percentage": 0
+  }
+}
