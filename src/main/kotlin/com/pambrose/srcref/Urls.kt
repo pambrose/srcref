@@ -19,9 +19,9 @@ import com.pambrose.srcref.QueryParams.END_TOPDOWN
 import com.pambrose.srcref.QueryParams.PATH
 import com.pambrose.srcref.QueryParams.REPO
 import com.pambrose.srcref.pages.Common.hasValues
-import org.apache.commons.text.StringEscapeUtils.escapeHtml4
 import java.util.regex.PatternSyntaxException
 import kotlin.time.measureTimedValue
+import org.apache.commons.text.StringEscapeUtils.escapeHtml4
 
 object Urls {
   internal const val MSG = "msg"
@@ -141,11 +141,13 @@ object Urls {
         ) + offset + 1
     }.getOrElse { e ->
       throw when (e) {
-        is PatternSyntaxException ->
+        is PatternSyntaxException -> {
           IllegalArgumentException("Invalid regex:\"${pattern}\" - ${e.message}")
+        }
 
-        is NoSuchElementException ->
+        is NoSuchElementException -> {
           IllegalArgumentException("Required matches ($occurrence) not found for $desc regex: \"$pattern\"")
+        }
 
         else -> {
           logger.error { "Error in calcLineNumber(): ${e::class.simpleName}: ${e.message}" }
