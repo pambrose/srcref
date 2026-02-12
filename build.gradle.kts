@@ -14,7 +14,7 @@ plugins {
 }
 
 // Change version in Makefile and README.md as well
-version = "1.9.8"
+version = "2.0.0"
 group = "com.github.pambrose.srcref"
 val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
 
@@ -55,6 +55,7 @@ dependencies {
   implementation(libs.kotlin.logging)
 
   testImplementation(libs.kotest)
+  testImplementation(libs.ktor.server.test.host)
 }
 
 kotlin {
@@ -76,7 +77,7 @@ publishing {
     create<MavenPublication>("mavenJava") {
       groupId = "com.github.pambrose.srcref"
       artifactId = "srcref"
-      version = "1.9.8"
+      version = "2.0.0"
 
       from(components["java"])
     }
