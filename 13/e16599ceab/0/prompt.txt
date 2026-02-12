@@ -1,0 +1,132 @@
+Implement the following plan:
+
+# Plan: Add Tests for Complete Code Coverage
+
+## Context
+
+The project currently has a single test file (`FileTests.kt`) with 24 assertions covering only `calcLineNumber()`. The goal is to achieve complete code coverage across all source files. This requires adding unit tests for pure functions, integration tests for HTTP routes using Ktor's `testApplication`, and cache data structure tests.
+
+**Key constraint:** `ContentCache.fetchContent()` creates its own `HttpClient(CIO)` internally and cannot be mocked without refactoring production code. Tests will cover error paths of `githubRangeUrl()` (empty params, missing required params) but not the happy path that hits GitHub.
+
+## 1. Build Changes
+
+### `gradle/libs.versions.toml` — Add test library entries
+```toml
+ktor-server-test-host = { module = "io.ktor:ktor-server-test-host" }
+```
+(Version resolved by the existing `ktor-bom`.)
+
+### `build.gradle.kts` — Add test dependency
+```kotlin
+testImplementation(libs.ktor.server.test.host)
+```
+
+## 2. Test Files
+
+All tests use Kotest `StringSpec` style, consistent with the existing `FileTests.kt`.
+
+### 2a. `FileTests.kt` — Expand with `calcLineNumber()` edge cases
+- Invalid regex (`[invalid`) throws `IllegalArgumentException` with "Invalid regex"
+- No match found (`"zzz"` pattern) throws with "not found"
+- Occurrence exceeding actual matches throws with "not found"
+- Negative offsets work correctly
+- Regex special characters (escaped parens, dot-matching)
+- Single-line input
+- Empty lines in input
+- `desc` parameter appears in error messages
+- Bottom-up with negative offset
+
+### 2b. `QueryParamsTest.kt` — New file
+- Enum has 12 entries with correct `arg` values
+- `optionalParams` contains exactly `[eregex, eoccur, eoffset, etopd]`
+- `defaultIfNull`: returns value when present, default when null, blank when value is blank
+- `defaultIfBlank`: returns value when non-blank, default when blank/null/missing
+- `required`: returns value when non-blank, throws `IllegalArgumentException("Missing: {arg} value")` when blank/null/missing
+- Default values for end params (empty regex, "1", "0", "true")
+
+### 2c. `UrlsTest.kt` — New file
+- `toQueryParams`: simple pairs, filters nulls, filters blanks, URL-encodes special chars, ignores end params when flag true, includes them when false, empty map returns ""
+- `srcrefToGithubUrl`: correct URL structure, HTML4 escaping on/off, ignores end params when eregex blank, includes when present
+- `toInt`: valid int, negative int, null throws, non-numeric throws, empty throws, decimal throws
+- `githubRangeUrl`: empty params returns `"" to ""`, all-blank params returns `"" to ""`, missing required param returns problem URL with error message
+
+### 2d. `ApiTest.kt` — New file
+- Default parameters produce correct URL structure
+- Custom begin parameters (occurrence, offset, topDown)
+- End parameters included when endRegex non-empty
+- End params omitted when endRegex empty
+- HTML4 escaping
+- Custom prefix and branch
+- Regex special characters are URL-encoded
+
+### 2e. `EndpointsTest.kt` — New file
+- 8 entries exist
+- `path` returns lowercase name for all entries
+- `toString()` returns path for all entries
+
+### 2f. `ContentCacheTest.kt` — New file
+- `CacheContent`: stores pageLines/etag/contentLength, hits starts at 0, `markReferenced()` increments hits, age/lastReferenced are non-negative
+- `ContentCache`: set/get, get returns null for missing key, size reflects entries, remove works, remove nonexistent returns null, sortedByLastReferenced ordering, overwrite replaces entry
+
+### 2g. `CommonTest.kt` — New file
+- `hasValues()`: false for empty map, all-null, all-blank; true when at least one non-blank value
+- `WIDTH_VAL` is "93"
+
+### 2h. `MainTest.kt` — New file
+- `startsWithList`: true when prefix matches, false when no match, false for empty list, empty string, partial prefix match
+
+### 2i. `RoutesIntegrationTest.kt` — New file (Ktor `testApplication`)
+- `GET /` redirects to `/edit`
+- `GET /ping` returns "pong"
+- `GET /edit` (no params) returns form with field labels and "Example Values" button
+- `GET /edit` (partial params, blank bregex) shows exception message
+- `GET /version` returns version page with "Version" and "Release Date"
+- `GET /what` returns documentation page
+- `GET /cache` returns cache page with "Cache Size"
+- `GET /problem?msg=...` displays the error message
+- `GET /problem` (no msg) shows "Missing message value"
+- `GET /github?edit` shows edit form
+- `GET /github` (no params) handles empty redirect
+- `GET /robots.txt` returns User-agent and Disallow rules
+- `GET /threaddump` returns content
+- `GET /nonexistent` returns 404 with "Page not found"
+
+## 3. Not Covered (would require production refactoring)
+
+- `ContentCache.fetchContent()` — creates own `HttpClient(CIO)`, not mockable
+- `ContentCache.isInvalidContentType()` — private extension function
+- Cache cleanup background thread — starts in companion `init` block
+- `Main.main()` — JVM entry point, just starts server
+- Happy path of `githubRangeUrl()` — requires `fetchContent` to succeed
+
+## 4. Files Modified
+
+| File | Action |
+|------|--------|
+| `gradle/libs.versions.toml` | Add ktor-server-test-host |
+| `build.gradle.kts` | Add testImplementation dependency |
+| `src/test/kotlin/FileTests.kt` | Expand with edge cases |
+| `src/test/kotlin/QueryParamsTest.kt` | Create |
+| `src/test/kotlin/UrlsTest.kt` | Create |
+| `src/test/kotlin/ApiTest.kt` | Create |
+| `src/test/kotlin/EndpointsTest.kt` | Create |
+| `src/test/kotlin/ContentCacheTest.kt` | Create |
+| `src/test/kotlin/CommonTest.kt` | Create |
+| `src/test/kotlin/MainTest.kt` | Create |
+| `src/test/kotlin/RoutesIntegrationTest.kt` | Create |
+
+## 5. Verification
+
+```bash
+./gradlew build -xtest          # Verify build with new dependency
+./gradlew test                   # Run all tests
+./gradlew formatKotlin           # Format before finalizing
+./gradlew lintKotlin             # Verify lint passes
+```
+
+
+If you need specific details from before exiting plan mode (like exact code snippets, error messages, or content you generated), read the full transcript at: /Users/pambrose/.REDACTED.jsonl
+
+---
+
+continue with creating tests
