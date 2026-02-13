@@ -43,6 +43,10 @@ docker-push:
 
 release: clean build uberjar build-docker docker-push
 
+deploy:
+	./secrets/deploy-app.sh
+	say finished app deployment
+
 dist:
 	./gradlew installDist
 
