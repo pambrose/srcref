@@ -78,7 +78,7 @@ testing), Dropwizard Metrics (JVM metrics), kotlin-logging + Logback.
 
 ## Version Management
 
-Version is defined in `build.gradle.kts` (`version = "2.0.0"`). Must also be updated in `Makefile` (`VERSION`) and
+Version is defined in `build.gradle.kts` (`version = "2.0.1"`). Must also be updated in `Makefile` (`VERSION`) and
 `README.md` when changing.
 
 ## Environment Variables

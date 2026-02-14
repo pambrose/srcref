@@ -14,7 +14,7 @@ plugins {
 }
 
 // Change version in Makefile and README.md as well
-version = "2.0.0"
+version = "2.0.1"
 group = "com.github.pambrose.srcref"
 val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
 
@@ -77,7 +77,7 @@ publishing {
     create<MavenPublication>("mavenJava") {
       groupId = "com.github.pambrose.srcref"
       artifactId = "srcref"
-      version = "2.0.0"
+      version = "2.0.1"
 
       from(components["java"])
     }
