@@ -86,8 +86,9 @@ object Routes {
         call.respondText(
           """
             User-agent: *
-            Disallow: /error/
-            Disallow: /error
+            Disallow: /${PROBLEM.path}
+            Disallow: /${CACHE.path}
+            Disallow: /${THREADDUMP.path}
           """.trimIndent(),
           Plain,
         )
