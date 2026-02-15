@@ -63,7 +63,11 @@ object Cache {
                     +v.pageLines.size.toString()
                   }
                   td { +url.let { if (url.startsWith(RAW_PREFIX)) it.substring(RAW_PREFIX.length) else it } }
-                  td { +v.etag.substring(1..20).let { if (v.etag.length > 20) "$it..." else it } }
+                  td {
+                    +v.etag
+                      .substring(1..minOf(20, v.etag.length - 1))
+                      .let { if (v.etag.length > 21) "$it..." else it }
+                  }
                 }
               }
             }
