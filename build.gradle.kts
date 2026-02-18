@@ -2,15 +2,15 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 plugins {
-  java
-  application
-  `maven-publish`
   alias(libs.plugins.kotlin)
-  alias(libs.plugins.kotlinter)
   alias(libs.plugins.buildconfig)
-  alias(libs.plugins.versions)
-//  alias(libs.plugins.shadow)
-  alias(libs.plugins.ktor.plugin)
+  alias(libs.plugins.ktor)
+  alias(libs.plugins.pambrose.envvar)
+  alias(libs.plugins.pambrose.stable.versions)
+  alias(libs.plugins.pambrose.kotlinter)
+  alias(libs.plugins.pambrose.repos)
+  alias(libs.plugins.pambrose.snapshot)
+  alias(libs.plugins.pambrose.testing)
 }
 
 // Change version in Makefile and README.md as well
@@ -23,18 +23,6 @@ buildConfig {
   buildConfigField("String", "VERSION", "\"${project.version}\"")
   buildConfigField("String", "RELEASE_DATE", "\"${LocalDate.now().format(formatter)}\"")
   buildConfigField("long", "BUILD_TIME", "${System.currentTimeMillis()}L")
-}
-
-val mainName = "com.pambrose.srcref.Main"
-
-application {
-  mainClass = mainName
-}
-
-repositories {
-  google()
-  mavenCentral()
-  maven { url = uri("https://jitpack.io") }
 }
 
 dependencies {
@@ -72,56 +60,12 @@ java {
   withSourcesJar()
 }
 
-publishing {
-  publications {
-    create<MavenPublication>("mavenJava") {
-      groupId = "com.github.pambrose.srcref"
-      artifactId = "srcref"
-      version = "2.0.1"
-
-      from(components["java"])
-    }
-  }
+application {
+  mainClass = "com.pambrose.srcref.Main"
 }
 
-tasks.test {
-  useJUnitPlatform()
-
-  testLogging {
-    events("passed", "skipped", "failed", "standardOut", "standardError")
-    exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-    showStandardStreams = true
-  }
-}
-
-//tasks.register("stage") {
-//  dependsOn("uberjar", "build", "clean")
-//}
-
-tasks.named("build") {
-  mustRunAfter("clean")
-}
-
-//tasks.register<Jar>("sourcesJar") {
-//  dependsOn("classes")
-//  from(sourceSets.main.get().allSource)
-//  archiveClassifier.set("sources")
-//}
-
-kotlinter {
-  reporters = arrayOf("checkstyle", "plain")
-}
-
-fun isNonStable(version: String): Boolean {
-  // val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.uppercase().contains(it) }
-  val betaKeyword = listOf("-RC", "-BETA", "-M", "-SNAPSHOT").any { version.uppercase().contains(it) }
-  // val regex = "^[0-9,.v-]+(-r)?$".toRegex()
-  val isStable = !betaKeyword //(stableKeyword || regex.matches(version)) && !betaKeyword
-  return !isStable
-}
-
-tasks.withType<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask> {
-  rejectVersionIf {
-    isNonStable(candidate.version)
+ktor {
+  fatJar {
+    archiveFileName.set("srcref-all.jar")
   }
 }

@@ -10,21 +10,19 @@ stop:
 clean:
 	./gradlew clean
 
-compile: build
-
 build:	clean
-	./gradlew build -xtest
+	./gradlew build -x test
 
 run:
 	./gradlew run
 
+refresh:
+	./gradlew --refresh-dependencies
+
 tests:
 	./gradlew --rerun-tasks check
 
-uberjar:
-	./gradlew buildFatJar
-
-uber: uberjar
+uber: build
 	java -jar build/libs/srcref-all.jar
 
 run-docker:
@@ -41,7 +39,7 @@ docker-push:
 	docker buildx use buildx 2>/dev/null || docker buildx create --use --name=buildx
 	docker buildx build --platform ${PLATFORMS} --push -t ${IMAGE_NAME}:latest -t ${IMAGE_NAME}:${VERSION} .
 
-release: clean build uberjar build-docker docker-push
+release: clean build build-docker docker-push
 
 deploy:
 	./secrets/deploy-app.sh
