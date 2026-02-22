@@ -45,6 +45,12 @@ deploy:
 	./secrets/deploy-app.sh
 	say finished app deployment
 
+trigger-build:
+	curl -s "https://jitpack.io/com/github/pambrose/srcref/${VERSION}/build.log"
+
+view-build:
+	curl -s "https://jitpack.io/api/builds/com.github.pambrose/srcref/${VERSION}" | python3 -m json.tool
+
 dist:
 	./gradlew installDist
 
