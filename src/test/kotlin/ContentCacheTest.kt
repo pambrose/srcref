@@ -3,6 +3,7 @@ import com.pambrose.srcref.ContentCache.CacheContent
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import kotlin.concurrent.thread
 
 class ContentCacheTest :
   StringSpec(
@@ -89,6 +90,21 @@ class ContentCacheTest :
         cache["url"]!!.pageLines shouldBe listOf("new")
         cache["url"]!!.etag shouldBe "e2"
         cache.size shouldBe 1
+      }
+
+      "CacheContent markReferenced is visible across threads" {
+        val content = CacheContent(pageLines = listOf("line1"), etag = "abc", contentLength = 10)
+        Thread.sleep(50)
+        // After sleeping, lastReferenced should be at least 50ms
+        val elapsedBeforeUpdate = content.lastReferenced
+        val t =
+          thread {
+            content.markReferenced()
+          }
+        t.join()
+        content.hits shouldBe 1
+        // After markReferenced, lastReferenced should be much smaller (more recent)
+        (content.lastReferenced < elapsedBeforeUpdate) shouldBe true
       }
     },
   )

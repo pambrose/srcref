@@ -26,6 +26,7 @@ import org.apache.commons.text.StringEscapeUtils.escapeHtml4
 object Urls {
   internal const val MSG = "msg"
   internal const val RAW_PREFIX = "https://raw.githubusercontent.com"
+  private const val REGEX_TIMEOUT_NANOS = 5_000_000_000L // 5 seconds
 
   internal fun Map<String, String?>.toQueryParams(ignoreEndParams: Boolean) =
     filter { if (ignoreEndParams) it.key !in QueryParams.optionalParams else true }
@@ -130,11 +131,18 @@ object Urls {
     desc: String = "",
   ): Int =
     runCatching {
+      require(occurrence >= 1) { "Occurrence must be >= 1, got: $occurrence" }
       val regex = Regex(pattern)
+      val deadline = System.nanoTime() + REGEX_TIMEOUT_NANOS
       (
         (if (topDown) lines else lines.asReversed())
           .asSequence()
-          .mapIndexed { index, s -> (if (topDown) index else (lines.size - index - 1)) to s.contains(regex) }
+          .mapIndexed { index, s ->
+            if (System.nanoTime() > deadline) {
+              throw IllegalArgumentException("Regex matching timed out for $desc regex: \"$pattern\"")
+            }
+            (if (topDown) index else (lines.size - index - 1)) to s.contains(regex)
+          }
           .filter { it.second }
           .drop(occurrence - 1)
           .first().first

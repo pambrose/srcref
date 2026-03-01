@@ -1,0 +1,76 @@
+# srcref
+
+> Dynamic GitHub permalinks using regex patterns instead of fixed line numbers.
+
+srcref is a web service that generates GitHub permalinks where the target lines are
+determined dynamically by regex at click time. Instead of hardcoding line numbers
+that break when code changes, srcref finds lines matching your regex patterns and
+redirects to the correct GitHub URL. Live at https://www.srcref.com.
+
+## How It Works
+
+1. You create a srcref URL specifying a GitHub file and regex patterns for the begin/end lines.
+2. When someone clicks the URL, srcref fetches the current file content from GitHub.
+3. It searches the file for lines matching your regex patterns.
+4. It constructs a GitHub permalink with the correct line numbers and redirects (302) to it.
+
+## URL Parameters
+
+All parameters are passed as query strings to `/github`:
+
+| Parameter  | Description                          | Required |
+|------------|--------------------------------------|----------|
+| `account`  | GitHub account/org                   | Yes      |
+| `repo`     | Repository name                      | Yes      |
+| `branch`   | Branch name (default: master)        | Yes      |
+| `path`     | File path within repo                | Yes      |
+| `bregex`   | Begin line regex pattern             | Yes      |
+| `boccur`   | Begin occurrence (Nth match, default: 1) | Yes  |
+| `boffset`  | Begin line offset (default: 0)       | Yes      |
+| `btopd`    | Begin search top-down (default: true)| Yes      |
+| `eregex`   | End line regex pattern               | No       |
+| `eoccur`   | End occurrence (Nth match, default: 1) | No     |
+| `eoffset`  | End line offset (default: 0)         | No       |
+| `etopd`    | End search top-down (default: true)  | No       |
+
+If end parameters are omitted, only a single line is highlighted.
+
+## Endpoints
+
+- `/edit` - Interactive form for creating srcref URLs
+- `/github?<params>` - Redirect to the computed GitHub permalink
+- `/github?<params>&edit` - Pre-fill the edit form with existing params
+- `/what` - Explanation of what srcref is and how it works
+- `/ping` - Health check (returns "pong")
+- `/version` - Version and build info
+- `/cache` - Cache status
+
+## API Usage
+
+srcref is available as a JitPack dependency for programmatic use:
+
+```kotlin
+val url = Api.srcrefUrl(
+  account = "owner",
+  repo = "repo",
+  branch = "main",
+  path = "src/File.kt",
+  bregex = "fun main",
+)
+```
+
+## Example
+
+To highlight lines between `install\(CallLogging\)` and 6 lines past `install\(Compression\)`
+in a file:
+
+```
+https://www.srcref.com/github?account=pambrose&repo=srcref&branch=master&path=src/main/kotlin/com/pambrose/srcref/Main.kt&bregex=install%5C%28CallLogging%5C%29&boccur=1&boffset=0&btopd=true&eregex=install%5C%28Compression%5C%29&eoccur=1&eoffset=6&etopd=true
+```
+
+Regex values use Java's `java.util.regex.Pattern` syntax. Characters like `()`, `[]`,
+and `{}` need escaping with backslashes when you want their literal values.
+
+## Source Code
+
+GitHub: https://github.com/pambrose/srcref

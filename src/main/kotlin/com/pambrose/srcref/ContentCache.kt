@@ -13,15 +13,6 @@ import io.ktor.client.request.get
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.collections.List
-import kotlin.collections.Map
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.forEach
-import kotlin.collections.set
-import kotlin.collections.sortedBy
-import kotlin.collections.sortedByDescending
-import kotlin.collections.take
 import kotlin.concurrent.atomics.AtomicInt
 import kotlin.concurrent.atomics.plusAssign
 import kotlin.concurrent.thread
@@ -40,7 +31,7 @@ internal class ContentCache {
     internal val etag: String,
     internal val contentLength: Int,
     private val references: AtomicInt = AtomicInt(0),
-    private var referenced: TimeMark = Monotonic.markNow(),
+    @Volatile private var referenced: TimeMark = Monotonic.markNow(),
     private val created: TimeMark = Monotonic.markNow(),
   ) {
     val age: Duration get() = created.elapsedNow()
@@ -76,7 +67,7 @@ internal class ContentCache {
     init {
       logger.info { "Starting cache cleanup thread" }
 
-      thread(name = "Cache Cleanup") {
+      thread(name = "Cache Cleanup", isDaemon = true) {
         while (true) {
           runCatching {
             val overflow = contentCache.size - contentCache.maxCacheSize
@@ -104,20 +95,21 @@ internal class ContentCache {
         startsWith("font/") ||
         startsWith("audio/")
 
+    private val httpClient =
+      HttpClient(CIO) {
+        install(HttpRequestRetry) {
+          retryOnServerErrors(maxRetries = 3)
+          exponentialDelay()
+        }
+      }
+
     internal suspend fun fetchContent(url: String): List<String> {
       val cacheItem = contentCache[url]
       val response =
-        HttpClient(CIO) {
-          install(HttpRequestRetry) {
-            retryOnServerErrors(maxRetries = 3)
-            exponentialDelay()
-          }
-        }.let { client ->
-          client.get(url) {
-            if (cacheItem.isNotNull() && cacheItem.etag.isNotBlank()) {
-              logger.info { "Setting ETag: ${cacheItem.etag} for url: ${url.removePrefix(RAW_PREFIX)}" }
-              headers.append(HttpHeaders.IfNoneMatch, cacheItem.etag)
-            }
+        httpClient.get(url) {
+          if (cacheItem.isNotNull() && cacheItem.etag.isNotBlank()) {
+            logger.info { "Setting ETag: ${cacheItem.etag} for url: ${url.removePrefix(RAW_PREFIX)}" }
+            headers.append(HttpHeaders.IfNoneMatch, cacheItem.etag)
           }
         }
 

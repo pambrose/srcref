@@ -1,4 +1,4 @@
-VERSION=2.0.0
+VERSION=$(shell grep '^version' build.gradle.kts | head -1 | sed 's/.*"\(.*\)"/\1/')
 
 default: versioncheck
 
@@ -10,21 +10,19 @@ stop:
 clean:
 	./gradlew clean
 
-compile: build
-
 build:	clean
-	./gradlew build -xtest
+	./gradlew build -x test
 
 run:
 	./gradlew run
 
+refresh:
+	./gradlew --refresh-dependencies
+
 tests:
 	./gradlew --rerun-tasks check
 
-uberjar:
-	./gradlew buildFatJar
-
-uber: uberjar
+uber: build
 	java -jar build/libs/srcref-all.jar
 
 run-docker:
@@ -41,11 +39,17 @@ docker-push:
 	docker buildx use buildx 2>/dev/null || docker buildx create --use --name=buildx
 	docker buildx build --platform ${PLATFORMS} --push -t ${IMAGE_NAME}:latest -t ${IMAGE_NAME}:${VERSION} .
 
-release: clean build uberjar build-docker docker-push
+release: clean build build-docker docker-push
 
 deploy:
 	./secrets/deploy-app.sh
 	say finished app deployment
+
+trigger-build:
+	curl -s "https://jitpack.io/com/github/pambrose/srcref/${VERSION}/build.log"
+
+view-build:
+	curl -s "https://jitpack.io/api/builds/com.github.pambrose/srcref/${VERSION}" | python3 -m json.tool
 
 dist:
 	./gradlew installDist
@@ -57,7 +61,7 @@ purge:
 	 heroku builds:cache:purge -a srcref --confirm srcref
 
 versioncheck:
-	./gradlew dependencyUpdates
+	./gradlew dependencyUpdates --no-configuration-cache
 
 upgrade-wrapper:
 	./gradlew wrapper --gradle-version=9.2.0 --distribution-type=bin

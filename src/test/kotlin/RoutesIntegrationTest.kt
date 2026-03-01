@@ -2,6 +2,7 @@ import com.pambrose.srcref.module
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldNotContain
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
@@ -132,14 +133,17 @@ class RoutesIntegrationTest :
         }
       }
 
-      "GET /robots.txt returns robot rules" {
+      "GET /robots.txt returns robot rules with correct paths" {
         testApplication {
           application { module() }
           client.get("/robots.txt").apply {
             status shouldBe HttpStatusCode.OK
             val body = bodyAsText()
             body shouldContain "User-agent"
-            body shouldContain "Disallow"
+            body shouldContain "Disallow: /problem"
+            body shouldContain "Disallow: /cache"
+            body shouldContain "Disallow: /threaddump"
+            body shouldNotContain "/error"
           }
         }
       }

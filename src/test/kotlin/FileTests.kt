@@ -113,5 +113,19 @@ class FileTests :
         // bottom-up: first match of "ccc" is at original index 2, line = 2 + (-1) + 1 = 2
         calcLineNumber(input, "ccc", 1, -1, false) shouldBe 2
       }
+
+      "calcLineNumber with occurrence 0 throws" {
+        val input = listOf("aaa", "bbb", "ccc")
+        shouldThrow<IllegalArgumentException> {
+          calcLineNumber(input, "aaa", 0, 0, true)
+        }.message shouldContain "Occurrence must be >= 1"
+      }
+
+      "calcLineNumber with negative occurrence throws" {
+        val input = listOf("aaa", "bbb", "ccc")
+        shouldThrow<IllegalArgumentException> {
+          calcLineNumber(input, "aaa", -1, 0, true)
+        }.message shouldContain "Occurrence must be >= 1"
+      }
     },
   )
