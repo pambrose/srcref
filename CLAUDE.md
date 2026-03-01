@@ -98,8 +98,8 @@ Tests in `src/test/kotlin/` use Kotest `StringSpec` with JUnit5 runner:
 
 ## Version Management
 
-Version is defined in `build.gradle.kts` (`version = "2.0.1"`). Must also be updated in `Makefile` (`VERSION`) and
-`README.md` when changing.
+Version is defined in `build.gradle.kts` (`version = "2.0.1"`). The Makefile `VERSION` is derived automatically from
+`build.gradle.kts`. `README.md` must still be updated manually when changing the version.
 
 ## Dependencies
 
