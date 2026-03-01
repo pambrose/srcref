@@ -3,6 +3,7 @@ build
 .gradle
 secrets
 .kotlin
+.DS_Store
 
 ### Kotlin template
 # Compiled class file
