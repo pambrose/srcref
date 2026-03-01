@@ -61,7 +61,7 @@ purge:
 	 heroku builds:cache:purge -a srcref --confirm srcref
 
 versioncheck:
-	./gradlew dependencyUpdates
+	./gradlew dependencyUpdates --no-configuration-cache
 
 upgrade-wrapper:
 	./gradlew wrapper --gradle-version=9.2.0 --distribution-type=bin

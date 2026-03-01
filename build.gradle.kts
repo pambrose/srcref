@@ -8,7 +8,6 @@ plugins {
   alias(libs.plugins.pambrose.envvar)
   alias(libs.plugins.pambrose.stable.versions)
   alias(libs.plugins.pambrose.kotlinter)
-  alias(libs.plugins.pambrose.repos)
   alias(libs.plugins.pambrose.snapshot)
   alias(libs.plugins.pambrose.testing)
 }
@@ -31,7 +30,7 @@ dependencies {
   implementation(platform(libs.ktor.bom))
   implementation(libs.bundles.ktor)
 
-  implementation(platform(libs.utils.bom))
+//  implementation(platform(libs.utils.bom))
   implementation(libs.bundles.common.utils)
 
   implementation(platform(libs.dropwizard.bom))
