@@ -2,14 +2,12 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 plugins {
-  `java-library`
-  `maven-publish`
-
   alias(libs.plugins.kotlin)
   alias(libs.plugins.buildconfig)
   alias(libs.plugins.ktor)
   alias(libs.plugins.pambrose.envvar)
   alias(libs.plugins.pambrose.stable.versions)
+  alias(libs.plugins.pambrose.publishing)
   alias(libs.plugins.pambrose.kotlinter)
   alias(libs.plugins.pambrose.snapshot)
   alias(libs.plugins.pambrose.testing)
@@ -61,6 +59,14 @@ kotlin {
 java {
   withSourcesJar()
 }
+
+//publishing {
+//  publications {
+//    create<MavenPublication>("maven") {
+//      from(components["java"])
+//    }
+//  }
+//}
 
 application {
   mainClass = "com.pambrose.srcref.Main"
