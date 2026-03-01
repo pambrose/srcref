@@ -2,6 +2,9 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 plugins {
+  `java-library`
+  `maven-publish`
+
   alias(libs.plugins.kotlin)
   alias(libs.plugins.buildconfig)
   alias(libs.plugins.ktor)
@@ -13,7 +16,7 @@ plugins {
 }
 
 // Change version in Makefile and README.md as well
-version = "2.0.1"
+version = "2.0.2"
 group = "com.github.pambrose.srcref"
 val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
 
