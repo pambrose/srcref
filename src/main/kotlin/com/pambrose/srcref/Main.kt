@@ -3,7 +3,7 @@ package com.pambrose.srcref
 import com.github.pambrose.common.util.Version
 import com.github.pambrose.common.util.Version.Companion.versionDesc
 import com.github.pambrose.common.util.getBanner
-import com.github.pambrose.srcref.srcref.BuildConfig
+import com.github.pambrose.srcref.BuildConfig
 import com.pambrose.srcref.Endpoints.PING
 import com.pambrose.srcref.Main.excludedEndpoints
 import com.pambrose.srcref.Routes.configureRoutes

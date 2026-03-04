@@ -1,7 +1,7 @@
 package com.pambrose.srcref.pages
 
-import com.github.pambrose.srcref.srcref.BuildConfig.RELEASE_DATE
-import com.github.pambrose.srcref.srcref.BuildConfig.VERSION
+import com.github.pambrose.srcref.BuildConfig.RELEASE_DATE
+import com.github.pambrose.srcref.BuildConfig.VERSION
 import io.ktor.server.html.respondHtmlTemplate
 import io.ktor.server.routing.RoutingContext
 import kotlinx.html.div

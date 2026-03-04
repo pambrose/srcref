@@ -1,0 +1,61 @@
+# srcref
+
+> srcref is a web service that generates dynamic GitHub permalinks using regex patterns.
+> Instead of linking to fixed line numbers that break when code changes, srcref uses regex
+> to find the target lines dynamically. Live at https://www.srcref.com.
+
+## How It Works
+
+srcref accepts query parameters specifying a GitHub file and regex patterns, then:
+
+1. Fetches the file content (with ETag-based caching)
+2. Searches for regex matches to determine line numbers
+3. Redirects the browser to the corresponding GitHub permalink
+
+Supports begin/end ranges, occurrence selection (Nth match), top-down/bottom-up search direction, and line offsets.
+
+## Query Parameters
+
+- `account`: GitHub account or organization name (required)
+- `repo`: Repository name (required)
+- `branch`: Branch name (default: "master")
+- `path`: File path in the repository (required)
+- `bregex`: Regex for the beginning line match (required)
+- `boccur`: Occurrence number for beginning match (default: 1)
+- `boffset`: Line offset from beginning match (default: 0)
+- `btopd`: Search direction for beginning match, true=top-down (default: true)
+- `eregex`: Regex for the ending line match (optional, omit for single-line highlight)
+- `eoccur`: Occurrence number for ending match (default: 1)
+- `eoffset`: Line offset from ending match (default: 0)
+- `etopd`: Search direction for ending match (default: true)
+
+## Endpoints
+
+- [Edit Form](https://www.srcref.com/edit): Main form UI for creating srcref URLs
+- [GitHub Redirect](https://www.srcref.com/github): Generates and redirects to a GitHub permalink (requires query parameters)
+- [About](https://www.srcref.com/what): Information about srcref
+- [Health Check](https://www.srcref.com/ping): Returns "pong"
+
+## Programmatic Usage
+
+Available as a JitPack dependency for Kotlin/JVM projects:
+
+```kotlin
+val permalink = Api.srcrefUrl(
+    account = "pambrose",
+    repo = "srcref",
+    path = "src/main/kotlin/Main.kt",
+    beginRegex = "fun main",
+    endRegex = "embeddedServer"
+)
+```
+
+## Documentation
+
+- [GitHub Repository](https://github.com/pambrose/srcref): Source code and documentation
+- [JitPack](https://jitpack.io/#pambrose/srcref): Dependency artifacts for programmatic usage
+
+## Optional
+
+- [Cache Status](https://www.srcref.com/cache): Current cache statistics
+- [Version Info](https://www.srcref.com/version): Build version and release date

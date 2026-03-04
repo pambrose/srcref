@@ -33,7 +33,8 @@ Run a single named test (Kotest string spec name):
 ./gradlew test --tests "FileTests.calcLineNumber top-down and bottom-up"
 ```
 
-Makefile shortcuts: `make build`, `make tests`, `make run`, `make uber`, `make release`.
+Makefile shortcuts: `make build`, `make tests`, `make run`, `make uber`, `make release`, `make deploy`.
+Default `make` target runs `./gradlew dependencyUpdates` to check for outdated dependencies.
 
 ## Architecture
 
@@ -72,6 +73,7 @@ Core modules in `src/main/kotlin/com/pambrose/srcref/`:
 | `/github?edit` | Edit an existing srcref URL           |
 | `/problem`     | Error display with message            |
 | `/ping`        | Health check (`pong`)                 |
+| `/what`        | About srcref                          |
 | `/cache`       | Cache status table                    |
 | `/version`     | Version and build info                |
 | `/threaddump`  | JVM thread dump (Dropwizard)          |
@@ -98,8 +100,9 @@ Tests in `src/test/kotlin/` use Kotest `StringSpec` with JUnit5 runner:
 
 ## Version Management
 
-Version is defined in `build.gradle.kts` (`version = "2.0.2"`). The Makefile `VERSION` is derived automatically from
-`build.gradle.kts`. `README.md` must still be updated manually when changing the version.
+Version is defined in `build.gradle.kts` (`version = "2.0.3"`). The Makefile `VERSION` is derived automatically from
+`build.gradle.kts`. `README.md` must still be updated manually when changing the version. (Note: the comment in
+`build.gradle.kts` saying to update the Makefile is outdated — only README.md needs a manual update.)
 
 ## Dependencies
 
