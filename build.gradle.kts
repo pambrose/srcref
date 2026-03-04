@@ -14,8 +14,8 @@ plugins {
 }
 
 // Change version in Makefile and README.md as well
-version = "2.0.2"
-group = "com.github.pambrose.srcref"
+version = "2.0.3"
+group = "com.github.pambrose"
 val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
 
 buildConfig {
