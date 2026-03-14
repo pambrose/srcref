@@ -13,8 +13,8 @@ plugins {
   alias(libs.plugins.pambrose.testing)
 }
 
-// Change version in Makefile and README.md as well
-version = "2.0.3"
+// Change version in README.md as well
+version = "2.0.4"
 group = "com.github.pambrose"
 val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
 
