@@ -16,7 +16,6 @@ import com.pambrose.srcref.QueryParams.END_TOPDOWN
 import com.pambrose.srcref.QueryParams.PATH
 import com.pambrose.srcref.QueryParams.REPO
 import com.pambrose.srcref.Urls
-import com.pambrose.srcref.pages.Common.SrcRefDslTag
 import com.pambrose.srcref.pages.Common.URL_PREFIX
 import com.pambrose.srcref.pages.Common.WIDTH_VAL
 import com.pambrose.srcref.pages.Common.hasValues
@@ -309,7 +308,6 @@ object Edit {
     }
   }
 
-  @SrcRefDslTag
   private inline fun TABLE.formElement(
     label: String,
     crossinline block: TD.() -> Unit,
@@ -320,7 +318,6 @@ object Edit {
     }
   }
 
-  @SrcRefDslTag
   internal inline fun TABLE.formElement(
     label: String,
     tooltip: String,
@@ -331,7 +328,6 @@ object Edit {
     }
   }
 
-  @SrcRefDslTag
   private inline fun FlowOrPhrasingContent.withToolTip(
     msg: String,
     crossinline block: FlowOrPhrasingContent.() -> Unit,

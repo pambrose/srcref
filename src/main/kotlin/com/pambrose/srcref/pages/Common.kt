@@ -10,8 +10,5 @@ object Common {
 
   internal fun HTMLTag.rawHtml(html: String) = unsafe { raw(html) }
 
-  @DslMarker
-  annotation class SrcRefDslTag
-
   internal fun Map<String, String?>.hasValues() = values.asSequence().filter { it?.isNotBlank() == true }.any()
 }
