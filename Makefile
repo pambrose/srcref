@@ -45,10 +45,10 @@ deploy:
 	./secrets/deploy-app.sh
 	say finished app deployment
 
-trigger-build:
+trigger-jitpack:
 	curl -s "https://jitpack.io/com/github/pambrose/srcref/${VERSION}/build.log"
 
-view-build:
+view-jitpack:
 	curl -s "https://jitpack.io/api/builds/com.github.pambrose/srcref/${VERSION}" | python3 -m json.tool
 
 dist:

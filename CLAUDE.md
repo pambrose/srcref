@@ -100,7 +100,7 @@ Tests in `src/test/kotlin/` use Kotest `StringSpec` with JUnit5 runner:
 
 ## Version Management
 
-Version is defined in `build.gradle.kts` (`version = "2.0.4"`). The Makefile `VERSION` is derived automatically from
+Version is defined in `build.gradle.kts` (`version = "2.0.5"`). The Makefile `VERSION` is derived automatically from
 `build.gradle.kts`. `README.md` must still be updated manually when changing the version. (Note: the comment in
 `build.gradle.kts` saying to update the Makefile is outdated — only README.md needs a manual update.)
 
