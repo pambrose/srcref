@@ -47,6 +47,9 @@ deploy:
 	./secrets/deploy-app.sh
 	say finished app deployment
 
+do-log:
+	./secrets/app-log.sh
+
 trigger-jitpack:
 	until curl -s "$(JITPACK_BUILD_LOG)" | grep -qv "not found"; do \
 		echo "Waiting for JitPack..."; \
