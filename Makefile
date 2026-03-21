@@ -1,4 +1,6 @@
 VERSION=$(shell grep '^version =' build.gradle.kts | head -1 | sed 's/.*"\(.*\)"/\1/')
+JITPACK_BUILD_LOG := https://jitpack.io/com/github/pambrose/srcref/$(VERSION)/build.log
+JITPACK_BUILD_API := https://jitpack.io/api/builds/com.github.pambrose/srcref/$(VERSION)
 
 default: versioncheck
 
@@ -46,10 +48,15 @@ deploy:
 	say finished app deployment
 
 trigger-jitpack:
-	curl -s "https://jitpack.io/com/github/pambrose/srcref/${VERSION}/build.log"
+	until curl -s "$(JITPACK_BUILD_LOG)" | grep -qv "not found"; do \
+		echo "Waiting for JitPack..."; \
+		sleep 10; \
+	done
+	echo "JitPack build triggered for version ${VERSION}"
 
 view-jitpack:
-	curl -s "https://jitpack.io/api/builds/com.github.pambrose/srcref/${VERSION}" | python3 -m json.tool
+	curl -s "$(JITPACK_BUILD_LOG)"
+	curl -s "$(JITPACK_BUILD_API)" | jq
 
 dist:
 	./gradlew installDist
@@ -64,4 +71,4 @@ versioncheck:
 	./gradlew dependencyUpdates --no-configuration-cache
 
 upgrade-wrapper:
-	./gradlew wrapper --gradle-version=9.4.0 --distribution-type=bin
+	./gradlew wrapper --gradle-version=9.4.1 --distribution-type=bin
