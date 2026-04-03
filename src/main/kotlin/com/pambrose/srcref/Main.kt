@@ -3,7 +3,6 @@ package com.pambrose.srcref
 import com.github.pambrose.common.util.Version
 import com.github.pambrose.common.util.Version.Companion.versionDesc
 import com.github.pambrose.common.util.getBanner
-import com.github.pambrose.srcref.BuildConfig
 import com.pambrose.srcref.Endpoints.PING
 import com.pambrose.srcref.Main.excludedEndpoints
 import com.pambrose.srcref.Routes.configureRoutes
@@ -24,6 +23,12 @@ import io.ktor.server.request.path
 import io.ktor.server.response.respondText
 import org.slf4j.event.Level
 
+/**
+ * Application entry point for the srcref web service.
+ *
+ * Starts a Ktor CIO embedded server, installs middleware (logging, headers, status pages,
+ * compression), and delegates to [Routes.configureRoutes] for endpoint registration.
+ */
 @Version(
   version = BuildConfig.VERSION,
   releaseDate = BuildConfig.RELEASE_DATE,
@@ -48,8 +53,18 @@ object Main {
   }
 }
 
+/** Returns `true` if this string starts with any of the given [prefixes]. */
 fun String.startsWithList(prefixes: Iterable<String>) = prefixes.any { startsWith(it) }
 
+/**
+ * Ktor application module that installs middleware and configures routes.
+ *
+ * Middleware installed:
+ * - [CallLogging] — request logging (excludes health checks and common bot probes).
+ * - [DefaultHeaders] — standard HTTP response headers.
+ * - [StatusPages] — custom 404 handling.
+ * - [Compression] — gzip and deflate response compression.
+ */
 fun Application.module() {
   install(CallLogging) {
     level = Level.INFO

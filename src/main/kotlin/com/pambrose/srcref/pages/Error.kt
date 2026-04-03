@@ -12,7 +12,12 @@ import kotlinx.html.onClick
 import kotlinx.html.p
 import kotlinx.html.textArea
 
+/** Error page displayed when srcref URL resolution fails. */
 object Error {
+  /**
+   * Renders an error page showing the exception [msg] and the original [params],
+   * with a button to return to the edit form with the same parameter values.
+   */
   internal suspend fun RoutingContext.displayException(
     params: Map<String, String?>,
     msg: String,

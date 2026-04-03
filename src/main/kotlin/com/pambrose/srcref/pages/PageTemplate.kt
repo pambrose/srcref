@@ -15,6 +15,14 @@ import kotlinx.html.link
 import kotlinx.html.meta
 import kotlinx.html.title
 
+/**
+ * Base HTML page template for all srcref pages.
+ *
+ * Provides a consistent layout with viewport meta tags, favicon, CSS, a GitHub source link
+ * in the top-right corner, and placeholders for page-specific [script] and [content].
+ *
+ * @param titleTxt the HTML `<title>` text for the page.
+ */
 class PageTemplate(
   val titleTxt: String,
 ) : Template<HTML> {

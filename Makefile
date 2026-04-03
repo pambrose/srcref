@@ -45,11 +45,8 @@ deploy:
 	./secrets/deploy-app.sh
 	say finished app deployment
 
-trigger-build:
-	curl -s "https://jitpack.io/com/github/pambrose/srcref/${VERSION}/build.log"
-
-view-build:
-	curl -s "https://jitpack.io/api/builds/com.github.pambrose/srcref/${VERSION}" | python3 -m json.tool
+do-log:
+	./secrets/app-log.sh
 
 dist:
 	./gradlew installDist
@@ -63,5 +60,21 @@ purge:
 versioncheck:
 	./gradlew dependencyUpdates --no-configuration-cache
 
+kdocs:
+	./gradlew dokkaGeneratePublicationHtml
+
+clean-docs:
+	rm -rf website/agentmail4k/site
+	rm -rf website/agentmail4k/.cache
+
+site: clean-docs
+	cd website/srcref && uv run zensical serve
+
+publish-local:
+	./gradlew publishToMavenLocal
+
+publish-maven-central:
+	./gradlew publishAndReleaseToMavenCentral
+
 upgrade-wrapper:
-	./gradlew wrapper --gradle-version=9.4.0 --distribution-type=bin
+	./gradlew wrapper --gradle-version=9.4.1 --distribution-type=bin

@@ -12,7 +12,9 @@ import kotlinx.html.p
 import kotlinx.html.pre
 import kotlinx.html.span
 
+/** "What is srcref?" explainer page describing the problem srcref solves and how it works. */
 object What {
+  /** Renders the explanatory page with examples of srcref URL usage. */
   internal suspend fun RoutingContext.displayWhat() {
     call.respondHtmlTemplate(PageTemplate("What is srcref?")) {
       content {

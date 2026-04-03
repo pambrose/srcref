@@ -1,0 +1,44 @@
+name: Documentation
+on:
+  push:
+    branches:
+      - master
+      - main
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/configure-pages@v5
+      - uses: actions/checkout@v5
+
+      # Build kdocs with Dokka
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+      - run: ./gradlew dokkaGeneratePublicationHtml
+
+      # Build Zensical site
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+      - run: pip install zensical
+      - run: zensical build --clean
+        working-directory: website/srcref
+
+      # Copy kdocs into the site output
+      - run: cp -r build/dokka/html website/srcref/site/kdocs
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: website/srcref/site
+      - uses: actions/deploy-pages@v4
+        id: deployment

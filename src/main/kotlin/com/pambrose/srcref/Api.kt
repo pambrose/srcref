@@ -3,8 +3,34 @@ package com.pambrose.srcref
 import com.pambrose.srcref.QueryParams.*
 import com.pambrose.srcref.Urls.srcrefToGithubUrl
 
+/**
+ * Public API for programmatically generating srcref URLs.
+ *
+ * This object is intended for use as a library dependency (e.g., via Maven Central),
+ * allowing consumers to generate srcref URLs from their own code.
+ */
 @Suppress("unused")
 object Api {
+  /**
+   * Generates a srcref URL that, when visited, dynamically resolves to a GitHub permalink
+   * with the appropriate line numbers based on the current file content.
+   *
+   * @param account GitHub username or organization name.
+   * @param repo GitHub repository name.
+   * @param path file path within the repository.
+   * @param beginRegex regex pattern to match the beginning line.
+   * @param beginOccurrence which occurrence of the begin regex to use (1-based).
+   * @param beginOffset number of lines to offset from the begin match (positive = below, negative = above).
+   * @param beginTopDown whether to search top-down (`true`) or bottom-up (`false`) for the begin match.
+   * @param endRegex optional regex pattern to match the ending line. Empty string means no end line.
+   * @param endOccurrence which occurrence of the end regex to use (1-based).
+   * @param endOffset number of lines to offset from the end match.
+   * @param endTopDown whether to search top-down or bottom-up for the end match.
+   * @param prefix URL prefix for the srcref service.
+   * @param branch GitHub branch name.
+   * @param escapeHtml4 whether to HTML-escape the resulting URL for safe embedding in HTML.
+   * @return the generated srcref URL string.
+   */
   fun srcrefUrl(
     account: String,
     repo: String,

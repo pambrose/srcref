@@ -2,17 +2,19 @@
 # Plugins
 kotlin = "2.3.20"
 buildconfig = "6.0.9"
+gradle-plugins = "1.0.11"
+dokka = "2.2.0"
+maven-publish = "0.36.0"
 
 # Libraries
 coroutines = "1.10.2"
 dropwizard = "4.2.38"
-gradle-plugins = "1.0.10"
-kotest = "6.1.7"
-ktor = "3.4.1"
+kotest = "6.1.10"
+ktor = "3.4.2"
 logback = "1.5.32"
 logging = "8.0.01"
 text = "1.15.0"
-utils = "2.6.2"
+utils = "2.6.4"
 
 [libraries]
 # Kotlin
@@ -49,9 +51,10 @@ ktor-server-test-host = { module = "io.ktor:ktor-server-test-host" }
 buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }
 pambrose-envvar = { id = "com.pambrose.envvar", version.ref = "gradle-plugins" }
 pambrose-stable-versions = { id = "com.pambrose.stable-versions", version.ref = "gradle-plugins" }
-pambrose-publishing = { id = "com.pambrose.publishing", version.ref = "gradle-plugins" }
 pambrose-kotlinter = { id = "com.pambrose.kotlinter", version.ref = "gradle-plugins" }
 pambrose-snapshot = { id = "com.pambrose.snapshot", version.ref = "gradle-plugins" }
 pambrose-testing = { id = "com.pambrose.testing", version.ref = "gradle-plugins" }
