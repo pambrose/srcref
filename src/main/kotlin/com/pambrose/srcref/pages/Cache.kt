@@ -14,7 +14,9 @@ import kotlinx.html.td
 import kotlinx.html.th
 import kotlinx.html.tr
 
+/** Cache status page showing all cached file entries with their access statistics. */
 object Cache {
+  /** Renders a table of all cached entries sorted by last access time. */
   internal suspend fun RoutingContext.displayCache() {
     call.respondHtmlTemplate(PageTemplate("srcref Content Cache")) {
       content {

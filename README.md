@@ -1,9 +1,9 @@
 # srcref - Dynamic Line-Specific GitHub Permalinks
 
-[![](https://jitpack.io/v/pambrose/srcref.svg)](https://jitpack.io/#pambrose/srcref)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/pambrose/srcref)
-[![Kotlin version](https://img.shields.io/badge/kotlin-2.2.0-red?logo=kotlin)](http://kotlinlang.org)
-[![License](https://img.shields.io/github/license/pambrose/srcref)](https://github.com/pambrose/srcref/blob/master/LICENSE.md)
+[![Kotlin version](https://img.shields.io/badge/kotlin-2.2.20-red?logo=kotlin)](http://kotlinlang.org)
+[![Maven Central](https://img.shields.io/maven-central/v/com.pambrose/srcref)](https://central.sonatype.com/artifact/com.pambrose/srcref)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 ## Overview
 
@@ -108,7 +108,7 @@ allprojects {
 
 ```groovy
 dependencies {
-   implementation 'com.github.pambrose:srcref:2.0.5'
+   implementation 'com.pambrose:srcref:2.0.5'
 }
 ```
 
@@ -131,7 +131,7 @@ dependencies {
 ```xml
 
 <dependency>
-   <groupId>com.github.pambrose</groupId>
+   <groupId>com.pambrose</groupId>
    <artifactId>srcref</artifactId>
    <version>2.0.5</version>
 </dependency>
@@ -343,7 +343,7 @@ make tests
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the Apache License 2.0 - see the [LICENSE.md](LICENSE.md) file for details.
 
 ## Acknowledgments
 

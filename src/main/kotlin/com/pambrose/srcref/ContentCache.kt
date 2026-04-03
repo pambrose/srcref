@@ -21,11 +21,25 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.TimeMark
 import kotlin.time.TimeSource.Monotonic
 
+/**
+ * In-memory LRU cache for GitHub raw file content, keyed by raw URL.
+ *
+ * Supports ETag-based conditional requests (HTTP 304) to avoid re-downloading unchanged files.
+ * A background daemon thread evicts the least-recently-referenced entries every 5 minutes
+ * when the cache exceeds [MAX_CACHE_SIZE][System.getenv].
+ */
 internal class ContentCache {
   private val contentMap: ConcurrentHashMap<String, CacheContent> = ConcurrentHashMap()
   private val maxCacheSize = System.getenv("MAX_CACHE_SIZE")?.toInt() ?: 2048
   private val maxLength = System.getenv("MAX_LENGTH")?.toInt() ?: (5 * 1048576)
 
+  /**
+   * A cached file entry containing the file's lines, its ETag, and access statistics.
+   *
+   * @property pageLines the lines of the cached file content.
+   * @property etag the HTTP ETag for conditional re-fetching.
+   * @property contentLength the Content-Length of the original response.
+   */
   class CacheContent(
     internal val pageLines: List<String>,
     internal val etag: String,
@@ -103,6 +117,12 @@ internal class ContentCache {
         }
       }
 
+    /**
+     * Fetches the file content at [url], using cached content with ETag validation when available.
+     *
+     * Returns the file as a list of lines. Throws [IllegalArgumentException] if the content type
+     * is binary or the content length exceeds the configured maximum.
+     */
     internal suspend fun fetchContent(url: String): List<String> {
       val cacheItem = contentCache[url]
       val response =

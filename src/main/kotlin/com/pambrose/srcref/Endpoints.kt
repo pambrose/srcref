@@ -1,5 +1,10 @@
 package com.pambrose.srcref
 
+/**
+ * Enumeration of all HTTP endpoints served by srcref.
+ *
+ * Each entry's [path] is the lowercase version of its name, used as the URL path segment.
+ */
 enum class Endpoints {
   EDIT,
   GITHUB,

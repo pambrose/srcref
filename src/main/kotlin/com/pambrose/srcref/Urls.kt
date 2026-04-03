@@ -23,11 +23,22 @@ import java.util.regex.PatternSyntaxException
 import kotlin.time.measureTimedValue
 import org.apache.commons.text.StringEscapeUtils.escapeHtml4
 
+/**
+ * Core URL construction and line-number resolution logic for srcref.
+ *
+ * Orchestrates the full flow: validates parameters, fetches file content via [ContentCache],
+ * runs regex matching with [calcLineNumber], and builds the final GitHub permalink.
+ */
 object Urls {
   internal const val MSG = "msg"
   internal const val RAW_PREFIX = "https://raw.githubusercontent.com"
   private const val REGEX_TIMEOUT_NANOS = 5_000_000_000L // 5 seconds
 
+  /**
+   * Converts this parameter map to a URL-encoded query string.
+   *
+   * @param ignoreEndParams if `true`, omits optional end-range parameters from the output.
+   */
   internal fun Map<String, String?>.toQueryParams(ignoreEndParams: Boolean) =
     filter { if (ignoreEndParams) it.key !in QueryParams.optionalParams else true }
       .map { (k, v) -> if (v.isNotNull()) "$k=${v.encode()}" else "" }
@@ -36,6 +47,9 @@ object Urls {
 
   private fun Map<String, String?>.missingEndRegex() = this[END_REGEX.arg]?.isBlank() ?: true
 
+  /**
+   * Builds a srcref redirect URL from the given [params], optionally HTML-escaping the result.
+   */
   internal fun srcrefToGithubUrl(
     params: Map<String, String?>,
     escapeHtml4: Boolean = false,
@@ -43,6 +57,10 @@ object Urls {
   ) = "$prefix/$GITHUB?${params.toQueryParams(params.missingEndRegex())}"
     .let { if (escapeHtml4) escapeHtml4(it) else it }
 
+  /**
+   * Parses this nullable string as an [Int], throwing [IllegalArgumentException] with
+   * the message from [block] if the string is null or not a valid integer.
+   */
   internal inline fun String?.toInt(block: () -> String) =
     try {
       this?.toInt() ?: throw IllegalArgumentException(block())
@@ -50,7 +68,15 @@ object Urls {
       throw IllegalArgumentException(block())
     }
 
-  // This returns an url and an error message
+  /**
+   * Resolves query [params] into a GitHub permalink URL with computed line numbers.
+   *
+   * Fetches the target file, runs regex matching for begin (and optionally end) lines,
+   * and constructs the final `github.com/.../blob/...#L{begin}[-L{end}]` URL.
+   *
+   * @return a [Pair] of (URL, errorMessage). On success the error message is empty;
+   *   on failure the URL points to the `/problem` page and the error message describes the issue.
+   */
   internal suspend fun githubRangeUrl(
     params: Map<String, String?>,
     prefix: String,
@@ -122,6 +148,21 @@ object Urls {
     branchName: String,
   ) = "$RAW_PREFIX/$username/$repoName/$branchName/$path"
 
+  /**
+   * Searches [lines] for the [occurrence]-th match of [pattern], applying [offset] to the result.
+   *
+   * The search proceeds top-down or bottom-up depending on [topDown]. A 5-second timeout
+   * guards against catastrophic regex backtracking.
+   *
+   * @param lines the file content as a list of lines.
+   * @param pattern the regex pattern to match against each line.
+   * @param occurrence which match to select (1-based).
+   * @param offset number of lines to add to the matched line number.
+   * @param topDown `true` to search from the first line, `false` to search from the last.
+   * @param desc label used in error messages (e.g., "begin" or "end").
+   * @return the 1-based line number after applying the offset.
+   * @throws IllegalArgumentException on invalid regex, timeout, or insufficient matches.
+   */
   internal fun calcLineNumber(
     lines: List<String>,
     pattern: String,

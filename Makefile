@@ -50,17 +50,6 @@ deploy:
 do-log:
 	./secrets/app-log.sh
 
-trigger-jitpack:
-	until curl -s "$(JITPACK_BUILD_LOG)" | grep -qv "not found"; do \
-		echo "Waiting for JitPack..."; \
-		sleep 10; \
-	done
-	echo "JitPack build triggered for version ${VERSION}"
-
-view-jitpack:
-	curl -s "$(JITPACK_BUILD_LOG)"
-	curl -s "$(JITPACK_BUILD_API)" | jq
-
 dist:
 	./gradlew installDist
 
@@ -72,6 +61,15 @@ purge:
 
 versioncheck:
 	./gradlew dependencyUpdates --no-configuration-cache
+
+kdocs:
+	./gradlew dokkaGeneratePublicationHtml
+
+publish-local:
+	./gradlew publishToMavenLocal
+
+publish-maven-central:
+	./gradlew publishAndReleaseToMavenCentral
 
 upgrade-wrapper:
 	./gradlew wrapper --gradle-version=9.4.1 --distribution-type=bin

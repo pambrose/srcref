@@ -48,7 +48,20 @@ import kotlinx.html.textArea
 import kotlinx.html.textInput
 import kotlinx.html.tr
 
+/**
+ * The main srcref edit form page.
+ *
+ * Renders an HTML form for specifying GitHub repository details and regex patterns,
+ * displays the generated srcref URL and resolved GitHub permalink, and provides
+ * copy/reset/view actions.
+ */
 object Edit {
+  /**
+   * Renders the edit form, pre-populated with [params].
+   *
+   * If parameters have values, the form also shows the generated srcref URL and
+   * the resolved GitHub permalink (or an error message if resolution fails).
+   */
   internal suspend fun RoutingContext.displayEdit(params: Map<String, String?>) {
     // This is called early because it is suspending, and we cannot suspend inside document construction
     val (githubUrl, msg) = Urls.githubRangeUrl(params, URL_PREFIX)

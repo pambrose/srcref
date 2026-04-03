@@ -29,9 +29,16 @@ import io.ktor.server.routing.routing
 import java.io.ByteArrayOutputStream
 import java.lang.management.ManagementFactory
 
+/**
+ * HTTP route definitions for the srcref web service.
+ *
+ * Maps each [Endpoints] path to its handler, including the main edit form, GitHub redirect,
+ * error display, health check, and administrative endpoints.
+ */
 object Routes {
   private val logger = KotlinLogging.logger {}
 
+  /** Installs all srcref routes into the Ktor application's routing tree. */
   fun Application.configureRoutes() {
     routing {
       // This will redirect to the www subdomain

@@ -7,15 +7,16 @@ plugins {
   alias(libs.plugins.ktor)
   alias(libs.plugins.pambrose.envvar)
   alias(libs.plugins.pambrose.stable.versions)
-  alias(libs.plugins.pambrose.publishing)
   alias(libs.plugins.pambrose.kotlinter)
   alias(libs.plugins.pambrose.snapshot)
   alias(libs.plugins.pambrose.testing)
+  alias(libs.plugins.dokka)
+  alias(libs.plugins.maven.publish)
 }
 
 // Change the version in README.md as well
 version = "2.0.5"
-group = "com.github.pambrose"
+group = "com.pambrose"
 val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
 
 buildConfig {
@@ -23,6 +24,10 @@ buildConfig {
   buildConfigField("String", "VERSION", "\"${project.version}\"")
   buildConfigField("String", "RELEASE_DATE", "\"${LocalDate.now().format(formatter)}\"")
   buildConfigField("long", "BUILD_TIME", "${System.currentTimeMillis()}L")
+}
+
+application {
+  mainClass = "com.pambrose.srcref.Main"
 }
 
 dependencies {
@@ -56,24 +61,44 @@ kotlin {
   }
 }
 
-java {
-  withSourcesJar()
-}
-
-//publishing {
-//  publications {
-//    create<MavenPublication>("maven") {
-//      from(components["java"])
-//    }
-//  }
-//}
-
-application {
-  mainClass = "com.pambrose.srcref.Main"
-}
-
 ktor {
   fatJar {
     archiveFileName.set("srcref-all.jar")
   }
 }
+
+mavenPublishing {
+  configure(com.vanniktech.maven.publish.KotlinJvm(
+    javadocJar = com.vanniktech.maven.publish.JavadocJar.Dokka("dokkaGeneratePublicationHtml"),
+    sourcesJar = true,
+  ))
+  coordinates("com.pambrose", "srcref", version.toString())
+
+  pom {
+    name.set("srcref")
+    description.set("Dynamic Line-Specific GitHub Permalinks")
+    url.set("https://github.com/pambrose/srcref")
+    licenses {
+      license {
+        name.set("Apache License 2.0")
+        url.set("https://www.apache.org/licenses/LICENSE-2.0")
+      }
+    }
+    developers {
+      developer {
+        id.set("pambrose")
+        name.set("Paul Ambrose")
+        email.set("pambrose@srcref.com")
+      }
+    }
+    scm {
+      connection.set("scm:git:git://github.com/pambrose/srcref.git")
+      developerConnection.set("scm:git:ssh://github.com/pambrose/srcref.git")
+      url.set("https://github.com/pambrose/srcref")
+    }
+  }
+
+  publishToMavenCentral()
+  signAllPublications()
+}
+
