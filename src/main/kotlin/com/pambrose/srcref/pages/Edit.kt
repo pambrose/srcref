@@ -75,10 +75,17 @@ object Edit {
           h2 {
             span {
               +"srcref - Dynamic Line-Specific GitHub Permalinks"
+
               a {
                 href = "/$WHAT"
                 style = "padding-left: 25px; font-size: 75%;"
                 +"(What is srcref?)"
+              }
+
+              a {
+                href = "https://pambrose.github.io/srcref/"
+                style = "padding-left: 25px; font-size: 75%;"
+                +"(Documentation)"
               }
             }
           }
