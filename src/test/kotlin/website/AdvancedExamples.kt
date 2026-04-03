@@ -5,7 +5,6 @@ package website
 import com.pambrose.srcref.Api.srcrefUrl
 
 object AdvancedExamples {
-
   // --8<-- [start:bottom-up-last-brace]
   // Find the last closing brace in a file (useful for end of class/object)
   val lastBrace =

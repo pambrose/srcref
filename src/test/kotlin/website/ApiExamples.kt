@@ -5,7 +5,6 @@ package website
 import com.pambrose.srcref.Api.srcrefUrl
 
 object ApiExamples {
-
   // --8<-- [start:basic-usage]
   val url =
     srcrefUrl(
