@@ -1,6 +1,4 @@
 VERSION=$(shell grep '^version =' build.gradle.kts | head -1 | sed 's/.*"\(.*\)"/\1/')
-JITPACK_BUILD_LOG := https://jitpack.io/com/github/pambrose/srcref/$(VERSION)/build.log
-JITPACK_BUILD_API := https://jitpack.io/api/builds/com.github.pambrose/srcref/$(VERSION)
 
 default: versioncheck
 

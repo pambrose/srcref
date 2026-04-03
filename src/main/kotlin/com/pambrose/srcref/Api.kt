@@ -6,7 +6,7 @@ import com.pambrose.srcref.Urls.srcrefToGithubUrl
 /**
  * Public API for programmatically generating srcref URLs.
  *
- * This object is intended for use as a library dependency (e.g., via JitPack or Maven Central),
+ * This object is intended for use as a library dependency (e.g., via Maven Central),
  * allowing consumers to generate srcref URLs from their own code.
  */
 @Suppress("unused")

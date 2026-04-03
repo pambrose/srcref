@@ -99,14 +99,6 @@ _srcref_ URLs can be generated programmatically with the `srcrefUrl()` call. An 
 <summary>Gradle:</summary>
 
 ```groovy
-allprojects {
-   repositories {
-      maven { url 'https://jitpack.io' }
-   }
-}
-```
-
-```groovy
 dependencies {
    implementation 'com.pambrose:srcref:2.0.5'
 }
@@ -117,16 +109,6 @@ dependencies {
 
 <details>
 <summary>Maven:</summary>
-
-```xml
-
-<repositories>
-   <repository>
-      <id>jitpack.io</id>
-      <url>https://jitpack.io</url>
-   </repository>
-</repositories>
-```
 
 ```xml
 

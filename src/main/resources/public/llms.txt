@@ -47,7 +47,7 @@ If end parameters are omitted, only a single line is highlighted.
 
 ## API Usage
 
-srcref is available as a JitPack dependency for programmatic use:
+srcref is available as a Maven Central dependency for programmatic use:
 
 ```kotlin
 val url = Api.srcrefUrl(
@@ -70,6 +70,10 @@ https://www.srcref.com/github?account=pambrose&repo=srcref&branch=master&path=sr
 
 Regex values use Java's `java.util.regex.Pattern` syntax. Characters like `()`, `[]`,
 and `{}` need escaping with backslashes when you want their literal values.
+
+## Dependency
+
+Available on Maven Central as `com.pambrose:srcref`. Licensed under Apache License 2.0.
 
 ## Source Code
 

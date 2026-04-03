@@ -38,7 +38,7 @@ Supports begin/end ranges, occurrence selection (Nth match), top-down/bottom-up 
 
 ## Programmatic Usage
 
-Available as a JitPack dependency for Kotlin/JVM projects:
+Available as a Maven Central dependency for Kotlin/JVM projects:
 
 ```kotlin
 val permalink = Api.srcrefUrl(
@@ -50,10 +50,14 @@ val permalink = Api.srcrefUrl(
 )
 ```
 
+## Dependency
+
+Available on Maven Central as `com.pambrose:srcref`. Licensed under Apache License 2.0.
+
 ## Documentation
 
 - [GitHub Repository](https://github.com/pambrose/srcref): Source code and documentation
-- [JitPack](https://jitpack.io/#pambrose/srcref): Dependency artifacts for programmatic usage
+- [KDoc API Reference](https://github.com/pambrose/srcref): Generated via Dokka
 
 ## Optional
 

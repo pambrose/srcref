@@ -33,7 +33,8 @@ Run a single named test (Kotest string spec name):
 ./gradlew test --tests "FileTests.calcLineNumber top-down and bottom-up"
 ```
 
-Makefile shortcuts: `make build`, `make tests`, `make run`, `make uber`, `make release`, `make deploy`.
+Makefile shortcuts: `make build`, `make tests`, `make run`, `make uber`, `make release`, `make deploy`,
+`make kdocs`, `make publish-local`, `make publish-maven-central`.
 Default `make` target runs `./gradlew dependencyUpdates` to check for outdated dependencies.
 
 ## Architecture
@@ -60,7 +61,7 @@ Core modules in `src/main/kotlin/com/pambrose/srcref/`:
   `boccur`, `boffset`, `btopd`) are required; end params (`eregex`, `eoccur`, `eoffset`, `etopd`) are optional.
 - **Routes.kt** — HTTP route definitions. Maps endpoints to handlers.
 - **Endpoints.kt** — Enum mapping endpoint names to lowercase paths.
-- **Api.kt** — Public `Api.srcrefUrl()` function for programmatic use (available as JitPack dependency).
+- **Api.kt** — Public `Api.srcrefUrl()` function for programmatic use (available as Maven Central dependency).
 - **pages/** — HTML pages using kotlinx.html DSL. `PageTemplate.kt` is the base template; `Edit.kt` (main form),
   `Error.kt`, `Version.kt`, `What.kt`, `Cache.kt` are individual pages. `Common.kt` has shared constants/utilities.
 
@@ -107,10 +108,24 @@ Version is defined in `build.gradle.kts` (`version = "2.0.5"`). The Makefile `VE
 ## Dependencies
 
 Managed via `gradle/libs.versions.toml`. Key frameworks: Ktor (HTTP server/client), kotlinx.html (HTML DSL), Kotest (
-testing), Dropwizard Metrics (JVM metrics), kotlin-logging + Logback. JVM toolchain: Java 17.
+testing), Dropwizard Metrics (JVM metrics), kotlin-logging + Logback, Dokka (KDoc generation). JVM toolchain: Java 17.
 
 Build metadata (VERSION, RELEASE_DATE, BUILD_TIME) is generated at compile time by the `buildconfig` Gradle plugin into
 a `BuildConfig` class.
+
+## Publishing
+
+Published to Maven Central as `com.pambrose:srcref` via the vanniktech maven-publish plugin (`com.vanniktech.maven.publish`).
+Dokka generates the javadoc jar from KDoc comments. Signing uses in-memory GPG keys via `signingInMemoryKey`,
+`signingInMemoryKeyId`, and `signingInMemoryKeyPassword` Gradle properties.
+
+- `make publish-local` — publish to `~/.m2/repository` for local testing.
+- `make publish-maven-central` — publish and release to Maven Central.
+- `make kdocs` — generate KDoc HTML documentation to `build/dokka/html/`.
+
+## License
+
+Apache License 2.0. See `LICENSE.md`.
 
 ## Environment Variables
 
