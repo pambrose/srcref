@@ -35,7 +35,7 @@ jobs:
         working-directory: website/srcref
 
       # Copy kdocs into the site output
-      - run: cp -r build/dokka/html website/srcref/site/kdocs
+      - run: cp -r build/dokka/html website/srcref/site/api-docs
 
       - uses: actions/upload-pages-artifact@v4
         with:
