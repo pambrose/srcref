@@ -3,7 +3,6 @@
 package website
 
 object GradleExamples {
-
   // --8<-- [start:gradle-kotlin]
   // build.gradle.kts
   // dependencies {

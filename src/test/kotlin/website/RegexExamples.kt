@@ -5,7 +5,6 @@ package website
 import com.pambrose.srcref.Api.srcrefUrl
 
 object RegexExamples {
-
   // --8<-- [start:literal-string]
   // Match a literal string — no special regex characters needed
   val literalMatch =
