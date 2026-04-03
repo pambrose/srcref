@@ -67,6 +67,14 @@ ktor {
   }
 }
 
+dokka {
+  moduleName.set("srcref")
+  pluginsConfiguration.html {
+    homepageLink.set("https://github.com/pambrose/srcref")
+    footerMessage.set("srcref")
+  }
+}
+
 mavenPublishing {
   configure(com.vanniktech.maven.publish.KotlinJvm(
     javadocJar = com.vanniktech.maven.publish.JavadocJar.Dokka("dokkaGeneratePublicationHtml"),

@@ -63,6 +63,13 @@ versioncheck:
 kdocs:
 	./gradlew dokkaGeneratePublicationHtml
 
+clean-docs:
+	rm -rf website/agentmail4k/site
+	rm -rf website/agentmail4k/.cache
+
+site: clean-docs
+	cd website/srcref && uv run zensical serve
+
 publish-local:
 	./gradlew publishToMavenLocal
 

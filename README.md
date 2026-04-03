@@ -96,7 +96,18 @@ _srcref_ URLs can be generated programmatically with the `srcrefUrl()` call. An 
 .
 
 <details open>
-<summary>Gradle:</summary>
+<summary>Gradle (Kotlin DSL):</summary>
+
+```kotlin
+dependencies {
+   implementation("com.pambrose:srcref:2.0.5")
+}
+```
+
+</details>
+
+<details>
+<summary>Gradle (Groovy DSL):</summary>
 
 ```groovy
 dependencies {
@@ -105,7 +116,6 @@ dependencies {
 ```
 
 </details>
-
 
 <details>
 <summary>Maven:</summary>
