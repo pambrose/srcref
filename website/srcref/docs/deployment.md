@@ -17,7 +17,7 @@ Works with any public GitHub repository.
 All deployment methods support these environment variables:
 
 ```
---8<-- "src/test/kotlin/website/DeploymentExamples.kt:env-vars"
+--8<-- "src/test/kotlin/website/DeploymentExamples.txt:env-vars"
 ```
 
 | Variable         | Default                  | Description                     |
@@ -31,7 +31,7 @@ All deployment methods support these environment variables:
 ## Local Development
 
 ```bash
---8<-- "src/test/kotlin/website/DeploymentExamples.kt:local-dev"
+--8<-- "src/test/kotlin/website/DeploymentExamples.txt:local-dev"
 ```
 
 ## Fat JAR
@@ -39,7 +39,7 @@ All deployment methods support these environment variables:
 Build a self-contained JAR that includes all dependencies:
 
 ```bash
---8<-- "src/test/kotlin/website/DeploymentExamples.kt:fat-jar"
+--8<-- "src/test/kotlin/website/DeploymentExamples.txt:fat-jar"
 ```
 
 ## Docker
@@ -47,13 +47,13 @@ Build a self-contained JAR that includes all dependencies:
 ### Running with Docker
 
 ```bash
---8<-- "src/test/kotlin/website/DeploymentExamples.kt:docker-run"
+--8<-- "src/test/kotlin/website/DeploymentExamples.txt:docker-run"
 ```
 
 ### Docker Compose
 
 ```yaml
---8<-- "src/test/kotlin/website/DeploymentExamples.kt:docker-compose"
+--8<-- "src/test/kotlin/website/DeploymentExamples.txt:docker-compose"
 ```
 
 ### Building the Docker Image
@@ -70,7 +70,7 @@ make release
 srcref includes a `system.properties` file for Heroku's Java runtime (Java 17):
 
 ```bash
---8<-- "src/test/kotlin/website/DeploymentExamples.kt:heroku"
+--8<-- "src/test/kotlin/website/DeploymentExamples.txt:heroku"
 ```
 
 ## Endpoints Reference

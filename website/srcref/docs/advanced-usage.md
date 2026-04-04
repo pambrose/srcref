@@ -177,7 +177,7 @@ Append `&edit` to any srcref URL to open it in the web editor with all
 fields pre-populated:
 
 ```
---8<-- "src/test/kotlin/website/UrlExamples.kt:web-edit"
+--8<-- "src/test/kotlin/website/UrlExamples.txt:web-edit"
 ```
 
 ### Manually Constructing URLs
@@ -186,13 +186,13 @@ When you can't use the API, construct URLs directly. Remember to URL-encode
 parameter values:
 
 ```
---8<-- "src/test/kotlin/website/UrlExamples.kt:web-single-line"
+--8<-- "src/test/kotlin/website/UrlExamples.txt:web-single-line"
 ```
 
 For line ranges, add the end parameters:
 
 ```
---8<-- "src/test/kotlin/website/UrlExamples.kt:web-line-range"
+--8<-- "src/test/kotlin/website/UrlExamples.txt:web-line-range"
 ```
 
 ## Self-Hosting Tips

@@ -56,7 +56,7 @@ highlight a range of lines from the begin match to the end match.
 Add `&edit` to any srcref URL to open it in the editor with all fields pre-filled:
 
 ```
---8<-- "src/test/kotlin/website/UrlExamples.kt:web-edit"
+--8<-- "src/test/kotlin/website/UrlExamples.txt:web-edit"
 ```
 
 ## Using the Programmatic API
@@ -67,7 +67,7 @@ Add `&edit` to any srcref URL to open it in the editor with all fields pre-fille
 
     ```kotlin
     dependencies {
-        implementation("com.pambrose:srcref:2.0.5")
+        implementation("com.pambrose:srcref:2.0.6")
     }
     ```
 
@@ -75,7 +75,7 @@ Add `&edit` to any srcref URL to open it in the editor with all fields pre-fille
 
     ```groovy
     dependencies {
-        implementation 'com.pambrose:srcref:2.0.5'
+        implementation 'com.pambrose:srcref:2.0.6'
     }
     ```
 
@@ -85,7 +85,7 @@ Add `&edit` to any srcref URL to open it in the editor with all fields pre-fille
     <dependency>
         <groupId>com.pambrose</groupId>
         <artifactId>srcref</artifactId>
-        <version>2.0.5</version>
+        <version>2.0.6</version>
     </dependency>
     ```
 
