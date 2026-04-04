@@ -114,3 +114,7 @@ mavenPublishing {
   signAllPublications()
 }
 
+// Skip signing when no GPG key is provided (e.g., local publishing)
+tasks.withType<Sign>().configureEach {
+  isEnabled = project.findProperty("signingInMemoryKey") != null
+}
