@@ -1,0 +1,63 @@
+; --8<-- [start:docker-run]
+docker run -p 8080:8080 \
+  -e PORT=8080 \
+  -e PREFIX=https://srcref.example.com \
+  -e MAX_CACHE_SIZE=4096 \
+  -e DEFAULT_BRANCH=main \
+  pambrose/srcref:latest
+; --8<-- [end:docker-run]
+
+; --8<-- [start:docker-compose]
+version: "3.8"
+services:
+  srcref:
+    image: pambrose/srcref:latest
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: 8080
+      PREFIX: "https://srcref.example.com"
+      MAX_CACHE_SIZE: 4096
+      DEFAULT_BRANCH: main
+    restart: unless-stopped
+; --8<-- [end:docker-compose]
+
+; --8<-- [start:env-vars]
+# Environment variables control runtime behavior:
+#
+# PORT           - HTTP server port (default: 8080)
+# PREFIX         - URL prefix for generated links (default: https://www.srcref.com)
+# DEFAULT_BRANCH - Default GitHub branch (default: master)
+# MAX_CACHE_SIZE - Maximum cached file entries (default: 2048)
+# MAX_LENGTH     - Maximum file size to process (default: 5MB)
+; --8<-- [end:env-vars]
+
+; --8<-- [start:local-dev]
+# Clone and build
+git clone https://github.com/pambrose/srcref.git
+cd srcref
+./gradlew build -xtest
+
+# Run the development server
+./gradlew run
+
+# The server starts at http://localhost:8080
+; --8<-- [end:local-dev]
+
+; --8<-- [start:fat-jar]
+# Build the fat JAR
+./gradlew buildFatJar
+
+# Run it directly
+java -jar build/libs/srcref-all.jar
+
+# Or with custom environment variables
+PORT=9090 PREFIX=https://srcref.mycompany.com java -jar build/libs/srcref-all.jar
+; --8<-- [end:fat-jar]
+
+; --8<-- [start:heroku]
+# Deploy to Heroku
+heroku create your-srcref-app
+heroku config:set PREFIX=https://your-srcref-app.herokuapp.com
+git push heroku master
+; --8<-- [end:heroku]
