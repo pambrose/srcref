@@ -22,11 +22,11 @@ kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", 
 
 # Ktor
 ktor-bom = { module = "io.ktor:ktor-bom", version.ref = "ktor" }
-ktor-server-core = { module = "io.ktor:ktor-server" }
-ktor-server-cio = { module = "io.ktor:ktor-server-cio" }
-ktor-server-html = { module = "io.ktor:ktor-server-html-builder" }
-ktor-client-core = { module = "io.ktor:ktor-client-core" }
-ktor-client-cio = { module = "io.ktor:ktor-client-cio" }
+ktor-server-core = { module = "io.ktor:ktor-server", version.ref = "ktor" }
+ktor-server-cio = { module = "io.ktor:ktor-server-cio", version.ref = "ktor" }
+ktor-server-html = { module = "io.ktor:ktor-server-html-builder", version.ref = "ktor" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 
 # Utils
 # utils-bom = { module = "com.github.pambrose.common-utils:common-utils-bom", version.ref = "utils" }
@@ -35,8 +35,8 @@ utils-ktor-server = { module = "com.github.pambrose.common-utils:ktor-server-uti
 
 # Metrics
 dropwizard-bom = { module = "io.dropwizard.metrics:metrics-bom", version.ref = "dropwizard" }
-dropwizard-core = { module = "io.dropwizard.metrics:metrics-core" }
-dropwizard-jvm = { module = "io.dropwizard.metrics:metrics-jvm" }
+dropwizard-core = { module = "io.dropwizard.metrics:metrics-core", version.ref = "dropwizard" }
+dropwizard-jvm = { module = "io.dropwizard.metrics:metrics-jvm", version.ref = "dropwizard" }
 
 # Other
 commons-text = { module = "org.apache.commons:commons-text", version.ref = "text" }
@@ -45,7 +45,7 @@ kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = 
 
 # Testing
 kotest = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
-ktor-server-test-host = { module = "io.ktor:ktor-server-test-host" }
+ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
 
 [plugins]
 buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
