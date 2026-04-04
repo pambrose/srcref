@@ -1,3 +1,5 @@
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.SourcesJar
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -76,10 +78,12 @@ dokka {
 }
 
 mavenPublishing {
-  configure(com.vanniktech.maven.publish.KotlinJvm(
-    javadocJar = com.vanniktech.maven.publish.JavadocJar.Dokka("dokkaGeneratePublicationHtml"),
-    sourcesJar = true,
-  ))
+  configure(
+    com.vanniktech.maven.publish.KotlinJvm(
+      javadocJar = JavadocJar.Dokka("dokkaGeneratePublicationHtml"),
+      sourcesJar = SourcesJar.Sources(),
+    ),
+  )
   coordinates("com.pambrose", "srcref", version.toString())
 
   pom {
@@ -106,7 +110,7 @@ mavenPublishing {
     }
   }
 
-  publishToMavenCentral()
+  publishToMavenCentral(automaticRelease = true)
   signAllPublications()
 }
 
