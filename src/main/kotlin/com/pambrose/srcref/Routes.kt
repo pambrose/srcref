@@ -1,7 +1,7 @@
 package com.pambrose.srcref
 
 import com.codahale.metrics.jvm.ThreadDump
-import com.github.pambrose.common.response.redirectTo
+import com.pambrose.common.response.redirectTo
 import com.pambrose.srcref.Endpoints.CACHE
 import com.pambrose.srcref.Endpoints.EDIT
 import com.pambrose.srcref.Endpoints.GITHUB

@@ -7,10 +7,8 @@ plugins {
   alias(libs.plugins.kotlin)
   alias(libs.plugins.buildconfig)
   alias(libs.plugins.ktor)
-  alias(libs.plugins.pambrose.envvar)
   alias(libs.plugins.pambrose.stable.versions)
   alias(libs.plugins.pambrose.kotlinter)
-  alias(libs.plugins.pambrose.snapshot)
   alias(libs.plugins.pambrose.testing)
   alias(libs.plugins.dokka)
   alias(libs.plugins.maven.publish)
@@ -32,16 +30,17 @@ application {
   mainClass = "com.pambrose.srcref.Main"
 }
 
+repositories {
+  // mavenLocal()
+  google()
+  mavenCentral()
+}
+
 dependencies {
   implementation(libs.kotlin.coroutines)
 
-  implementation(platform(libs.ktor.bom))
   implementation(libs.bundles.ktor)
-
-//  implementation(platform(libs.utils.bom))
   implementation(libs.bundles.common.utils)
-
-  implementation(platform(libs.dropwizard.bom))
   implementation(libs.bundles.dropwizard)
 
   implementation(libs.commons.text)
