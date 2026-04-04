@@ -76,15 +76,15 @@ publish-local:
 publish-local-snapshot:
 	./gradlew -PoverrideVersion=$(VERSION)-SNAPSHOT publishToMavenLocal
 
-publish-snapshot:
+GPG_ENV = \
 	ORG_GRADLE_PROJECT_signingInMemoryKey="$$(gpg --armor --export-secret-keys $$GPG_SIGNING_KEY_ID)" \
-	ORG_GRADLE_PROJECT_signingInMemoryKeyPassword=$$(security find-generic-password -a "gpg-signing" -s "gradle-signing-password" -w) \
-	./gradlew -PoverrideVersion=$(VERSION)-SNAPSHOT publishToMavenCentral
+	ORG_GRADLE_PROJECT_signingInMemoryKeyPassword=$$(security find-generic-password -a "gpg-signing" -s "gradle-signing-password" -w)
+
+publish-snapshot:
+	$(GPG_ENV) ./gradlew -PoverrideVersion=$(VERSION)-SNAPSHOT publishToMavenCentral
 
 publish-maven-central:
-	ORG_GRADLE_PROJECT_signingInMemoryKey="$$(gpg --armor --export-secret-keys $$GPG_SIGNING_KEY_ID)" \
-	ORG_GRADLE_PROJECT_signingInMemoryKeyPassword=$$(security find-generic-password -a "gpg-signing" -s "gradle-signing-password" -w) \
-	./gradlew publishAndReleaseToMavenCentral
+	$(GPG_ENV) ./gradlew publishAndReleaseToMavenCentral
 
 upgrade-wrapper:
 	./gradlew wrapper --gradle-version=9.4.1 --distribution-type=bin
