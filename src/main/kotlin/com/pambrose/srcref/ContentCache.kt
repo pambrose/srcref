@@ -1,7 +1,7 @@
 package com.pambrose.srcref
 
-import com.github.pambrose.common.util.isNotNull
-import com.github.pambrose.common.util.simpleClassName
+import com.pambrose.common.util.isNotNull
+import com.pambrose.common.util.simpleClassName
 import com.pambrose.srcref.Urls.RAW_PREFIX
 import com.pambrose.srcref.Urls.toInt
 import io.github.oshai.kotlinlogging.KotlinLogging

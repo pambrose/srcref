@@ -1,7 +1,7 @@
 package com.pambrose.srcref
 
-import com.github.pambrose.common.util.encode
-import com.github.pambrose.common.util.isNotNull
+import com.pambrose.common.util.encode
+import com.pambrose.common.util.isNotNull
 import com.pambrose.srcref.ContentCache.Companion.fetchContent
 import com.pambrose.srcref.Endpoints.GITHUB
 import com.pambrose.srcref.Endpoints.PROBLEM
