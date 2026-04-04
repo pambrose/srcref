@@ -64,8 +64,8 @@ kdocs:
 	./gradlew dokkaGeneratePublicationHtml
 
 clean-docs:
-	rm -rf website/agentmail4k/site
-	rm -rf website/agentmail4k/.cache
+	rm -rf website/srcref/site
+	rm -rf website/srcref/.cache
 
 site: clean-docs
 	cd website/srcref && uv run zensical serve
@@ -73,7 +73,17 @@ site: clean-docs
 publish-local:
 	./gradlew publishToMavenLocal
 
+publish-local-snapshot:
+	./gradlew -PoverrideVersion=$(VERSION)-SNAPSHOT publishToMavenLocal
+
+publish-snapshot:
+	ORG_GRADLE_PROJECT_signingInMemoryKey="$$(gpg --armor --export-secret-keys $$GPG_SIGNING_KEY_ID)" \
+	ORG_GRADLE_PROJECT_signingInMemoryKeyPassword=$$(security find-generic-password -a "gpg-signing" -s "gradle-signing-password" -w) \
+	./gradlew -PoverrideVersion=$(VERSION)-SNAPSHOT publishToMavenCentral
+
 publish-maven-central:
+	ORG_GRADLE_PROJECT_signingInMemoryKey="$$(gpg --armor --export-secret-keys $$GPG_SIGNING_KEY_ID)" \
+	ORG_GRADLE_PROJECT_signingInMemoryKeyPassword=$$(security find-generic-password -a "gpg-signing" -s "gradle-signing-password" -w) \
 	./gradlew publishAndReleaseToMavenCentral
 
 upgrade-wrapper:
