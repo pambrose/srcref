@@ -18,8 +18,10 @@ import com.pambrose.srcref.QueryParams.END_REGEX
 import com.pambrose.srcref.QueryParams.END_TOPDOWN
 import com.pambrose.srcref.QueryParams.PATH
 import com.pambrose.srcref.QueryParams.REPO
+import com.pambrose.srcref.Urls.calcLineNumber
 import com.pambrose.srcref.pages.Common.hasValues
 import java.util.regex.PatternSyntaxException
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.measureTimedValue
 import org.apache.commons.text.StringEscapeUtils.escapeHtml4
 
@@ -32,7 +34,7 @@ import org.apache.commons.text.StringEscapeUtils.escapeHtml4
 object Urls {
   internal const val MSG = "msg"
   internal const val RAW_PREFIX = "https://raw.githubusercontent.com"
-  private const val REGEX_TIMEOUT_NANOS = 5_000_000_000L // 5 seconds
+  private val REGEX_TIMEOUT_NANOS = 5.seconds.inWholeNanoseconds
 
   /**
    * Converts this parameter map to a URL-encoded query string.
