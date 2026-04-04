@@ -15,7 +15,7 @@ plugins {
 }
 
 // Change the version in README.md as well
-version = "2.0.5"
+version = "2.0.6"
 group = "com.pambrose"
 val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
 
