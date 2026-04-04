@@ -100,7 +100,7 @@ _srcref_ URLs can be generated programmatically with the `srcrefUrl()` call. An 
 
 ```kotlin
 dependencies {
-   implementation("com.pambrose:srcref:2.0.6")
+   implementation("com.pambrose:srcref:2.0.7")
 }
 ```
 
@@ -111,7 +111,7 @@ dependencies {
 
 ```groovy
 dependencies {
-   implementation 'com.pambrose:srcref:2.0.6'
+   implementation 'com.pambrose:srcref:2.0.7'
 }
 ```
 
@@ -125,7 +125,7 @@ dependencies {
 <dependency>
    <groupId>com.pambrose</groupId>
    <artifactId>srcref</artifactId>
-   <version>2.0.6</version>
+   <version>2.0.7</version>
 </dependency>
 ```
 
