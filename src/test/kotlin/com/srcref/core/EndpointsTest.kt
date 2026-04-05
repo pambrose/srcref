@@ -14,25 +14,29 @@
  *   limitations under the License.
  */
 
-package com.pambrose.srcref
+package com.srcref.core
 
-/**
- * Enumeration of all HTTP endpoints served by srcref.
- *
- * Each entry's [path] is the lowercase version of its name, used as the URL path segment.
- */
-enum class Endpoints {
-  EDIT,
-  GITHUB,
-  PROBLEM,
-  WHAT,
-  CACHE,
-  VERSION,
-  PING,
-  THREADDUMP,
-  ;
+import com.pambrose.srcref.Endpoints
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
 
-  val path = name.lowercase()
+class EndpointsTest :
+  StringSpec(
+    {
+      "Endpoints has 8 entries" {
+        Endpoints.entries.size shouldBe 8
+      }
 
-  override fun toString() = path
-}
+      "path returns lowercase name for all entries" {
+        Endpoints.entries.forEach { endpoint ->
+          endpoint.path shouldBe endpoint.name.lowercase()
+        }
+      }
+
+      "toString returns path for all entries" {
+        Endpoints.entries.forEach { endpoint ->
+          endpoint.toString() shouldBe endpoint.path
+        }
+      }
+    },
+  )

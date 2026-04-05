@@ -15,7 +15,7 @@ plugins {
 }
 
 // Change the version in README.md as well
-version = findProperty("overrideVersion")?.toString() ?: "2.0.7"
+version = findProperty("overrideVersion")?.toString() ?: "2.0.8"
 group = "com.pambrose"
 val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
 
