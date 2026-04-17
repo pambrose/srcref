@@ -17,6 +17,7 @@ plugins {
 // Change the version in README.md as well
 version = findProperty("overrideVersion")?.toString() ?: "2.0.8"
 group = "com.pambrose"
+
 val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
 
 buildConfig {
@@ -32,19 +33,15 @@ application {
 
 repositories {
   // mavenLocal()
-  google()
   mavenCentral()
 }
 
 dependencies {
   implementation(libs.kotlin.coroutines)
-
   implementation(libs.bundles.ktor)
   implementation(libs.bundles.common.utils)
   implementation(libs.bundles.dropwizard)
-
   implementation(libs.commons.text)
-
   implementation(libs.logback)
   implementation(libs.kotlin.logging)
 
@@ -56,9 +53,11 @@ kotlin {
   jvmToolchain(17)
 
   sourceSets.all {
-    languageSettings.optIn("kotlin.time.ExperimentalTime")
-    languageSettings.optIn("kotlinx.coroutines.DelicateCoroutinesApi")
-    languageSettings.optIn("kotlin.concurrent.atomics.ExperimentalAtomicApi")
+    listOf(
+      "kotlin.time.ExperimentalTime",
+      "kotlinx.coroutines.DelicateCoroutinesApi",
+      "kotlin.concurrent.atomics.ExperimentalAtomicApi",
+    ).map { languageSettings.optIn(it) }
   }
 }
 

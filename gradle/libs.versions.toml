@@ -9,12 +9,12 @@ maven-publish = "0.36.0"
 # Libraries
 coroutines = "1.10.2"
 dropwizard = "4.2.38"
-kotest = "6.1.10"
+kotest = "6.1.11"
 ktor = "3.4.2"
 logback = "1.5.32"
 logging = "8.0.01"
 text = "1.15.0"
-utils = "2.7.0"
+utils = "2.7.1"
 
 [libraries]
 # Kotlin

@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package com.srcref.api
+package com.pambrose.srcref.api
 
 import com.pambrose.srcref.Api.srcrefUrl
 import io.kotest.core.spec.style.StringSpec

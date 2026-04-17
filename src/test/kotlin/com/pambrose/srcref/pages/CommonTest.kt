@@ -14,33 +14,34 @@
  *   limitations under the License.
  */
 
-package com.srcref.core
+package com.pambrose.srcref.pages
 
-import com.pambrose.srcref.startsWithList
+import com.pambrose.srcref.pages.Common.WIDTH_VAL
+import com.pambrose.srcref.pages.Common.hasValues
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class MainTest :
+class CommonTest :
   StringSpec(
     {
-      "startsWithList returns true when prefix matches" {
-        "/ping".startsWithList(listOf("/ping", "/pong")) shouldBe true
+      "hasValues returns false for empty map" {
+        emptyMap<String, String?>().hasValues() shouldBe false
       }
 
-      "startsWithList returns false when no match" {
-        "/other".startsWithList(listOf("/ping", "/pong")) shouldBe false
+      "hasValues returns false for all-null values" {
+        mapOf("a" to null, "b" to null).hasValues() shouldBe false
       }
 
-      "startsWithList returns false for empty list" {
-        "/anything".startsWithList(emptyList()) shouldBe false
+      "hasValues returns false for all-blank values" {
+        mapOf("a" to "", "b" to "  ").hasValues() shouldBe false
       }
 
-      "startsWithList with empty string input" {
-        "".startsWithList(listOf("/ping")) shouldBe false
+      "hasValues returns true when at least one non-blank value" {
+        mapOf("a" to "", "b" to "test").hasValues() shouldBe true
       }
 
-      "startsWithList with partial prefix match" {
-        "/pin".startsWithList(listOf("/ping")) shouldBe false
+      "WIDTH_VAL is 93" {
+        WIDTH_VAL shouldBe "93"
       }
     },
   )

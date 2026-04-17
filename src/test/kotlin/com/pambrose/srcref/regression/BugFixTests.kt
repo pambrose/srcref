@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package com.srcref.regression
+package com.pambrose.srcref.regression
 
 import com.pambrose.srcref.ContentCache
 import com.pambrose.srcref.ContentCache.CacheContent
