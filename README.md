@@ -1,6 +1,6 @@
 # srcref - Dynamic Line-Specific GitHub Permalinks
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/pambrose/srcref)
+[![GitHub release](https://img.shields.io/github/v/release/pambrose/srcref?sort=semver)](https://github.com/pambrose/srcref/releases/latest)
 [![Maven Central](https://img.shields.io/maven-central/v/com.pambrose/srcref)](https://central.sonatype.com/artifact/com.pambrose/srcref)
 [![Kotlin version](https://img.shields.io/badge/kotlin-2.3.20-red?logo=kotlin)](http://kotlinlang.org)
 [![ktlint](https://img.shields.io/badge/ktlint%20code--style-%E2%9D%A4-FF4081)](https://pinterest.github.io/ktlint/)
