@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package com.srcref.core
+package com.pambrose.srcref.core
 
 import com.pambrose.srcref.QueryParams
 import com.pambrose.srcref.Urls.githubRangeUrl
