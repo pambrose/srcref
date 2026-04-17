@@ -2,17 +2,16 @@
 
 Full release notes for every published version, newest first. Mirrors https://github.com/pambrose/srcref/releases.
 
-## [Unreleased]
+## [v2.0.8](https://github.com/pambrose/srcref/releases/tag/2.0.8) — 2026-04-16
 
-Changes targeted for the upcoming `2.0.8` release. Merged to `master`:
+## What's Changed
 
 - Configure Gradle daemon JVM memory to fix metaspace exhaustion ([#32](https://github.com/pambrose/srcref/pull/32))
 - Bump to 2.0.8, add license headers, reorganize tests, and enhance docs site ([#33](https://github.com/pambrose/srcref/pull/33))
 - Remove navigation tabs from docs site config ([#34](https://github.com/pambrose/srcref/pull/34))
-
-Open pull request:
-
 - Bump dependencies, align test packages, and enrich CallLogging ([#35](https://github.com/pambrose/srcref/pull/35))
+
+**Full Changelog**: https://github.com/pambrose/srcref/compare/2.0.7...2.0.8
 
 ## [v2.0.7](https://github.com/pambrose/srcref/releases/tag/2.0.7) — 2026-04-04
 
