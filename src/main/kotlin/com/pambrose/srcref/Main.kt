@@ -29,12 +29,15 @@ import io.ktor.server.application.install
 import io.ktor.server.cio.CIO
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.plugins.calllogging.CallLogging
+import io.ktor.server.plugins.calllogging.processingTimeMillis
 import io.ktor.server.plugins.compression.Compression
 import io.ktor.server.plugins.compression.deflate
 import io.ktor.server.plugins.compression.gzip
 import io.ktor.server.plugins.compression.minimumSize
 import io.ktor.server.plugins.defaultheaders.DefaultHeaders
+import io.ktor.server.plugins.origin
 import io.ktor.server.plugins.statuspages.StatusPages
+import io.ktor.server.request.httpMethod
 import io.ktor.server.request.path
 import io.ktor.server.response.respondText
 import org.slf4j.event.Level
@@ -93,9 +96,12 @@ fun Application.module() {
       }
     }
     format { call ->
+      val status = call.response.status()
+      val method = call.request.httpMethod.value
       val path = call.request.path()
-      val userAgent = call.request.headers["User-Agent"]
-      "[$userAgent] $path"
+      val duration = call.processingTimeMillis()
+      val remote = call.request.origin.remoteHost
+      "$status $method $path ${duration}ms from $remote"
     }
   }
   install(DefaultHeaders)
