@@ -101,7 +101,7 @@ Tests in `src/test/kotlin/` use Kotest `StringSpec` with JUnit5 runner:
 
 ## Version Management
 
-Version is defined in `build.gradle.kts` (`version = "2.0.8"`). The Makefile `VERSION` is derived automatically from
+Version is defined in `build.gradle.kts` (`version = "2.0.9"`). The Makefile `VERSION` is derived automatically from
 `build.gradle.kts`. `README.md` must still be updated manually when changing the version. (Note: the comment in
 `build.gradle.kts` saying to update the Makefile is outdated — only README.md needs a manual update.)
 
@@ -119,7 +119,9 @@ Published to Maven Central as `com.pambrose:srcref` via the vanniktech maven-pub
 Dokka generates the javadoc jar from KDoc comments. Signing uses in-memory GPG keys via `signingInMemoryKey`,
 `signingInMemoryKeyId`, and `signingInMemoryKeyPassword` Gradle properties.
 
-- `make publish-local` — publish to `~/.m2/repository` for local testing.
+- `make publish-local` — publish to `~/.m2/repository` for local testing. To consume locally-published
+  artifacts in another build, run with `-PuseMavenLocal=true` (the `mavenLocal()` repo is gated on this
+  property in `settings.gradle.kts`).
 - `make publish-maven-central` — publish and release to Maven Central.
 - `make kdocs` — generate KDoc HTML documentation to `build/dokka/html/`.
 

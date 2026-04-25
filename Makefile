@@ -11,7 +11,16 @@ clean:
 	./gradlew clean
 
 build:	clean
-	./gradlew build -x test
+	./gradlew build -xtest
+
+local-build: clean
+	./gradlew build -PuseMavenLocal=true -xtest
+
+tests:
+	./gradlew --rerun-tasks check
+
+local-tests:
+	./gradlew --rerun-tasks -PuseMavenLocal=true check
 
 run:
 	./gradlew run
@@ -19,10 +28,10 @@ run:
 refresh:
 	./gradlew --refresh-dependencies
 
-tests:
-	./gradlew --rerun-tasks check
+fatjar: build
+	./gradlew buildFatJar
 
-uber: build
+uber: uberjar
 	java -jar build/libs/srcref-all.jar
 
 run-docker:

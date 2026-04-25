@@ -1,4 +1,5 @@
 import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.KotlinJvm
 import com.vanniktech.maven.publish.SourcesJar
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -15,7 +16,7 @@ plugins {
 }
 
 // Change the version in README.md as well
-version = findProperty("overrideVersion")?.toString() ?: "2.0.8"
+version = findProperty("overrideVersion")?.toString() ?: "2.0.9"
 group = "com.pambrose"
 
 val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
@@ -29,11 +30,6 @@ buildConfig {
 
 application {
   mainClass = "com.pambrose.srcref.Main"
-}
-
-repositories {
-  // mavenLocal()
-  mavenCentral()
 }
 
 dependencies {
@@ -57,7 +53,7 @@ kotlin {
       "kotlin.time.ExperimentalTime",
       "kotlinx.coroutines.DelicateCoroutinesApi",
       "kotlin.concurrent.atomics.ExperimentalAtomicApi",
-    ).map { languageSettings.optIn(it) }
+    ).forEach { languageSettings.optIn(it) }
   }
 }
 
@@ -77,7 +73,7 @@ dokka {
 
 mavenPublishing {
   configure(
-    com.vanniktech.maven.publish.KotlinJvm(
+    KotlinJvm(
       javadocJar = JavadocJar.Dokka("dokkaGeneratePublicationHtml"),
       sourcesJar = SourcesJar.Sources(),
     ),
