@@ -2,7 +2,7 @@
 # Plugins
 kotlin = "2.3.21"
 buildconfig = "6.0.9"
-gradle-plugins = "1.0.12"
+gradle-plugins = "1.0.14"
 dokka = "2.2.0"
 maven-publish = "0.36.0"
 

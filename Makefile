@@ -11,10 +11,10 @@ clean:
 	./gradlew clean
 
 build:	clean
-	./gradlew build -xtest
+	./gradlew build -PreleaseDate=2026-04-25 -xtest
 
 local-build: clean
-	./gradlew build -PuseMavenLocal=true -xtest
+	./gradlew build -PuseMavenLocal=true -PreleaseDate=2026-04-25 -xtest
 
 tests:
 	./gradlew --rerun-tasks check
