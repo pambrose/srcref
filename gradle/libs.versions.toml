@@ -1,8 +1,8 @@
 [versions]
 # Plugins
-kotlin = "2.3.20"
+kotlin = "2.3.21"
 buildconfig = "6.0.9"
-gradle-plugins = "1.0.12"
+gradle-plugins = "1.0.14"
 dokka = "2.2.0"
 maven-publish = "0.36.0"
 
@@ -10,11 +10,11 @@ maven-publish = "0.36.0"
 coroutines = "1.10.2"
 dropwizard = "4.2.38"
 kotest = "6.1.11"
-ktor = "3.4.2"
+ktor = "3.4.3"
 logback = "1.5.32"
 logging = "8.0.01"
 text = "1.15.0"
-utils = "2.7.1"
+utils = "2.8.1"
 
 [libraries]
 # Kotlin
@@ -44,16 +44,6 @@ kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = 
 kotest = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
 
-[plugins]
-buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
-kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }
-pambrose-stable-versions = { id = "com.pambrose.stable-versions", version.ref = "gradle-plugins" }
-pambrose-kotlinter = { id = "com.pambrose.kotlinter", version.ref = "gradle-plugins" }
-pambrose-testing = { id = "com.pambrose.testing", version.ref = "gradle-plugins" }
-
 [bundles]
 ktor = [
   "ktor-server-core",
@@ -72,3 +62,13 @@ dropwizard = [
   "dropwizard-core",
   "dropwizard-jvm",
 ]
+
+[plugins]
+buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }
+pambrose-stable-versions = { id = "com.pambrose.stable-versions", version.ref = "gradle-plugins" }
+pambrose-kotlinter = { id = "com.pambrose.kotlinter", version.ref = "gradle-plugins" }
+pambrose-testing = { id = "com.pambrose.testing", version.ref = "gradle-plugins" }

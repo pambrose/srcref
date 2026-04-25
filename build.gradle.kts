@@ -1,4 +1,5 @@
 import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.KotlinJvm
 import com.vanniktech.maven.publish.SourcesJar
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -14,26 +15,23 @@ plugins {
   alias(libs.plugins.maven.publish)
 }
 
-// Change the version in README.md as well
-version = findProperty("overrideVersion")?.toString() ?: "2.0.8"
+// Update version refs in README.md and website/srcref/docs/{api,getting-started}.md as well
+version = findProperty("overrideVersion")?.toString() ?: "2.0.9"
 group = "com.pambrose"
 
 val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+val releaseDate = (findProperty("releaseDate") as? String) ?: LocalDate.now().format(formatter)
+val buildTime = (findProperty("buildTime") as? String)?.toLong() ?: System.currentTimeMillis()
 
 buildConfig {
   buildConfigField("String", "NAME", "\"${project.name}\"")
   buildConfigField("String", "VERSION", "\"${project.version}\"")
-  buildConfigField("String", "RELEASE_DATE", "\"${LocalDate.now().format(formatter)}\"")
-  buildConfigField("long", "BUILD_TIME", "${System.currentTimeMillis()}L")
+  buildConfigField("String", "RELEASE_DATE", "\"$releaseDate\"")
+  buildConfigField("long", "BUILD_TIME", "${buildTime}L")
 }
 
 application {
   mainClass = "com.pambrose.srcref.Main"
-}
-
-repositories {
-  // mavenLocal()
-  mavenCentral()
 }
 
 dependencies {
@@ -57,7 +55,7 @@ kotlin {
       "kotlin.time.ExperimentalTime",
       "kotlinx.coroutines.DelicateCoroutinesApi",
       "kotlin.concurrent.atomics.ExperimentalAtomicApi",
-    ).map { languageSettings.optIn(it) }
+    ).forEach { languageSettings.optIn(it) }
   }
 }
 
@@ -77,12 +75,11 @@ dokka {
 
 mavenPublishing {
   configure(
-    com.vanniktech.maven.publish.KotlinJvm(
+    KotlinJvm(
       javadocJar = JavadocJar.Dokka("dokkaGeneratePublicationHtml"),
       sourcesJar = SourcesJar.Sources(),
     ),
   )
-  coordinates("com.pambrose", "srcref", version.toString())
 
   pom {
     name.set("srcref")
@@ -109,10 +106,8 @@ mavenPublishing {
   }
 
   publishToMavenCentral(automaticRelease = true)
-  signAllPublications()
-}
-
-// Skip signing when no GPG key is provided (e.g., local publishing)
-tasks.withType<Sign>().configureEach {
-  isEnabled = project.findProperty("signingInMemoryKey") != null
+  // Skip signing when no GPG key is provided (e.g., local publishing)
+  if (project.findProperty("signingInMemoryKey") != null) {
+    signAllPublications()
+  }
 }

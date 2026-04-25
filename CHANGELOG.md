@@ -2,6 +2,21 @@
 
 All notable changes to this project. Format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [2.0.9](https://github.com/pambrose/srcref/releases/tag/2.0.9) — 2026-04-25
+
+- Bump version to 2.0.9
+- Bump dependencies: Kotlin 2.3.21, Ktor 3.4.3, common-utils 2.8.1
+- Move `repositories {}` to `settings.gradle.kts` via `dependencyResolutionManagement` with `FAIL_ON_PROJECT_REPOS`
+- Gate `mavenLocal()` behind `-PuseMavenLocal=true` for opt-in local-artifact resolution
+- Add `local-build`, `local-tests`, and `fatjar` Makefile targets
+- Replace `.map` with `.forEach` for the Kotlin opt-in language settings loop
+- Import `KotlinJvm` instead of using fully-qualified name in `mavenPublishing` configuration
+- Make build reproducible via `-PreleaseDate` and `-PbuildTime` Gradle property overrides
+- Add explicit `pluginManagement { repositories { ... } }` block to `settings.gradle.kts`
+- Enable Gradle build cache (`org.gradle.caching=true`)
+
+**Full Changelog**: https://github.com/pambrose/srcref/compare/2.0.8...2.0.9
+
 ## [2.0.8](https://github.com/pambrose/srcref/releases/tag/2.0.8) — 2026-04-16
 
 - Configure Gradle daemon JVM memory to fix metaspace exhaustion ([#32](https://github.com/pambrose/srcref/pull/32))
