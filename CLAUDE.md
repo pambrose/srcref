@@ -102,8 +102,15 @@ Tests in `src/test/kotlin/` use Kotest `StringSpec` with JUnit5 runner:
 ## Version Management
 
 Version is defined in `build.gradle.kts` (`version = "2.0.9"`). The Makefile `VERSION` is derived automatically from
-`build.gradle.kts`. `README.md` must still be updated manually when changing the version. (Note: the comment in
-`build.gradle.kts` saying to update the Makefile is outdated — only README.md needs a manual update.)
+`build.gradle.kts`. The following must still be updated manually when changing the version:
+
+- `README.md` (Maven/Gradle dependency snippets and Kotlin version badge)
+- `website/srcref/docs/api.md` (dependency snippets)
+- `website/srcref/docs/getting-started.md` (dependency snippets)
+- `CHANGELOG.md` and `RELEASE_NOTES.md` (new version section)
+
+The build is reproducible: pass `-PreleaseDate=MM/dd/yyyy` and `-PbuildTime=<epoch-ms>` to override the values
+embedded in `BuildConfig`. Without overrides they default to "now".
 
 ## Dependencies
 

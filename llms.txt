@@ -57,7 +57,8 @@ Available on Maven Central as `com.pambrose:srcref`. Licensed under Apache Licen
 ## Documentation
 
 - [GitHub Repository](https://github.com/pambrose/srcref): Source code and documentation
-- [KDoc API Reference](https://github.com/pambrose/srcref): Generated via Dokka
+- [Documentation Site](https://pambrose.github.io/srcref/): Zensical-based docs (getting started, query parameters, regex guide, API, advanced usage, deployment)
+- [KDoc API Reference](https://pambrose.github.io/srcref/api-docs/index.html): Generated via Dokka
 
 ## Optional
 
