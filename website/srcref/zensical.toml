@@ -11,7 +11,7 @@ Copyright &copy; 2026 Paul Ambrose
 # The repo_url adds a repository link/badge in the header
 repo_url = "https://github.com/pambrose/srcref"
 repo_name = "pambrose/srcref"
-edit_uri = "edit/master/website/agentmail/docs/"
+edit_uri = "edit/master/website/srcref/docs/"
 
 nav = [
   { "Home" = "index.md" },

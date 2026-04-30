@@ -11,10 +11,10 @@ clean:
 	./gradlew clean
 
 build:	clean
-	./gradlew build -PreleaseDate=2026-04-25 -xtest
+	./gradlew build -PreleaseDate=04/25/2026 -xtest
 
 local-build: clean
-	./gradlew build -PuseMavenLocal=true -PreleaseDate=2026-04-25 -xtest
+	./gradlew build -PuseMavenLocal=true -PreleaseDate=04/25/2026 -xtest
 
 tests:
 	./gradlew --rerun-tasks check
@@ -96,4 +96,4 @@ publish-maven-central:
 	$(GPG_ENV) ./gradlew publishAndReleaseToMavenCentral
 
 upgrade-wrapper:
-	./gradlew wrapper --gradle-version=9.4.1 --distribution-type=bin
+	./gradlew wrapper --gradle-version=9.5.0 --distribution-type=bin
