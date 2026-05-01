@@ -1,6 +1,14 @@
-VERSION=$(shell grep '^version=' gradle.properties | head -1 | cut -d= -f2)
+VERSION=$(shell awk -F= '/^version[[:space:]]*=/ {gsub(/[[:space:]]/,"",$$2); print $$2; exit}' gradle.properties)
+
+.PHONY: default build-all stop clean build local-build tests local-tests run refresh \
+	fatjar uber run-docker build-docker docker-push release deploy do-log dist stage \
+	purge versioncheck kdocs coverage coverage-xml coverage-verify clean-docs site \
+	publish-local publish-local-snapshot check-gpg-env publish-snapshot \
+	publish-maven-central upgrade-wrapper
 
 default: versioncheck
+
+.NOTPARALLEL: build-all release
 
 build-all: clean stage
 
@@ -10,10 +18,10 @@ stop:
 clean:
 	./gradlew clean
 
-build:	clean
+build:
 	./gradlew build -xtest
 
-local-build: clean
+local-build:
 	./gradlew build -PuseMavenLocal=true -xtest
 
 tests:
@@ -31,24 +39,24 @@ refresh:
 fatjar: build
 	./gradlew buildFatJar
 
-uber: uberjar
+uber: fatjar
 	java -jar build/libs/srcref-all.jar
 
 run-docker:
-	docker run --rm --env-file=docker_env_vars -p 8080:8080 pambrose/srcref:${VERSION}
+	docker run --rm --env-file=docker_env_vars -p 8080:8080 pambrose/srcref:$(VERSION)
 
-build-docker:
-	docker build -t pambrose/srcref:${VERSION} .
+build-docker: build
+	docker build -t pambrose/srcref:$(VERSION) .
 
 PLATFORMS := linux/amd64,linux/arm64/v8
 IMAGE_NAME := pambrose/srcref
 
-docker-push:
+docker-push: build-docker
 	# prepare multiarch
 	docker buildx use buildx 2>/dev/null || docker buildx create --use --name=buildx
-	docker buildx build --platform ${PLATFORMS} --push -t ${IMAGE_NAME}:latest -t ${IMAGE_NAME}:${VERSION} .
+	docker buildx build --platform $(PLATFORMS) --push -t $(IMAGE_NAME):latest -t $(IMAGE_NAME):$(VERSION) .
 
-release: clean build build-docker docker-push
+release: docker-push
 
 deploy:
 	./secrets/deploy-app.sh
@@ -64,7 +72,7 @@ stage:
 	./gradlew stage
 
 purge:
-	 heroku builds:cache:purge -a srcref --confirm srcref
+	heroku builds:cache:purge -a srcref --confirm srcref
 
 versioncheck:
 	./gradlew dependencyUpdates --no-configuration-cache
@@ -96,7 +104,8 @@ publish-local-snapshot:
 
 GPG_ENV = \
 	ORG_GRADLE_PROJECT_signingInMemoryKey="$$(gpg --armor --export-secret-keys $$GPG_SIGNING_KEY_ID)" \
-	ORG_GRADLE_PROJECT_signingInMemoryKeyPassword=$$(security find-generic-password -a "gpg-signing" -s "gradle-signing-password" -w)
+	ORG_GRADLE_PROJECT_signingInMemoryKeyId="$$GPG_SIGNING_KEY_ID" \
+	ORG_GRADLE_PROJECT_signingInMemoryKeyPassword="$$(security find-generic-password -a "gpg-signing" -s "gradle-signing-password" -w)"
 
 check-gpg-env:
 	@if [ -z "$$GPG_SIGNING_KEY_ID" ]; then \
