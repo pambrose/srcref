@@ -18,6 +18,9 @@ at https://www.srcref.com.
 ./gradlew formatKotlin         # Auto-format code
 ./gradlew run                  # Run dev server (port 8080)
 ./gradlew buildFatJar          # Create fat JAR at build/libs/srcref-all.jar
+./gradlew koverHtmlReport      # Run tests + generate HTML coverage report at build/reports/kover/html/
+./gradlew koverXmlReport       # Run tests + generate XML coverage report (for CI tools)
+./gradlew koverVerify          # Run tests + verify coverage rules
 ./gradlew dependencyUpdates    # Check for dependency updates
 ```
 
@@ -34,7 +37,8 @@ Run a single named test (Kotest string spec name):
 ```
 
 Makefile shortcuts: `make build`, `make tests`, `make run`, `make uber`, `make release`, `make deploy`,
-`make kdocs`, `make publish-local`, `make publish-maven-central`.
+`make kdocs`, `make coverage`, `make coverage-xml`, `make coverage-verify`, `make publish-local`,
+`make publish-maven-central`.
 Default `make` target runs `./gradlew dependencyUpdates` to check for outdated dependencies.
 
 ## Architecture
@@ -101,8 +105,8 @@ Tests in `src/test/kotlin/` use Kotest `StringSpec` with JUnit5 runner:
 
 ## Version Management
 
-Version is defined in `build.gradle.kts` (`version = "2.0.9"`). The Makefile `VERSION` is derived automatically from
-`build.gradle.kts`. The following must still be updated manually when changing the version:
+Version is defined in `gradle.properties` (`version=2.0.10`). The Makefile `VERSION` is derived automatically from
+`gradle.properties`. The following must still be updated manually when changing the version:
 
 - `README.md` (Maven/Gradle dependency snippets and Kotlin version badge)
 - `website/srcref/docs/api.md` (dependency snippets)

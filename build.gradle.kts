@@ -12,12 +12,12 @@ plugins {
   alias(libs.plugins.pambrose.kotlinter)
   alias(libs.plugins.pambrose.testing)
   alias(libs.plugins.dokka)
+  alias(libs.plugins.kover)
   alias(libs.plugins.maven.publish)
 }
 
-// Update version refs in README.md and website/srcref/docs/{api,getting-started}.md as well
-version = findProperty("overrideVersion")?.toString() ?: "2.0.9"
-group = "com.pambrose"
+// Version and group are defined in gradle.properties; also update version refs in README.md and website/srcref/docs/{api,getting-started}.md
+findProperty("overrideVersion")?.toString()?.let { version = it }
 
 val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
 val releaseDate = (findProperty("releaseDate") as? String) ?: LocalDate.now().format(formatter)
