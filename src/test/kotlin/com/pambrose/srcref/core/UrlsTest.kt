@@ -141,5 +141,45 @@ class UrlsTest :
         url shouldContain "problem"
         msg shouldContain "Missing: repo value"
       }
+
+      "githubRangeUrl with missing path returns problem URL" {
+        val params =
+          mapOf(
+            "account" to "u",
+            "repo" to "r",
+            "branch" to "main",
+            "path" to "",
+            "bregex" to "x",
+          )
+        val (url, msg) = githubRangeUrl(params, "http://localhost:8080")
+        url shouldContain "problem"
+        msg shouldContain "Missing: path value"
+      }
+
+      "githubRangeUrl with blank branch returns problem URL" {
+        val params =
+          mapOf(
+            "account" to "u",
+            "repo" to "r",
+            "branch" to "",
+            "path" to "f.kt",
+            "bregex" to "x",
+          )
+        val (url, msg) = githubRangeUrl(params, "http://localhost:8080")
+        url shouldContain "problem"
+        msg shouldContain "Missing: branch value"
+      }
+
+      "githubRangeUrl propagates the request prefix into the problem URL" {
+        val params = mapOf("account" to "u", "repo" to "")
+        val (url, _) = githubRangeUrl(params, "https://example.test")
+        url shouldStartWith "https://example.test/problem?"
+      }
+
+      "githubRangeUrl includes the original params in the problem query string" {
+        val params = mapOf("account" to "alice", "repo" to "")
+        val (url, _) = githubRangeUrl(params, "http://localhost:8080")
+        url shouldContain "account=alice"
+      }
     },
   )

@@ -16,6 +16,8 @@
 
 package com.pambrose.srcref.integration
 
+import com.pambrose.srcref.ContentCache.CacheContent
+import com.pambrose.srcref.ContentCache.Companion.contentCache
 import com.pambrose.srcref.module
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
@@ -105,6 +107,43 @@ class RoutesIntegrationTest :
             status shouldBe HttpStatusCode.OK
             bodyAsText() shouldContain "Cache Size"
           }
+        }
+      }
+
+      "GET /cache renders populated entries with table" {
+        val rawUrl = "https://raw.githubusercontent.com/u/r/main/file.kt"
+        val shortEtagUrl = "https://example.com/short-etag-cache-test"
+        val longEtagUrl = "https://example.com/long-etag-cache-test"
+        val longEtag = "\"abcdefghijklmnopqrstuvwxyz1234567890\""
+        try {
+          contentCache[rawUrl] =
+            CacheContent(pageLines = listOf("a", "b", "c"), etag = "\"short\"", contentLength = 12)
+              .apply { markReferenced() }
+          contentCache[shortEtagUrl] =
+            CacheContent(pageLines = listOf("x"), etag = "\"e\"", contentLength = 1)
+          contentCache[longEtagUrl] =
+            CacheContent(pageLines = listOf("y"), etag = longEtag, contentLength = 1)
+
+          testApplication {
+            application { module() }
+            client.get("/cache").apply {
+              status shouldBe HttpStatusCode.OK
+              val body = bodyAsText()
+              body shouldContain "cachetable"
+              // Raw GitHub prefix is stripped from the URL display column
+              body shouldContain "/u/r/main/file.kt"
+              body shouldNotContain "raw.githubusercontent.com"
+              // Long etags get truncated with an ellipsis
+              body shouldContain "..."
+              // Both other test URLs render
+              body shouldContain shortEtagUrl
+              body shouldContain longEtagUrl
+            }
+          }
+        } finally {
+          contentCache.remove(rawUrl)
+          contentCache.remove(shortEtagUrl)
+          contentCache.remove(longEtagUrl)
         }
       }
 

@@ -4,6 +4,7 @@ kotlin = "2.3.21"
 buildconfig = "6.0.9"
 gradle-plugins = "1.0.14"
 dokka = "2.2.0"
+kover = "0.9.8"
 maven-publish = "0.36.0"
 
 # Libraries
@@ -68,6 +69,7 @@ buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }
 pambrose-stable-versions = { id = "com.pambrose.stable-versions", version.ref = "gradle-plugins" }
 pambrose-kotlinter = { id = "com.pambrose.kotlinter", version.ref = "gradle-plugins" }

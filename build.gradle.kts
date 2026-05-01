@@ -12,16 +12,16 @@ plugins {
   alias(libs.plugins.pambrose.kotlinter)
   alias(libs.plugins.pambrose.testing)
   alias(libs.plugins.dokka)
+  alias(libs.plugins.kover)
   alias(libs.plugins.maven.publish)
 }
 
-// Update version refs in README.md and website/srcref/docs/{api,getting-started}.md as well
-version = findProperty("overrideVersion")?.toString() ?: "2.0.9"
-group = "com.pambrose"
+// Version and group are defined in gradle.properties; also update version refs in README.md and website/srcref/docs/{api,getting-started}.md
+providers.gradleProperty("overrideVersion").orNull?.let { version = it }
 
 val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
-val releaseDate = (findProperty("releaseDate") as? String) ?: LocalDate.now().format(formatter)
-val buildTime = (findProperty("buildTime") as? String)?.toLong() ?: System.currentTimeMillis()
+val releaseDate = providers.gradleProperty("releaseDate").orNull ?: LocalDate.now().format(formatter)
+val buildTime = providers.gradleProperty("buildTime").orNull?.toLong() ?: System.currentTimeMillis()
 
 buildConfig {
   buildConfigField("String", "NAME", "\"${project.name}\"")
