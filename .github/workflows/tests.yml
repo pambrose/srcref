@@ -13,4 +13,9 @@ jobs:
           distribution: temurin
           java-version: 17
       - uses: gradle/actions/setup-gradle@v4
-      - run: ./gradlew check
+      - run: ./gradlew check koverXmlReport
+      - uses: codecov/codecov-action@v5
+        with:
+          files: build/reports/kover/report.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
