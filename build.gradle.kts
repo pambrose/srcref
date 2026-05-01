@@ -17,11 +17,11 @@ plugins {
 }
 
 // Version and group are defined in gradle.properties; also update version refs in README.md and website/srcref/docs/{api,getting-started}.md
-findProperty("overrideVersion")?.toString()?.let { version = it }
+providers.gradleProperty("overrideVersion").orNull?.let { version = it }
 
 val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
-val releaseDate = (findProperty("releaseDate") as? String) ?: LocalDate.now().format(formatter)
-val buildTime = (findProperty("buildTime") as? String)?.toLong() ?: System.currentTimeMillis()
+val releaseDate = providers.gradleProperty("releaseDate").orNull ?: LocalDate.now().format(formatter)
+val buildTime = providers.gradleProperty("buildTime").orNull?.toLong() ?: System.currentTimeMillis()
 
 buildConfig {
   buildConfigField("String", "NAME", "\"${project.name}\"")
