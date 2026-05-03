@@ -319,6 +319,9 @@ cd srcref
 # Run tests
 ./gradlew test
 
+# Generate coverage report (HTML at build/reports/kover/html/)
+make coverage
+
 # Start development server
 ./gradlew run
 ```
@@ -327,7 +330,7 @@ cd srcref
 
 ```bash
 # Create executable JAR
-make uberjar
+make uber
 
 # Build Docker image
 make build-docker

@@ -96,6 +96,10 @@ Tests in `src/test/kotlin/` use Kotest `StringSpec` with JUnit5 runner:
 - **BugFixTests.kt** — Regression tests: ETag edge cases, daemon thread, robots.txt, occurrence validation
 - **EndpointsTest.kt**, **CommonTest.kt**, **MainTest.kt** — Unit tests for utilities
 
+Coverage is reported to Codecov via Kover. Codecov behavior is configured in `codecov.yml`:
+project status uses `auto` target with a 0.5% threshold; patch status targets 70% but is
+informational (won't gate PRs); generated `BuildConfig.kt` is ignored.
+
 ## Code Style
 
 - Kotlinter (ktlint) for linting. Run `./gradlew formatKotlin` before committing.

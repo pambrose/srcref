@@ -2,6 +2,19 @@
 
 Full release notes for every published version, newest first. Mirrors https://github.com/pambrose/srcref/releases.
 
+## [v2.0.10](https://github.com/pambrose/srcref/releases/tag/2.0.10) — 2026-05-03
+
+## What's Changed
+
+- Bump Gradle to 9.5, fix `releaseDate` format in Makefile, and update docs edit URI
+- Add Kover coverage with Codecov reporting ([#37](https://github.com/pambrose/srcref/pull/37))
+- Fix Makefile correctness and parsing issues ([#38](https://github.com/pambrose/srcref/pull/38))
+- Tune Codecov config: require CI to pass, disable check annotations, set explicit precision/round, tighten project threshold to 0.5%, mark patch coverage informational, drop empty `flags` from comment layout, and ignore `BuildConfig.kt` ([#39](https://github.com/pambrose/srcref/pull/39))
+- Drop `-PuseMavenLocal` flag and `local-build` / `local-tests` Make targets; build now resolves only from `mavenCentral()` ([#39](https://github.com/pambrose/srcref/pull/39))
+- Bump dependencies: `common-utils` 2.8.1 → 2.8.2, `kotlin-logging` 8.0.01 → 8.0.02 ([#39](https://github.com/pambrose/srcref/pull/39))
+
+**Full Changelog**: https://github.com/pambrose/srcref/compare/2.0.9...2.0.10
+
 ## [v2.0.9](https://github.com/pambrose/srcref/releases/tag/2.0.9) — 2026-04-25
 
 ## What's Changed
