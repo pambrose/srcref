@@ -1,0 +1,27 @@
+codecov:
+  require_ci_to_pass: true
+
+github_checks:
+  annotations: false
+
+coverage:
+  precision: 2
+  round: down
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 0.5%
+    patch:
+      default:
+        target: 70%
+        threshold: 1%
+        informational: true
+
+comment:
+  layout: "reach, diff, files"
+  behavior: default
+  require_changes: true
+
+ignore:
+  - "**/BuildConfig.kt"

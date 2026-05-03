@@ -13,9 +13,9 @@ dropwizard = "4.2.38"
 kotest = "6.1.11"
 ktor = "3.4.3"
 logback = "1.5.32"
-logging = "8.0.01"
+logging = "8.0.02"
 text = "1.15.0"
-utils = "2.8.1"
+utils = "2.8.2"
 
 [libraries]
 # Kotlin

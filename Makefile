@@ -21,14 +21,8 @@ clean:
 build:
 	./gradlew build -xtest
 
-local-build:
-	./gradlew build -PuseMavenLocal=true -xtest
-
 tests:
 	./gradlew --rerun-tasks check
-
-local-tests:
-	./gradlew --rerun-tasks -PuseMavenLocal=true check
 
 run:
 	./gradlew run
