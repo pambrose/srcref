@@ -130,9 +130,9 @@ Published to Maven Central as `com.pambrose:srcref` via the vanniktech maven-pub
 Dokka generates the javadoc jar from KDoc comments. Signing uses in-memory GPG keys via `signingInMemoryKey`,
 `signingInMemoryKeyId`, and `signingInMemoryKeyPassword` Gradle properties.
 
-- `make publish-local` — publish to `~/.m2/repository` for local testing. To consume locally-published
-  artifacts in another build, run with `-PuseMavenLocal=true` (the `mavenLocal()` repo is gated on this
-  property in `settings.gradle.kts`).
+- `make publish-local` — publish to `~/.m2/repository` for local testing. Note: this build only resolves from
+  `mavenCentral()` (see `settings.gradle.kts`); to consume locally-published artifacts, add `mavenLocal()` to the
+  consuming build's repositories.
 - `make publish-maven-central` — publish and release to Maven Central.
 - `make kdocs` — generate KDoc HTML documentation to `build/dokka/html/`.
 
