@@ -16,6 +16,8 @@ at https://www.srcref.com.
 ./gradlew check                # Full check including lint
 ./gradlew lintKotlin           # Lint only
 ./gradlew formatKotlin         # Auto-format code
+./gradlew detekt               # Run detekt static analysis (also runs as part of `check`)
+./gradlew detektBaseline       # Regenerate detekt-baseline.xml from current violations
 ./gradlew run                  # Run dev server (port 8080)
 ./gradlew buildFatJar          # Create fat JAR at build/libs/srcref-all.jar
 ./gradlew koverHtmlReport      # Run tests + generate HTML coverage report at build/reports/kover/html/
@@ -37,8 +39,8 @@ Run a single named test (Kotest string spec name):
 ```
 
 Makefile shortcuts: `make build`, `make tests`, `make run`, `make uber`, `make release`, `make deploy`,
-`make kdocs`, `make coverage`, `make coverage-xml`, `make coverage-verify`, `make publish-local`,
-`make publish-maven-central`.
+`make kdocs`, `make coverage`, `make coverage-xml`, `make coverage-verify`, `make lint` (kotlinter +
+detekt), `make detekt-baseline`, `make publish-local`, `make publish-maven-central`.
 Default `make` target runs `./gradlew dependencyUpdates` to check for outdated dependencies.
 
 ## Architecture
@@ -102,14 +104,18 @@ informational (won't gate PRs); generated `BuildConfig.kt` is ignored.
 
 ## Code Style
 
-- Kotlinter (ktlint) for linting. Run `./gradlew formatKotlin` before committing.
+- Kotlinter (ktlint) for linting/formatting. Run `./gradlew formatKotlin` before committing.
+- Detekt for static analysis (code smells, complexity, potential bugs). Config in `config/detekt/detekt.yml`;
+  pre-existing violations are snapshotted in `config/detekt/detekt-baseline.xml`. Both run as part of
+  `./gradlew check`. After intentional new violations or fixes, regenerate the baseline with
+  `./gradlew detektBaseline`.
 - Disabled ktlint rules (via `.editorconfig`): `no-wildcard-imports`, `string-template-indent`, `indent`,
   `chain-method-continuation`, `import-ordering`.
 - 120 char line length, 2-space indentation, UTF-8, LF line endings.
 
 ## Version Management
 
-Version is defined in `gradle.properties` (`version=2.0.10`). The Makefile `VERSION` is derived automatically from
+Version is defined in `gradle.properties` (`version=2.0.11`). The Makefile `VERSION` is derived automatically from
 `gradle.properties`. The following must still be updated manually when changing the version:
 
 - `README.md` (Maven/Gradle dependency snippets and Kotlin version badge)

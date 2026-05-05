@@ -5,7 +5,6 @@
 [![Tests](https://img.shields.io/github/actions/workflow/status/pambrose/srcref/tests.yml?branch=master&label=tests)](https://github.com/pambrose/srcref/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/pambrose/srcref/branch/master/graph/badge.svg)](https://codecov.io/gh/pambrose/srcref)
 [![Kotlin version](https://img.shields.io/badge/kotlin-2.3.21-red?logo=kotlin)](http://kotlinlang.org)
-[![ktlint](https://img.shields.io/badge/ktlint%20code--style-%E2%9D%A4-FF4081)](https://pinterest.github.io/ktlint/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 ## Overview
@@ -103,7 +102,7 @@ _srcref_ URLs can be generated programmatically with the `srcrefUrl()` call. An 
 
 ```kotlin
 dependencies {
-   implementation("com.pambrose:srcref:2.0.10")
+   implementation("com.pambrose:srcref:2.0.11")
 }
 ```
 
@@ -114,7 +113,7 @@ dependencies {
 
 ```groovy
 dependencies {
-   implementation 'com.pambrose:srcref:2.0.10'
+   implementation 'com.pambrose:srcref:2.0.11'
 }
 ```
 
@@ -128,7 +127,7 @@ dependencies {
 <dependency>
    <groupId>com.pambrose</groupId>
    <artifactId>srcref</artifactId>
-   <version>2.0.10</version>
+   <version>2.0.11</version>
 </dependency>
 ```
 
