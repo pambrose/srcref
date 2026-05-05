@@ -14,6 +14,7 @@ plugins {
   alias(libs.plugins.dokka)
   alias(libs.plugins.kover)
   alias(libs.plugins.maven.publish)
+  alias(libs.plugins.detekt)
 }
 
 // Version and group are defined in gradle.properties; also update version refs in README.md and website/srcref/docs/{api,getting-started}.md
@@ -63,6 +64,32 @@ ktor {
   fatJar {
     archiveFileName.set("srcref-all.jar")
   }
+}
+
+detekt {
+  toolVersion = libs.versions.detekt.get()
+  source.setFrom(files("src/main/kotlin", "src/test/kotlin"))
+  config.setFrom(files("$rootDir/detekt.yml"))
+  baseline = file("$rootDir/detekt-baseline.xml")
+  buildUponDefaultConfig = true
+  parallel = true
+  ignoreFailures = false
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+  jvmTarget = "17"
+  reports {
+    html.required.set(true)
+    xml.required.set(true)
+    txt.required.set(false)
+    sarif.required.set(false)
+    md.required.set(false)
+  }
+  exclude("**/build/generated/**")
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
+  jvmTarget = "17"
 }
 
 dokka {
