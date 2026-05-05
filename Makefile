@@ -22,7 +22,7 @@ build:
 	./gradlew build -xtest
 
 lint:
-	./gradlew lintKotlinMain lintKotlinTest detekt
+	./gradlew lintKotlin detekt
 
 detekt-baseline:
 	./gradlew detektBaseline
