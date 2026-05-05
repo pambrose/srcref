@@ -69,8 +69,8 @@ ktor {
 detekt {
   toolVersion = libs.versions.detekt.get()
   source.setFrom(files("src/main/kotlin", "src/test/kotlin"))
-  config.setFrom(files("$rootDir/detekt.yml"))
-  baseline = file("$rootDir/detekt-baseline.xml")
+  config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
+  baseline = file("$rootDir/config/detekt/detekt-baseline.xml")
   buildUponDefaultConfig = true
   parallel = true
   ignoreFailures = false

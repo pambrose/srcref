@@ -105,9 +105,10 @@ informational (won't gate PRs); generated `BuildConfig.kt` is ignored.
 ## Code Style
 
 - Kotlinter (ktlint) for linting/formatting. Run `./gradlew formatKotlin` before committing.
-- Detekt for static analysis (code smells, complexity, potential bugs). Config in `detekt.yml`;
-  pre-existing violations are snapshotted in `detekt-baseline.xml`. Both run as part of `./gradlew check`.
-  After intentional new violations or fixes, regenerate the baseline with `./gradlew detektBaseline`.
+- Detekt for static analysis (code smells, complexity, potential bugs). Config in `config/detekt/detekt.yml`;
+  pre-existing violations are snapshotted in `config/detekt/detekt-baseline.xml`. Both run as part of
+  `./gradlew check`. After intentional new violations or fixes, regenerate the baseline with
+  `./gradlew detektBaseline`.
 - Disabled ktlint rules (via `.editorconfig`): `no-wildcard-imports`, `string-template-indent`, `indent`,
   `chain-method-continuation`, `import-ordering`.
 - 120 char line length, 2-space indentation, UTF-8, LF line endings.
