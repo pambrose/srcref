@@ -1,10 +1,11 @@
-VERSION=$(shell awk -F= '/^version[[:space:]]*=/ {gsub(/[[:space:]]/,"",$$2); print $$2; exit}' gradle.properties)
-
 .PHONY: default build-all stop clean build local-build tests local-tests run refresh \
 	fatjar uber run-docker build-docker docker-push release deploy do-log dist stage \
 	purge versioncheck kdocs coverage coverage-xml coverage-verify clean-docs site \
 	publish-local publish-local-snapshot check-gpg-env publish-snapshot \
 	publish-maven-central upgrade-wrapper lint detekt-baseline
+
+VERSION=$(shell awk -F= '/^version[[:space:]]*=/ {gsub(/[[:space:]]/,"",$$2); print $$2; exit}' gradle.properties)
+GRADLE_VERSION=$(shell awk -F'"' '/^gradle[[:space:]]*=/ {print $$2; exit}' gradle/libs.versions.toml)
 
 default: versioncheck
 
@@ -149,4 +150,4 @@ publish-maven-central: check-gpg-env
 	$(GPG_ENV) ./gradlew publishAndReleaseToMavenCentral
 
 upgrade-wrapper:
-	./gradlew wrapper --gradle-version=9.5.0 --distribution-type=bin
+	./gradlew wrapper --gradle-version=$(GRADLE_VERSION) --distribution-type=bin

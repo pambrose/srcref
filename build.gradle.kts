@@ -20,6 +20,10 @@ plugins {
 // Version and group are defined in gradle.properties; also update version refs in README.md and website/srcref/docs/{api,getting-started}.md
 providers.gradleProperty("overrideVersion").orNull?.let { version = it }
 
+val projectUrl = "https://github.com/pambrose/srcref"
+val detektConfigDir = "$rootDir/config/detekt"
+val jvmTargetVersion = libs.versions.jvm.get()
+
 val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
 val releaseDate = providers.gradleProperty("releaseDate").orNull ?: LocalDate.now().format(formatter)
 val buildTime = providers.gradleProperty("buildTime").orNull?.toLong() ?: System.currentTimeMillis()
@@ -49,7 +53,7 @@ dependencies {
 }
 
 kotlin {
-  jvmToolchain(17)
+  jvmToolchain(jvmTargetVersion.toInt())
 
   sourceSets.all {
     listOf(
@@ -62,16 +66,14 @@ kotlin {
 
 ktor {
   fatJar {
-    archiveFileName.set("srcref-all.jar")
+    archiveFileName.set("${project.name}-all.jar")
   }
 }
 
-val jvmTargetVersion = "17"
-
 detekt {
   toolVersion = libs.versions.detekt.get()
-  config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
-  baseline = file("$rootDir/config/detekt/detekt-baseline.xml")
+  config.setFrom(files("$detektConfigDir/detekt.yml"))
+  baseline = file("$detektConfigDir/detekt-baseline.xml")
   buildUponDefaultConfig = true
 }
 
@@ -88,10 +90,10 @@ tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configure
 }
 
 dokka {
-  moduleName.set("srcref")
+  moduleName.set(project.name)
   pluginsConfiguration.html {
-    homepageLink.set("https://github.com/pambrose/srcref")
-    footerMessage.set("srcref")
+    homepageLink.set(projectUrl)
+    footerMessage.set(project.name)
   }
 }
 
@@ -104,9 +106,9 @@ mavenPublishing {
   )
 
   pom {
-    name.set("srcref")
+    name.set(project.name)
     description.set("Dynamic Line-Specific GitHub Permalinks")
-    url.set("https://github.com/pambrose/srcref")
+    url.set(projectUrl)
     licenses {
       license {
         name.set("Apache License 2.0")
@@ -123,7 +125,7 @@ mavenPublishing {
     scm {
       connection.set("scm:git:git://github.com/pambrose/srcref.git")
       developerConnection.set("scm:git:ssh://github.com/pambrose/srcref.git")
-      url.set("https://github.com/pambrose/srcref")
+      url.set(projectUrl)
     }
   }
 
