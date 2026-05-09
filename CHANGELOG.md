@@ -2,6 +2,15 @@
 
 All notable changes to this project. Format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [2.0.11](https://github.com/pambrose/srcref/releases/tag/2.0.11) — Unreleased
+
+- Add detekt static analysis with baseline and Gradle integration ([#41](https://github.com/pambrose/srcref/pull/41))
+- Consolidate build literals and centralize toolchain versions in `gradle/libs.versions.toml`
+- Extract the `coverage-packages` Python report from the Makefile into `scripts/coverage_packages.py` so the recipe is a one-line invocation
+- Add `make help` target that auto-discovers `## description` annotations on Makefile targets and prints a colorized listing
+
+**Full Changelog**: https://github.com/pambrose/srcref/compare/2.0.10...2.0.11
+
 ## [2.0.10](https://github.com/pambrose/srcref/releases/tag/2.0.10) — 2026-05-03
 
 - Bump Gradle to 9.5, fix `releaseDate` format in Makefile, and update docs edit URI

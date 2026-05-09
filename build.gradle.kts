@@ -77,16 +77,16 @@ detekt {
   buildUponDefaultConfig = true
 }
 
-tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-  jvmTarget = jvmTargetVersion
+tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
+  jvmTarget.set(jvmTargetVersion)
   reports {
     html.required.set(false)
-    xml.required.set(false)
+    checkstyle.required.set(false)
   }
 }
 
-tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
-  jvmTarget = jvmTargetVersion
+tasks.withType<dev.detekt.gradle.DetektCreateBaselineTask>().configureEach {
+  jvmTarget.set(jvmTargetVersion)
 }
 
 dokka {

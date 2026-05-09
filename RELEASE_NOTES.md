@@ -2,6 +2,17 @@
 
 Full release notes for every published version, newest first. Mirrors https://github.com/pambrose/srcref/releases.
 
+## [v2.0.11](https://github.com/pambrose/srcref/releases/tag/2.0.11) — Unreleased
+
+## What's Changed
+
+- Add detekt static analysis with baseline and Gradle integration ([#41](https://github.com/pambrose/srcref/pull/41))
+- Consolidate build literals and centralize toolchain versions in `gradle/libs.versions.toml`
+- Extract the `coverage-packages` Python report from the Makefile into `scripts/coverage_packages.py` so the recipe is a one-line invocation
+- Add `make help` target that auto-discovers `## description` annotations on Makefile targets and prints a colorized listing
+
+**Full Changelog**: https://github.com/pambrose/srcref/compare/2.0.10...2.0.11
+
 ## [v2.0.10](https://github.com/pambrose/srcref/releases/tag/2.0.10) — 2026-05-03
 
 ## What's Changed
