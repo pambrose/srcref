@@ -1,15 +1,15 @@
 complexity:
   LongMethod:
-    threshold: 80
+    allowedLines: 80
   LongParameterList:
-    functionThreshold: 8
-    constructorThreshold: 8
+    allowedFunctionParameters: 8
+    allowedConstructorParameters: 8
   CyclomaticComplexMethod:
-    threshold: 20
+    allowedComplexity: 20
   TooManyFunctions:
     active: false
   NestedBlockDepth:
-    threshold: 6
+    allowedDepth: 6
 
 style:
   MagicNumber:

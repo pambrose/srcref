@@ -39,8 +39,10 @@ Run a single named test (Kotest string spec name):
 ```
 
 Makefile shortcuts: `make build`, `make tests`, `make run`, `make uber`, `make release`, `make deploy`,
-`make kdocs`, `make coverage`, `make coverage-xml`, `make coverage-verify`, `make lint` (kotlinter +
-detekt), `make detekt-baseline`, `make publish-local`, `make publish-maven-central`.
+`make kdocs`, `make coverage`, `make coverage-xml`, `make coverage-verify`, `make coverage-packages`
+(per-package coverage summary via `scripts/coverage_packages.py`), `make lint` (kotlinter + detekt),
+`make detekt-baseline`, `make publish-local`, `make publish-maven-central`. Run `make help` to list
+all annotated targets with descriptions.
 Default `make` target runs `./gradlew dependencyUpdates` to check for outdated dependencies.
 
 ## Architecture

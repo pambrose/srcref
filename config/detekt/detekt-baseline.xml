@@ -2,14 +2,8 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>LongMethod:Edit.kt$Edit$internal suspend fun RoutingContext.displayEdit(params: Map&lt;String, String?>)</ID>
-    <ID>LongMethod:What.kt$What$internal suspend fun RoutingContext.displayWhat()</ID>
-    <ID>LongParameterList:Api.kt$Api$( account: String, repo: String, path: String, beginRegex: String, beginOccurrence: Int = 1, beginOffset: Int = 0, beginTopDown: Boolean = true, endRegex: String = "", endOccurrence: Int = 1, endOffset: Int = 0, endTopDown: Boolean = true, prefix: String = "https://www.srcref.com", branch: String = "master", escapeHtml4: Boolean = false, )</ID>
-    <ID>MemberNameEqualsClassName:ContentCache.kt$ContentCache.Companion$internal val contentCache = ContentCache()</ID>
-    <ID>MemberNameEqualsClassName:Main.kt$Main$@JvmStatic fun main(args: Array&lt;String>)</ID>
-    <ID>SwallowedException:Routes.kt$Routes$e: NoClassDefFoundError</ID>
-    <ID>UseRequire:Urls.kt$Urls$throw IllegalArgumentException("Begin line number is less than 1")</ID>
-    <ID>UseRequire:Urls.kt$Urls$throw IllegalArgumentException("End line number is less than 1")</ID>
-    <ID>UseRequire:Urls.kt$Urls$throw IllegalArgumentException("Regex matching timed out for $desc regex: \"$pattern\"")</ID>
+    <ID>LongMethod:Edit.kt:Edit$internal suspend fun RoutingContext.displayEdit</ID>
+    <ID>LongMethod:What.kt:What$internal suspend fun RoutingContext.displayWhat</ID>
+    <ID>SwallowedException:Routes.kt:Routes$e: NoClassDefFoundError</ID>
   </CurrentIssues>
 </SmellBaseline>

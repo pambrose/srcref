@@ -1,15 +1,19 @@
 [versions]
+# Toolchain
+gradle = "9.5.0"
+jvm = "17"
+
 # Plugins
 kotlin = "2.3.21"
 buildconfig = "6.0.9"
-detekt = "1.23.8"
+detekt = "2.0.0-alpha.3"
 gradle-plugins = "1.0.14"
 dokka = "2.2.0"
 kover = "0.9.8"
 maven-publish = "0.36.0"
 
 # Libraries
-coroutines = "1.10.2"
+coroutines = "1.11.0"
 dropwizard = "4.2.38"
 kotest = "6.1.11"
 ktor = "3.4.3"
@@ -67,7 +71,7 @@ dropwizard = [
 
 [plugins]
 buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+detekt = { id = "dev.detekt", version.ref = "detekt" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }

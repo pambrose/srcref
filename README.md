@@ -312,6 +312,9 @@ srcref provides detailed error messages for common issues:
 git clone https://github.com/pambrose/srcref.git
 cd srcref
 
+# List available make targets
+make help
+
 # Build project
 ./gradlew build
 
@@ -320,6 +323,9 @@ cd srcref
 
 # Generate coverage report (HTML at build/reports/kover/html/)
 make coverage
+
+# Per-package coverage summary (uses scripts/coverage_packages.py)
+make coverage-packages
 
 # Start development server
 ./gradlew run
