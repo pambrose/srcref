@@ -1,28 +1,22 @@
 .PHONY: default help build-all stop clean build local-build tests local-tests run refresh \
 	fatjar uber run-docker build-docker docker-push release deploy do-log dist stage \
-	purge versioncheck kdocs coverage coverage-xml coverage-verify clean-docs site \
-	publish-local publish-local-snapshot check-gpg-env publish-snapshot \
-	publish-maven-central upgrade-wrapper lint detekt detekt-baseline
+	purge versioncheck kdocs coverage coverage-html coverage-xml coverage-log \
+	coverage-open coverage-packages coverage-clean coverage-verify clean-docs site \
+	publish-local publish-local-snapshot publish-snapshot publish-maven-central \
+	upgrade-wrapper lint detekt detekt-baseline \
+	_check-gpg-env _require-version _require-gradle-version
 
-VERSION=$(shell awk -F= '/^version[[:space:]]*=/ {gsub(/[[:space:]]/,"",$$2); print $$2; exit}' gradle.properties)
-
-ifeq ($(strip $(VERSION)),)
-$(error Could not determine project version from gradle.properties)
-endif
-
-GRADLE_VERSION=$(shell awk -F'"' '/^gradle[[:space:]]*=/ {print $$2; exit}' gradle/libs.versions.toml)
-
-ifeq ($(strip $(GRADLE_VERSION)),)
-$(error Could not determine gradle version from gradle/libs.versions.toml)
-endif
+# Strip inline `# comment` text and surrounding whitespace so trailing notes don't poison the value.
+VERSION=$(shell awk -F= '/^[[:space:]]*version[[:space:]]*=/ {sub(/#.*/,"",$$2); gsub(/[[:space:]]/,"",$$2); print $$2; exit}' gradle.properties)
+GRADLE_VERSION=$(shell awk -F'"' '/^[[:space:]]*gradle[[:space:]]*=/ {print $$2; exit}' gradle/libs.versions.toml)
 
 PLATFORMS := linux/amd64,linux/arm64/v8
 IMAGE_NAME := pambrose/srcref
 
-GPG_ENV = \
+GPG_ENV := \
 	ORG_GRADLE_PROJECT_signingInMemoryKey="$$(gpg --armor --export-secret-keys $$GPG_SIGNING_KEY_ID)" \
 	ORG_GRADLE_PROJECT_signingInMemoryKeyId="$$GPG_SIGNING_KEY_ID" \
-	ORG_GRADLE_PROJECT_signingInMemoryKeyPassword="$$(security find-generic-password -a "gpg-signing" -s "gradle-signing-password" -w)"
+	ORG_GRADLE_PROJECT_signingInMemoryKeyPassword=$$(security find-generic-password -a "gpg-signing" -s "gradle-signing-password" -w)
 
 default: versioncheck
 
@@ -92,14 +86,14 @@ fatjar: build  ## Build the fat JAR
 uber: fatjar  ## Build and run the fat JAR
 	java -jar build/libs/srcref-all.jar
 
-run-docker:  ## Run the published Docker image locally
+run-docker: _require-version ## Run the published Docker image locally
 	docker run --rm --env-file=docker_env_vars -p 8080:8080 pambrose/srcref:$(VERSION)
 
-build-docker: build  ## Build the Docker image
+build-docker: _require-version build  ## Build the Docker image
 	docker build -t pambrose/srcref:$(VERSION) .
 
-docker-push: build-docker  ## Build and push multi-arch Docker image
-	# prepare multiarch
+docker-push: _require-version  ## Build and push multi-arch Docker image
+	# buildx rebuilds for both architectures, so a prior single-arch `build-docker` would be wasted work.
 	docker buildx use buildx 2>/dev/null || docker buildx create --use --name=buildx
 	docker buildx build --platform $(PLATFORMS) --push -t $(IMAGE_NAME):latest -t $(IMAGE_NAME):$(VERSION) .
 
@@ -122,6 +116,7 @@ purge:  ## Purge the Heroku build cache
 	heroku builds:cache:purge -a srcref --confirm srcref
 
 versioncheck:  ## Check for outdated dependencies
+	# --no-configuration-cache: the gradle-versions plugin (`dependencyUpdates`) is not config-cache compatible.
 	./gradlew dependencyUpdates --no-configuration-cache
 
 kdocs:  ## Generate KDoc HTML documentation
@@ -137,10 +132,19 @@ site: clean-docs  ## Serve the docs site locally
 publish-local:  ## Publish to local Maven repo (~/.m2)
 	./gradlew publishToMavenLocal
 
-publish-local-snapshot:  ## Publish a SNAPSHOT to local Maven repo
+publish-local-snapshot: _require-version ## Publish a SNAPSHOT to local Maven repo
 	./gradlew -PoverrideVersion=$(VERSION)-SNAPSHOT publishToMavenLocal
 
-check-gpg-env:
+publish-snapshot: _require-version _check-gpg-env  ## Publish a SNAPSHOT to Maven Central
+	$(GPG_ENV) ./gradlew -PoverrideVersion=$(VERSION)-SNAPSHOT publishToMavenCentral
+
+publish-maven-central: _check-gpg-env  ## Publish and release to Maven Central
+	$(GPG_ENV) ./gradlew publishAndReleaseToMavenCentral
+
+upgrade-wrapper: _require-gradle-version ## Upgrade the Gradle wrapper to the version in libs.versions.toml
+	./gradlew wrapper --gradle-version=$(GRADLE_VERSION) --distribution-type=bin
+
+_check-gpg-env:
 	@if [ -z "$$GPG_SIGNING_KEY_ID" ]; then \
 		echo "Error: GPG_SIGNING_KEY_ID is not set" >&2; exit 1; \
 	fi
@@ -151,11 +155,8 @@ check-gpg-env:
 		echo "Error: keychain entry 'gradle-signing-password' (account 'gpg-signing') not found" >&2; exit 1; \
 	fi
 
-publish-snapshot: check-gpg-env  ## Publish a SNAPSHOT to Maven Central
-	$(GPG_ENV) ./gradlew -PoverrideVersion=$(VERSION)-SNAPSHOT publishToMavenCentral
+_require-version:
+	@[ -n "$(VERSION)" ] || { echo "ERROR: Could not determine project version from gradle.properties" >&2; exit 1; }
 
-publish-maven-central: check-gpg-env  ## Publish and release to Maven Central
-	$(GPG_ENV) ./gradlew publishAndReleaseToMavenCentral
-
-upgrade-wrapper:  ## Upgrade the Gradle wrapper to the version in libs.versions.toml
-	./gradlew wrapper --gradle-version=$(GRADLE_VERSION) --distribution-type=bin
+_require-gradle-version:
+	@[ -n "$(GRADLE_VERSION)" ] || { echo "ERROR: Could not determine gradle version from gradle/libs.versions.toml" >&2; exit 1; }

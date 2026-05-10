@@ -1,6 +1,8 @@
 import com.vanniktech.maven.publish.JavadocJar
 import com.vanniktech.maven.publish.KotlinJvm
 import com.vanniktech.maven.publish.SourcesJar
+import dev.detekt.gradle.Detekt
+import dev.detekt.gradle.DetektCreateBaselineTask
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -77,7 +79,7 @@ detekt {
   buildUponDefaultConfig = true
 }
 
-tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
+tasks.withType<Detekt>().configureEach {
   jvmTarget.set(jvmTargetVersion)
   reports {
     html.required.set(false)
@@ -85,7 +87,7 @@ tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
   }
 }
 
-tasks.withType<dev.detekt.gradle.DetektCreateBaselineTask>().configureEach {
+tasks.withType<DetektCreateBaselineTask>().configureEach {
   jvmTarget.set(jvmTargetVersion)
 }
 
