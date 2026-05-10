@@ -1,4 +1,4 @@
-.PHONY: default help build-all stop clean build local-build tests local-tests run refresh \
+.PHONY: default help build-all stop clean build tests run refresh \
 	fatjar uber run-docker build-docker docker-push release deploy do-log dist stage \
 	purge versioncheck kdocs coverage coverage-html coverage-xml coverage-log \
 	coverage-open coverage-packages coverage-clean coverage-verify clean-docs site \
@@ -25,7 +25,10 @@ help:  ## Show this help (list of targets)
 		/^[a-zA-Z0-9_-]+:.*?## / {printf "  \033[36m%-22s\033[0m %s\n", $$1, $$2}' \
 		$(MAKEFILE_LIST)
 
-.NOTPARALLEL: build-all release
+# .NOTPARALLEL ignores its prerequisites — its presence forces the whole Makefile to run
+# serially under -j. Recipes here mostly wrap Gradle (which manages its own parallelism),
+# so serial top-level execution is what we want.
+.NOTPARALLEL:
 
 build-all: clean stage  ## Clean and stage a full build
 
@@ -38,8 +41,8 @@ clean:  ## Remove Gradle build outputs
 build:  ## Build without running tests
 	./gradlew build -xtest
 
-lint: detekt ## Run kotlinter and detekt
-	./gradlew lintKotlin
+lint:  ## Run kotlinter and detekt
+	./gradlew lintKotlin detekt
 
 detekt:  ## Run detekt static analysis
 	./gradlew detekt
@@ -47,7 +50,8 @@ detekt:  ## Run detekt static analysis
 detekt-baseline:  ## Regenerate the detekt baseline
 	./gradlew detektBaseline
 
-coverage: coverage-html coverage-xml  ## Generate HTML and XML coverage reports
+coverage:  ## Generate HTML and XML coverage reports
+	./gradlew koverHtmlReport koverXmlReport
 
 coverage-html:  ## Generate HTML coverage report (Kover)
 	./gradlew koverHtmlReport
