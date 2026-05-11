@@ -133,19 +133,19 @@ clean-docs:  ## Remove generated docs site
 site: clean-docs  ## Serve the docs site locally
 	cd website/srcref && uv run zensical serve
 
-publish-local:  ## Publish to local Maven repo (~/.m2)
+publish-local: _require-version  ## Publish to local Maven repo (~/.m2)
 	./gradlew publishToMavenLocal
 
-publish-local-snapshot: _require-version ## Publish a SNAPSHOT to local Maven repo
+publish-local-snapshot: _require-version  ## Publish a SNAPSHOT to local Maven repo
 	./gradlew -PoverrideVersion=$(VERSION)-SNAPSHOT publishToMavenLocal
 
 publish-snapshot: _require-version _check-gpg-env  ## Publish a SNAPSHOT to Maven Central
 	$(GPG_ENV) ./gradlew -PoverrideVersion=$(VERSION)-SNAPSHOT publishToMavenCentral
 
-publish-maven-central: _check-gpg-env  ## Publish and release to Maven Central
+publish-maven-central: _require-version _check-gpg-env  ## Publish and release to Maven Central
 	$(GPG_ENV) ./gradlew publishAndReleaseToMavenCentral
 
-upgrade-wrapper: _require-gradle-version ## Upgrade the Gradle wrapper to the version in libs.versions.toml
+upgrade-wrapper: _require-gradle-version  ## Upgrade the Gradle wrapper to the version in libs.versions.toml
 	./gradlew wrapper --gradle-version=$(GRADLE_VERSION) --distribution-type=bin
 
 _check-gpg-env:
