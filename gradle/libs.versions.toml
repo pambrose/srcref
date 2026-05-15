@@ -1,6 +1,6 @@
 [versions]
 # Toolchain
-gradle = "9.5.0"
+gradle = "9.5.1"
 jvm = "17"
 
 # Plugins
