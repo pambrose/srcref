@@ -13,7 +13,7 @@ the `Api.srcrefUrl()` function for generating srcref URLs programmatically.
 
     ```kotlin
     dependencies {
-        implementation("com.pambrose:srcref:2.0.11")
+        implementation("com.pambrose:srcref:2.1.0")
     }
     ```
 
@@ -21,7 +21,7 @@ the `Api.srcrefUrl()` function for generating srcref URLs programmatically.
 
     ```groovy
     dependencies {
-        implementation 'com.pambrose:srcref:2.0.11'
+        implementation 'com.pambrose:srcref:2.1.0'
     }
     ```
 
@@ -31,7 +31,7 @@ the `Api.srcrefUrl()` function for generating srcref URLs programmatically.
     <dependency>
         <groupId>com.pambrose</groupId>
         <artifactId>srcref</artifactId>
-        <version>2.0.11</version>
+        <version>2.1.0</version>
     </dependency>
     ```
 

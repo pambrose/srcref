@@ -2,14 +2,18 @@
 
 All notable changes to this project. Format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
-## [2.0.11](https://github.com/pambrose/srcref/releases/tag/2.0.11) — Unreleased
+## [2.1.0](https://github.com/pambrose/srcref/releases/tag/2.1.0) — Unreleased
 
+- Upgrade Gradle wrapper to 9.5.1 ([#45](https://github.com/pambrose/srcref/pull/45))
+- Upgrade dependencies: Kotlin 2.4.0-RC, Ktor 3.5.0, kotlin-logging 8.0.03, and website tooling (zensical 0.0.43)
+- Enable the Gradle daemon and parallel execution in `gradle.properties`
+- Add `check-site` / `upgrade-site` Makefile targets for managing website dependencies
 - Add detekt static analysis with baseline and Gradle integration ([#41](https://github.com/pambrose/srcref/pull/41))
 - Consolidate build literals and centralize toolchain versions in `gradle/libs.versions.toml`
 - Extract the `coverage-packages` Python report from the Makefile into `scripts/coverage_packages.py` so the recipe is a one-line invocation
 - Add `make help` target that auto-discovers `## description` annotations on Makefile targets and prints a colorized listing
 
-**Full Changelog**: https://github.com/pambrose/srcref/compare/2.0.10...2.0.11
+**Full Changelog**: https://github.com/pambrose/srcref/compare/2.0.10...2.1.0
 
 ## [2.0.10](https://github.com/pambrose/srcref/releases/tag/2.0.10) — 2026-05-03
 

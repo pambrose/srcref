@@ -117,7 +117,7 @@ informational (won't gate PRs); generated `BuildConfig.kt` is ignored.
 
 ## Version Management
 
-Version is defined in `gradle.properties` (`version=2.0.11`). The Makefile `VERSION` is derived automatically from
+Version is defined in `gradle.properties` (`version=2.1.0`). The Makefile `VERSION` is derived automatically from
 `gradle.properties`. The following must still be updated manually when changing the version:
 
 - `README.md` (Maven/Gradle dependency snippets and Kotlin version badge)
