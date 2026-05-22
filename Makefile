@@ -21,7 +21,7 @@ default: help
 
 help:  ## Show this help (list of targets)
 	@awk 'BEGIN {FS = ":.*?## "; printf "Usage: make <target>\n\nTargets:\n"} \
-		/^[a-zA-Z0-9_-]+:.*?## / {printf "  \033[36m%-22s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+		/^[a-zA-Z0-9_-]+:.*?## / {printf "  \033[36m%-24s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 # .NOTPARALLEL ignores its prerequisites — its presence forces the whole Makefile to run
 # serially under -j. Recipes here mostly wrap Gradle (which manages its own parallelism),
@@ -88,7 +88,7 @@ fatjar: build  ## Build the fat JAR
 uber: fatjar  ## Build and run the fat JAR
 	java -jar build/libs/srcref-all.jar
 
-run-docker: _require-version ## Run the published Docker image locally
+run-docker: _require-version  ## Run the published Docker image locally
 	docker run --rm --env-file=docker_env_vars -p 8080:8080 pambrose/srcref:$(VERSION)
 
 build-docker: _require-version build  ## Build the Docker image
@@ -118,17 +118,18 @@ purge:  ## Purge the Heroku build cache
 	heroku builds:cache:purge -a srcref --confirm srcref
 
 versions:  ## Check for outdated dependencies
-	# --no-configuration-cache: the gradle-versions plugin (`dependencyUpdates`) is not config-cache compatible.
+	# Both flags override global gradle.properties settings: the gradle-versions
+	# plugin (`dependencyUpdates`) is incompatible with config cache and parallel execution.
 	./gradlew dependencyUpdates --no-configuration-cache --no-parallel
 
 kdocs:  ## Generate KDoc HTML documentation
 	./gradlew dokkaGeneratePublicationHtml
 
 check-site:  ## Check for outdated website dependencies
-	cd website && env -u VIRTUAL_ENV uv lock --upgrade --dry-run
+	cd website/srcref && env -u VIRTUAL_ENV uv lock --upgrade --dry-run
 
 upgrade-site:  ## Upgrade the website dependencies
-	cd website && env -u VIRTUAL_ENV uv lock --upgrade
+	cd website/srcref && env -u VIRTUAL_ENV uv lock --upgrade
 
 clean-site:  ## Remove generated docs site
 	rm -rf website/srcref/site
