@@ -1,14 +1,13 @@
 .PHONY: default help build-all stop clean build tests run refresh \
 	fatjar uber run-docker build-docker docker-push release deploy do-log dist stage \
-	purge versioncheck kdocs coverage coverage-html coverage-xml coverage-log \
-	coverage-open coverage-packages coverage-clean coverage-verify clean-docs site \
+	purge versions kdocs coverage coverage-html coverage-xml coverage-log \
+	coverage-open coverage-packages coverage-clean coverage-verify check-site upgrade-site clean-site site \
 	publish-local publish-local-snapshot publish-snapshot publish-maven-central \
 	upgrade-wrapper lint detekt detekt-baseline \
 	_check-gpg-env _require-version _require-gradle-version
 
-# Strip inline `# comment` text and surrounding whitespace so trailing notes don't poison the value.
-VERSION=$(shell awk -F= '/^[[:space:]]*version[[:space:]]*=/ {sub(/#.*/,"",$$2); gsub(/[[:space:]]/,"",$$2); print $$2; exit}' gradle.properties)
-GRADLE_VERSION=$(shell awk -F'"' '/^[[:space:]]*gradle[[:space:]]*=/ {print $$2; exit}' gradle/libs.versions.toml)
+VERSION := $(shell sed -n 's/^version=\(.*\)/\1/p' gradle.properties)
+GRADLE_VERSION := $(shell sed -n 's/^gradle-wrapper = "\(.*\)"/\1/p' gradle/libs.versions.toml)
 
 PLATFORMS := linux/amd64,linux/arm64/v8
 IMAGE_NAME := pambrose/srcref
@@ -18,12 +17,11 @@ GPG_ENV := \
 	ORG_GRADLE_PROJECT_signingInMemoryKeyId="$$GPG_SIGNING_KEY_ID" \
 	ORG_GRADLE_PROJECT_signingInMemoryKeyPassword=$$(security find-generic-password -a "gpg-signing" -s "gradle-signing-password" -w)
 
-default: versioncheck
+default: help
 
 help:  ## Show this help (list of targets)
 	@awk 'BEGIN {FS = ":.*?## "; printf "Usage: make <target>\n\nTargets:\n"} \
-		/^[a-zA-Z0-9_-]+:.*?## / {printf "  \033[36m%-22s\033[0m %s\n", $$1, $$2}' \
-		$(MAKEFILE_LIST)
+		/^[a-zA-Z0-9_-]+:.*?## / {printf "  \033[36m%-24s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 # .NOTPARALLEL ignores its prerequisites — its presence forces the whole Makefile to run
 # serially under -j. Recipes here mostly wrap Gradle (which manages its own parallelism),
@@ -90,7 +88,7 @@ fatjar: build  ## Build the fat JAR
 uber: fatjar  ## Build and run the fat JAR
 	java -jar build/libs/srcref-all.jar
 
-run-docker: _require-version ## Run the published Docker image locally
+run-docker: _require-version  ## Run the published Docker image locally
 	docker run --rm --env-file=docker_env_vars -p 8080:8080 pambrose/srcref:$(VERSION)
 
 build-docker: _require-version build  ## Build the Docker image
@@ -119,18 +117,25 @@ stage:  ## Run the Gradle stage task
 purge:  ## Purge the Heroku build cache
 	heroku builds:cache:purge -a srcref --confirm srcref
 
-versioncheck:  ## Check for outdated dependencies
-	# --no-configuration-cache: the gradle-versions plugin (`dependencyUpdates`) is not config-cache compatible.
-	./gradlew dependencyUpdates --no-configuration-cache
+versions:  ## Check for outdated dependencies
+	# Both flags override global gradle.properties settings: the gradle-versions
+	# plugin (`dependencyUpdates`) is incompatible with config cache and parallel execution.
+	./gradlew dependencyUpdates --no-configuration-cache --no-parallel
 
 kdocs:  ## Generate KDoc HTML documentation
 	./gradlew dokkaGeneratePublicationHtml
 
-clean-docs:  ## Remove generated docs site
+check-site:  ## Check for outdated website dependencies
+	cd website/srcref && env -u VIRTUAL_ENV uv lock --upgrade --dry-run
+
+upgrade-site:  ## Upgrade the website dependencies
+	cd website/srcref && env -u VIRTUAL_ENV uv lock --upgrade
+
+clean-site:  ## Remove generated docs site
 	rm -rf website/srcref/site
 	rm -rf website/srcref/.cache
 
-site: clean-docs  ## Serve the docs site locally
+site: clean-site  ## Serve the docs site locally
 	cd website/srcref && uv run zensical serve
 
 publish-local: _require-version  ## Publish to local Maven repo (~/.m2)
