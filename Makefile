@@ -126,10 +126,10 @@ kdocs:  ## Generate KDoc HTML documentation
 	./gradlew dokkaGeneratePublicationHtml
 
 check-site:  ## Check for outdated website dependencies
-	cd website/srcref && env -u VIRTUAL_ENV uv lock --upgrade --dry-run
+	cd website && env -u VIRTUAL_ENV uv lock --upgrade --dry-run
 
 upgrade-site:  ## Upgrade the website dependencies
-	cd website/srcref && env -u VIRTUAL_ENV uv lock --upgrade
+	cd website && env -u VIRTUAL_ENV uv lock --upgrade
 
 clean-site:  ## Remove generated docs site
 	rm -rf website/srcref/site
