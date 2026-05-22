@@ -119,7 +119,7 @@ purge:  ## Purge the Heroku build cache
 
 versions:  ## Check for outdated dependencies
 	# --no-configuration-cache: the gradle-versions plugin (`dependencyUpdates`) is not config-cache compatible.
-	./gradlew dependencyUpdates
+	./gradlew dependencyUpdates --no-configuration-cache --no-parallel
 
 kdocs:  ## Generate KDoc HTML documentation
 	./gradlew dokkaGeneratePublicationHtml
