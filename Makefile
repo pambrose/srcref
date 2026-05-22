@@ -1,7 +1,7 @@
 .PHONY: default help build-all stop clean build tests run refresh \
 	fatjar uber run-docker build-docker docker-push release deploy do-log dist stage \
-	purge versioncheck kdocs coverage coverage-html coverage-xml coverage-log \
-	coverage-open coverage-packages coverage-clean coverage-verify clean-docs site \
+	purge versions kdocs coverage coverage-html coverage-xml coverage-log \
+	coverage-open coverage-packages coverage-clean coverage-verify check-site upgrade-site clean-site site \
 	publish-local publish-local-snapshot publish-snapshot publish-maven-central \
 	upgrade-wrapper lint detekt detekt-baseline \
 	_check-gpg-env _require-version _require-gradle-version
@@ -17,7 +17,7 @@ GPG_ENV := \
 	ORG_GRADLE_PROJECT_signingInMemoryKeyId="$$GPG_SIGNING_KEY_ID" \
 	ORG_GRADLE_PROJECT_signingInMemoryKeyPassword=$$(security find-generic-password -a "gpg-signing" -s "gradle-signing-password" -w)
 
-default: versioncheck
+default: help
 
 help:  ## Show this help (list of targets)
 	@awk 'BEGIN {FS = ":.*?## "; printf "Usage: make <target>\n\nTargets:\n"} \
@@ -117,18 +117,24 @@ stage:  ## Run the Gradle stage task
 purge:  ## Purge the Heroku build cache
 	heroku builds:cache:purge -a srcref --confirm srcref
 
-versioncheck:  ## Check for outdated dependencies
+versions:  ## Check for outdated dependencies
 	# --no-configuration-cache: the gradle-versions plugin (`dependencyUpdates`) is not config-cache compatible.
 	./gradlew dependencyUpdates
 
 kdocs:  ## Generate KDoc HTML documentation
 	./gradlew dokkaGeneratePublicationHtml
 
-clean-docs:  ## Remove generated docs site
+check-site:  ## Check for outdated website dependencies
+	cd website && env -u VIRTUAL_ENV uv lock --upgrade --dry-run
+
+upgrade-site:  ## Upgrade the website dependencies
+	cd website && env -u VIRTUAL_ENV uv lock --upgrade
+
+clean-site:  ## Remove generated docs site
 	rm -rf website/srcref/site
 	rm -rf website/srcref/.cache
 
-site: clean-docs  ## Serve the docs site locally
+site: clean-site  ## Serve the docs site locally
 	cd website/srcref && uv run zensical serve
 
 publish-local: _require-version  ## Publish to local Maven repo (~/.m2)
