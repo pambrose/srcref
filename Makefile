@@ -12,6 +12,9 @@ GRADLE_VERSION := $(shell sed -n 's/^gradle-wrapper = "\(.*\)"/\1/p' gradle/libs
 PLATFORMS := linux/amd64,linux/arm64/v8
 IMAGE_NAME := pambrose/srcref
 
+WEBSITE_DIR := website
+SITE_DIR := $(WEBSITE_DIR)/srcref
+
 GPG_ENV := \
 	ORG_GRADLE_PROJECT_signingInMemoryKey="$$(gpg --armor --export-secret-keys $$GPG_SIGNING_KEY_ID)" \
 	ORG_GRADLE_PROJECT_signingInMemoryKeyId="$$GPG_SIGNING_KEY_ID" \
@@ -126,17 +129,17 @@ kdocs:  ## Generate KDoc HTML documentation
 	./gradlew dokkaGeneratePublicationHtml
 
 check-site:  ## Check for outdated website dependencies
-	cd website && env -u VIRTUAL_ENV uv lock --upgrade --dry-run
+	cd $(WEBSITE_DIR) && env -u VIRTUAL_ENV uv lock --upgrade --dry-run
 
 upgrade-site:  ## Upgrade the website dependencies
-	cd website && env -u VIRTUAL_ENV uv lock --upgrade
+	cd $(WEBSITE_DIR) && env -u VIRTUAL_ENV uv lock --upgrade
 
 clean-site:  ## Remove generated docs site
-	rm -rf website/srcref/site
-	rm -rf website/srcref/.cache
+	rm -rf $(SITE_DIR)/site
+	rm -rf $(SITE_DIR)/.cache
 
 site: clean-site  ## Serve the docs site locally
-	cd website/srcref && uv run zensical serve
+	cd $(SITE_DIR) && uv run zensical serve
 
 publish-local: _require-version  ## Publish to local Maven repo (~/.m2)
 	./gradlew publishToMavenLocal
