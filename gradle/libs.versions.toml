@@ -4,7 +4,7 @@ gradle-wrapper = "9.5.1"
 jvm = "17"
 
 # Plugins
-kotlin = "2.4.0-RC"
+kotlin = "2.4.0-RC2"
 buildconfig = "6.0.9"
 detekt = "2.0.0-alpha.3"
 gradle-plugins = "1.0.14"
@@ -14,11 +14,11 @@ maven-publish = "0.36.0"
 
 # Libraries
 coroutines = "1.11.0"
-dropwizard = "4.2.38"
+dropwizard = "4.2.39"
 kotest = "6.1.11"
 ktor = "3.5.0"
-logback = "1.5.32"
-logging = "8.0.03"
+logback = "1.5.33"
+logging = "8.0.4"
 text = "1.15.0"
 utils = "2.8.2"
 
