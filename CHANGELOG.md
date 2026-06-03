@@ -2,14 +2,16 @@
 
 All notable changes to this project. Format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
-## [2.1.0](https://github.com/pambrose/srcref/releases/tag/2.1.0) — Unreleased
+## [2.1.0](https://github.com/pambrose/srcref/releases/tag/2.1.0) — 2026-06-03
 
 - Upgrade Gradle wrapper to 9.5.1 ([#45](https://github.com/pambrose/srcref/pull/45))
-- Upgrade dependencies: Kotlin 2.4.0-RC, Ktor 3.5.0, kotlin-logging 8.0.03, and website tooling (zensical 0.0.43)
+- Upgrade dependencies: Kotlin 2.4.0, Ktor 3.5.0, common-utils 2.9.0, kotlin-logging 8.0.4, Dropwizard 4.2.39, Logback 1.5.34, and website tooling (zensical 0.0.43) ([#49](https://github.com/pambrose/srcref/pull/49))
 - Enable the Gradle daemon and parallel execution in `gradle.properties`
 - Add `check-site` / `upgrade-site` Makefile targets for managing website dependencies
+- Abstract website directories to `WEBSITE_DIR` and `SITE_DIR` in the Makefile ([#48](https://github.com/pambrose/srcref/pull/48))
+- Run `uv lock` from the website project root in site Makefile targets ([#46](https://github.com/pambrose/srcref/pull/46))
 - Add detekt static analysis with baseline and Gradle integration ([#41](https://github.com/pambrose/srcref/pull/41))
-- Consolidate build literals and centralize toolchain versions in `gradle/libs.versions.toml`
+- Consolidate build literals and centralize toolchain versions in `gradle/libs.versions.toml` ([#42](https://github.com/pambrose/srcref/pull/42))
 - Extract the `coverage-packages` Python report from the Makefile into `scripts/coverage_packages.py` so the recipe is a one-line invocation
 - Add `make help` target that auto-discovers `## description` annotations on Makefile targets and prints a colorized listing
 
