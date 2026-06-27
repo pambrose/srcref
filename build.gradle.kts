@@ -10,13 +10,13 @@ plugins {
   alias(libs.plugins.kotlin)
   alias(libs.plugins.buildconfig)
   alias(libs.plugins.ktor)
-  alias(libs.plugins.pambrose.stable.versions)
   alias(libs.plugins.pambrose.kotlinter)
   alias(libs.plugins.pambrose.testing)
   alias(libs.plugins.dokka)
   alias(libs.plugins.kover)
   alias(libs.plugins.maven.publish)
   alias(libs.plugins.detekt)
+  alias(libs.plugins.ben.manes.versions)
 }
 
 // Version and group are defined in gradle.properties; also update version refs in README.md and website/srcref/docs/{api,getting-started}.md
