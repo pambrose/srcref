@@ -97,7 +97,7 @@ run-docker: _require-version  ## Run the published Docker image locally
 build-docker: _require-version build  ## Build the Docker image
 	docker build -t pambrose/srcref:$(VERSION) .
 
-docker-push: _require-version  ## Build and push multi-arch Docker image
+docker-push: _require-version fatjar  ## Build and push multi-arch Docker image
 	# buildx rebuilds for both architectures, so a prior single-arch `build-docker` would be wasted work.
 	docker buildx use buildx 2>/dev/null || docker buildx create --use --name=buildx
 	docker buildx build --platform $(PLATFORMS) --push -t $(IMAGE_NAME):latest -t $(IMAGE_NAME):$(VERSION) .

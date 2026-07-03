@@ -1,26 +1,27 @@
 [versions]
 # Toolchain
-gradle-wrapper = "9.5.1"
+gradle-wrapper = "9.6.1"
 jvm = "17"
 
 # Plugins
 kotlin = "2.4.0"
-buildconfig = "6.0.9"
-detekt = "2.0.0-alpha.3"
-gradle-plugins = "1.0.14"
+buildconfig = "6.0.10"
+detekt = "2.0.0-alpha.5"
+gradle-plugins = "1.0.15"
 dokka = "2.2.0"
 kover = "0.9.8"
-maven-publish = "0.36.0"
+maven-publish = "0.37.0"
+versions = "0.54.0"
 
 # Libraries
 coroutines = "1.11.0"
 dropwizard = "4.2.39"
-kotest = "6.1.11"
-ktor = "3.5.0"
-logback = "1.5.34"
+kotest = "6.2.1"
+ktor = "3.5.1"
+logback = "1.5.37"
 logging = "8.0.4"
 text = "1.15.0"
-utils = "2.9.0"
+utils = "2.9.3"
 
 [libraries]
 # Kotlin
@@ -70,6 +71,7 @@ dropwizard = [
 ]
 
 [plugins]
+ben-manes-versions = { id = "com.github.ben-manes.versions", version.ref = "versions" }
 buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
 detekt = { id = "dev.detekt", version.ref = "detekt" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -77,6 +79,5 @@ ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }
-pambrose-stable-versions = { id = "com.pambrose.stable-versions", version.ref = "gradle-plugins" }
 pambrose-kotlinter = { id = "com.pambrose.kotlinter", version.ref = "gradle-plugins" }
 pambrose-testing = { id = "com.pambrose.testing", version.ref = "gradle-plugins" }
