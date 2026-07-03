@@ -2,6 +2,20 @@
 
 Full release notes for every published version, newest first. Mirrors https://github.com/pambrose/srcref/releases.
 
+## [v2.1.1](https://github.com/pambrose/srcref/releases/tag/2.1.1) — 2026-07-03
+
+## What's Changed
+
+- Upgrade Gradle wrapper to 9.6.1 ([#51](https://github.com/pambrose/srcref/pull/51))
+- Bump dependencies: Kotest 6.2.1, Ktor 3.5.1, Logback 1.5.37, common-utils 2.9.3, and build plugins (buildconfig 6.0.10, detekt 2.0.0-alpha.5, gradle-plugins 1.0.15, maven-publish 0.37.0) ([#51](https://github.com/pambrose/srcref/pull/51))
+- Replace the `com.pambrose.stable-versions` plugin with `com.github.ben-manes.versions` 0.54.0 and add a `configureVersions()` block that rejects pre-release dependency updates ([#51](https://github.com/pambrose/srcref/pull/51))
+- Reorganize `build.gradle.kts` into `Project.configureX()` extension functions ([#51](https://github.com/pambrose/srcref/pull/51))
+- Add `src/test/resources/logback-test.xml` to silence Ktor test-host startup and `CallLogging` request logging during tests ([#51](https://github.com/pambrose/srcref/pull/51))
+- Switch the Docker base image to `bellsoft/liberica-openjre-alpine:17`, dropping the separate `apk add openjdk17-jre` step ([#51](https://github.com/pambrose/srcref/pull/51))
+- Make the `docker-push` Makefile target depend on `fatjar` so the JAR is built before the multi-arch image ([#51](https://github.com/pambrose/srcref/pull/51))
+
+**Full Changelog**: https://github.com/pambrose/srcref/compare/2.1.0...2.1.1
+
 ## [v2.1.0](https://github.com/pambrose/srcref/releases/tag/2.1.0) — 2026-06-03
 
 ## What's Changed
