@@ -105,6 +105,9 @@ Coverage is reported to Codecov via Kover. Codecov behavior is configured in `co
 project status uses `auto` target with a 0.5% threshold; patch status targets 70% but is
 informational (won't gate PRs); generated `BuildConfig.kt` is ignored.
 
+Test log output is quieted by `src/test/resources/logback-test.xml`, which sets the `io.ktor` logger to
+`WARN` so Ktor test-host startup and `CallLogging` request logs don't clutter test runs.
+
 ## Code Style
 
 - Kotlinter (ktlint) for linting/formatting. Run `./gradlew formatKotlin` before committing.
@@ -118,7 +121,7 @@ informational (won't gate PRs); generated `BuildConfig.kt` is ignored.
 
 ## Version Management
 
-Version is defined in `gradle.properties` (`version=2.1.0`). The Makefile `VERSION` is derived automatically from
+Version is defined in `gradle.properties` (`version=2.1.1`). The Makefile `VERSION` is derived automatically from
 `gradle.properties`. The following must still be updated manually when changing the version:
 
 - `README.md` (Maven/Gradle dependency snippets and Kotlin version badge)
@@ -165,5 +168,5 @@ Apache License 2.0. See `LICENSE.md`.
 
 ## Deployment
 
-Docker multi-arch build (amd64/arm64) via `make release`. Image runs on Alpine + OpenJDK 17 JRE.
+Docker multi-arch build (amd64/arm64) via `make release`. Image runs on the BellSoft Liberica OpenJRE 17 Alpine base image (`bellsoft/liberica-openjre-alpine:17`).
 Heroku supported via `system.properties` (Java 17 runtime). No CI/CD pipeline — deployment is manual.

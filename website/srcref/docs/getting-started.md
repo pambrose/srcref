@@ -67,7 +67,7 @@ Add `&edit` to any srcref URL to open it in the editor with all fields pre-fille
 
     ```kotlin
     dependencies {
-        implementation("com.pambrose:srcref:2.1.0")
+        implementation("com.pambrose:srcref:2.1.1")
     }
     ```
 
@@ -75,7 +75,7 @@ Add `&edit` to any srcref URL to open it in the editor with all fields pre-fille
 
     ```groovy
     dependencies {
-        implementation 'com.pambrose:srcref:2.1.0'
+        implementation 'com.pambrose:srcref:2.1.1'
     }
     ```
 
@@ -85,7 +85,7 @@ Add `&edit` to any srcref URL to open it in the editor with all fields pre-fille
     <dependency>
         <groupId>com.pambrose</groupId>
         <artifactId>srcref</artifactId>
-        <version>2.1.0</version>
+        <version>2.1.1</version>
     </dependency>
     ```
 

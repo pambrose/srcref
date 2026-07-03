@@ -102,7 +102,7 @@ _srcref_ URLs can be generated programmatically with the `srcrefUrl()` call. An 
 
 ```kotlin
 dependencies {
-   implementation("com.pambrose:srcref:2.1.0")
+   implementation("com.pambrose:srcref:2.1.1")
 }
 ```
 
