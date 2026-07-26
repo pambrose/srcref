@@ -35,7 +35,7 @@ class BugFixTests :
     {
       // Bug 2: ETag substring bounds
       "Cache page handles short ETags without crashing" {
-        val content = CacheContent(pageLines = listOf("line1"), etag = "ab", contentLength = 10)
+        val content = CacheContent(pageLines = ["line1"], etag = "ab", contentLength = 10)
         // Verify the etag is accessible and short - the actual crash was in the cache display page
         content.etag shouldBe "ab"
         content.etag.length shouldBe 2
@@ -90,18 +90,18 @@ class BugFixTests :
       // Bug 7: occurrence validation
       "calcLineNumber rejects occurrence of 0" {
         shouldThrow<IllegalArgumentException> {
-          calcLineNumber(listOf("a", "b"), "a", 0, 0, true)
+          calcLineNumber(["a", "b"], "a", 0, 0, true)
         }.message shouldContain "Occurrence must be >= 1"
       }
 
       "calcLineNumber rejects negative occurrence" {
         shouldThrow<IllegalArgumentException> {
-          calcLineNumber(listOf("a", "b"), "a", -5, 0, true)
+          calcLineNumber(["a", "b"], "a", -5, 0, true)
         }.message shouldContain "Occurrence must be >= 1"
       }
 
       "calcLineNumber still works with occurrence of 1" {
-        calcLineNumber(listOf("a", "b", "c"), "b", 1, 0, true) shouldBe 2
+        calcLineNumber(["a", "b", "c"], "b", 1, 0, true) shouldBe 2
       }
     },
   )

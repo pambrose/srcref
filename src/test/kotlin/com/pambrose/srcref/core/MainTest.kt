@@ -24,11 +24,11 @@ class MainTest :
   StringSpec(
     {
       "startsWithList returns true when prefix matches" {
-        "/ping".startsWithList(listOf("/ping", "/pong")) shouldBe true
+        "/ping".startsWithList(["/ping", "/pong"]) shouldBe true
       }
 
       "startsWithList returns false when no match" {
-        "/other".startsWithList(listOf("/ping", "/pong")) shouldBe false
+        "/other".startsWithList(["/ping", "/pong"]) shouldBe false
       }
 
       "startsWithList returns false for empty list" {
@@ -36,11 +36,11 @@ class MainTest :
       }
 
       "startsWithList with empty string input" {
-        "".startsWithList(listOf("/ping")) shouldBe false
+        "".startsWithList(["/ping"]) shouldBe false
       }
 
       "startsWithList with partial prefix match" {
-        "/pin".startsWithList(listOf("/ping")) shouldBe false
+        "/pin".startsWithList(["/ping"]) shouldBe false
       }
     },
   )

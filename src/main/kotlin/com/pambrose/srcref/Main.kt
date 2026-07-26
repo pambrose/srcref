@@ -55,7 +55,7 @@ import org.slf4j.event.Level
 )
 object Main {
   internal val logger = KotlinLogging.logger {}
-  internal val excludedEndpoints = listOf("/${PING.path}")
+  internal val excludedEndpoints = ["/${PING.path}"]
 
   @JvmStatic
   fun main(args: Array<String>) {

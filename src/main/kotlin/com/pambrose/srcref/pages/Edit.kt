@@ -381,7 +381,7 @@ object Edit {
   }
 
   private fun SELECT.occurrenceOptions(isSelected: Int) {
-    listOf("1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th").forEachIndexed { index, s ->
+    ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"].forEachIndexed { index, s ->
       option {
         value = (index + 1).toString()
         selected = isSelected == (index + 1)

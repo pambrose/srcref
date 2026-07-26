@@ -117,12 +117,12 @@ class RoutesIntegrationTest :
         val longEtag = "\"abcdefghijklmnopqrstuvwxyz1234567890\""
         try {
           contentCache[rawUrl] =
-            CacheContent(pageLines = listOf("a", "b", "c"), etag = "\"short\"", contentLength = 12)
+            CacheContent(pageLines = ["a", "b", "c"], etag = "\"short\"", contentLength = 12)
               .apply { markReferenced() }
           contentCache[shortEtagUrl] =
-            CacheContent(pageLines = listOf("x"), etag = "\"e\"", contentLength = 1)
+            CacheContent(pageLines = ["x"], etag = "\"e\"", contentLength = 1)
           contentCache[longEtagUrl] =
-            CacheContent(pageLines = listOf("y"), etag = longEtag, contentLength = 1)
+            CacheContent(pageLines = ["y"], etag = longEtag, contentLength = 1)
 
           testApplication {
             application { module() }
