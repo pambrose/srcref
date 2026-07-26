@@ -8,6 +8,7 @@ All notable changes to this project. Format is loosely based on [Keep a Changelo
 - Convert `listOf(...)` call sites to `[...]` collection literals in `Main.kt`, `pages/Edit.kt`, and across the test suite ([#53](https://github.com/pambrose/srcref/pull/53))
 - Wrap the cache cleanup `thread(...)` call in an explicit discard to satisfy the return-value checker ([#53](https://github.com/pambrose/srcref/pull/53))
 - Bump dependencies: Kotlin 2.4.10, Kover 0.9.9, Kotest 6.2.3, Logback 1.6.0, common-utils 3.2.1 ([#53](https://github.com/pambrose/srcref/pull/53))
+- Use the spaced `-x test` form of the Gradle exclude flag in the Makefile and docs ([#55](https://github.com/pambrose/srcref/pull/55))
 
 **Full Changelog**: https://github.com/pambrose/srcref/compare/2.1.1...2.2.0
 
