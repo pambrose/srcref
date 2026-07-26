@@ -36,7 +36,7 @@ services:
 # Clone and build
 git clone https://github.com/pambrose/srcref.git
 cd srcref
-./gradlew build -xtest
+./gradlew build -x test
 
 # Run the development server
 ./gradlew run
