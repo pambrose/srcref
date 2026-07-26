@@ -2,6 +2,15 @@
 
 All notable changes to this project. Format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [2.2.0](https://github.com/pambrose/srcref/releases/tag/2.2.0) — 2026-07-25
+
+- Move the experimental `-Xcollection-literals` opt-in from `compileKotlin` to all `KotlinCompile` tasks so test sources can use collection literal syntax; `-Xreturn-value-checker=check` stays scoped to production code ([#53](https://github.com/pambrose/srcref/pull/53))
+- Convert `listOf(...)` call sites to `[...]` collection literals in `Main.kt`, `pages/Edit.kt`, and across the test suite ([#53](https://github.com/pambrose/srcref/pull/53))
+- Wrap the cache cleanup `thread(...)` call in an explicit discard to satisfy the return-value checker ([#53](https://github.com/pambrose/srcref/pull/53))
+- Bump dependencies: Kotlin 2.4.10, Kover 0.9.9, Kotest 6.2.3, Logback 1.6.0, common-utils 3.2.1 ([#53](https://github.com/pambrose/srcref/pull/53))
+
+**Full Changelog**: https://github.com/pambrose/srcref/compare/2.1.1...2.2.0
+
 ## [2.1.1](https://github.com/pambrose/srcref/releases/tag/2.1.1) — 2026-07-03
 
 - Upgrade Gradle wrapper to 9.6.1 ([#51](https://github.com/pambrose/srcref/pull/51))
