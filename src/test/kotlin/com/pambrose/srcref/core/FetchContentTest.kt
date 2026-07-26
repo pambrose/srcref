@@ -100,11 +100,11 @@ class FetchContentTest :
         val url = "http://localhost:$port/file?cache-etag"
         contentCache.remove(url)
         val lines = fetchContent(url)
-        lines shouldBe listOf("alpha", "beta", "gamma")
+        lines shouldBe ["alpha", "beta", "gamma"]
         val cached = contentCache[url]
         cached shouldNotBe null
         cached!!.etag shouldBe "\"v1\""
-        cached.pageLines shouldBe listOf("alpha", "beta", "gamma")
+        cached.pageLines shouldBe ["alpha", "beta", "gamma"]
       }
 
       "fetchContent without ETag does not populate cache" {
@@ -112,7 +112,7 @@ class FetchContentTest :
         val url = "http://localhost:$port/file?no-etag"
         contentCache.remove(url)
         val lines = fetchContent(url)
-        lines shouldBe listOf("alpha", "beta", "gamma")
+        lines shouldBe ["alpha", "beta", "gamma"]
         contentCache[url] shouldBe null
       }
 
@@ -125,7 +125,7 @@ class FetchContentTest :
         val firstHits = contentCache[url]!!.hits
 
         val second = fetchContent(url)
-        second shouldBe listOf("alpha", "beta", "gamma")
+        second shouldBe ["alpha", "beta", "gamma"]
         contentCache[url]!!.hits shouldBe firstHits + 1
       }
 
@@ -153,7 +153,7 @@ class FetchContentTest :
         val url = "http://localhost:$port/file?weird"
         contentCache.remove(url)
         val lines = fetchContent(url)
-        lines shouldBe listOf("alpha", "beta", "gamma")
+        lines shouldBe ["alpha", "beta", "gamma"]
       }
 
       "fetchContent throws when Content-Length exceeds maximum" {

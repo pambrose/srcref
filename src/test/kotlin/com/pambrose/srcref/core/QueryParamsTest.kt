@@ -44,7 +44,7 @@ class QueryParamsTest :
       }
 
       "optionalParams contains exactly the end params" {
-        QueryParams.optionalParams shouldBe listOf("eregex", "eoccur", "eoffset", "etopd")
+        QueryParams.optionalParams shouldBe ["eregex", "eoccur", "eoffset", "etopd"]
       }
 
       "defaultIfNull returns value when present" {

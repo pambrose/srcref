@@ -97,24 +97,28 @@ internal class ContentCache {
     init {
       logger.info { "Starting cache cleanup thread" }
 
-      thread(name = "Cache Cleanup", isDaemon = true) {
-        while (true) {
-          runCatching {
-            val overflow = contentCache.size - contentCache.maxCacheSize
-            if (overflow > 0) {
-              logger.info { "Cache size: ${contentCache.size} exceeds max: ${contentCache.maxCacheSize}" }
-              contentCache.contentMap.entries.sortedByDescending { it.value.lastReferenced }.take(overflow)
-                .forEach { (k, _) ->
-                  logger.info { "Removing $k from cache" }
-                  contentCache.remove(k)
-                }
+      val _ =
+        thread(
+          name = "Cache Cleanup",
+          isDaemon = true,
+        ) {
+          while (true) {
+            runCatching {
+              val overflow = contentCache.size - contentCache.maxCacheSize
+              if (overflow > 0) {
+                logger.info { "Cache size: ${contentCache.size} exceeds max: ${contentCache.maxCacheSize}" }
+                contentCache.contentMap.entries.sortedByDescending { it.value.lastReferenced }.take(overflow)
+                  .forEach { (k, _) ->
+                    logger.info { "Removing $k from cache" }
+                    contentCache.remove(k)
+                  }
+              }
+            }.onFailure { e ->
+              logger.error(e) { "Exception in Cache Cleanup ${e.simpleClassName} ${e.message}" }
             }
-          }.onFailure { e ->
-            logger.error(e) { "Exception in Cache Cleanup ${e.simpleClassName} ${e.message}" }
+            Thread.sleep(5.minutes.inWholeMilliseconds)
           }
-          Thread.sleep(5.minutes.inWholeMilliseconds)
         }
-      }
     }
 
     private fun String.isInvalidContentType() =

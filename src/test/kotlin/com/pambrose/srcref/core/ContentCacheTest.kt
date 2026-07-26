@@ -27,19 +27,19 @@ class ContentCacheTest :
   StringSpec(
     {
       "CacheContent stores pageLines, etag, and contentLength" {
-        val content = CacheContent(pageLines = listOf("line1", "line2"), etag = "abc123", contentLength = 100)
-        content.pageLines shouldBe listOf("line1", "line2")
+        val content = CacheContent(pageLines = ["line1", "line2"], etag = "abc123", contentLength = 100)
+        content.pageLines shouldBe ["line1", "line2"]
         content.etag shouldBe "abc123"
         content.contentLength shouldBe 100
       }
 
       "CacheContent hits starts at 0" {
-        val content = CacheContent(pageLines = listOf("line1"), etag = "abc", contentLength = 10)
+        val content = CacheContent(pageLines = ["line1"], etag = "abc", contentLength = 10)
         content.hits shouldBe 0
       }
 
       "CacheContent markReferenced increments hits" {
-        val content = CacheContent(pageLines = listOf("line1"), etag = "abc", contentLength = 10)
+        val content = CacheContent(pageLines = ["line1"], etag = "abc", contentLength = 10)
         content.markReferenced()
         content.hits shouldBe 1
         content.markReferenced()
@@ -47,14 +47,14 @@ class ContentCacheTest :
       }
 
       "CacheContent age and lastReferenced are non-negative" {
-        val content = CacheContent(pageLines = listOf("line1"), etag = "abc", contentLength = 10)
+        val content = CacheContent(pageLines = ["line1"], etag = "abc", contentLength = 10)
         content.age.isNegative() shouldBe false
         content.lastReferenced.isNegative() shouldBe false
       }
 
       "ContentCache set and get" {
         val cache = ContentCache()
-        val content = CacheContent(pageLines = listOf("line1"), etag = "abc", contentLength = 10)
+        val content = CacheContent(pageLines = ["line1"], etag = "abc", contentLength = 10)
         cache["http://example.com"] = content
         cache["http://example.com"] shouldNotBe null
         cache["http://example.com"]!!.etag shouldBe "abc"
@@ -68,15 +68,15 @@ class ContentCacheTest :
       "ContentCache size reflects entries" {
         val cache = ContentCache()
         cache.size shouldBe 0
-        cache["url1"] = CacheContent(listOf(), "e1", 10)
+        cache["url1"] = CacheContent(emptyList(), "e1", 10)
         cache.size shouldBe 1
-        cache["url2"] = CacheContent(listOf(), "e2", 20)
+        cache["url2"] = CacheContent(emptyList(), "e2", 20)
         cache.size shouldBe 2
       }
 
       "ContentCache remove works" {
         val cache = ContentCache()
-        val content = CacheContent(listOf("line"), "etag", 10)
+        val content = CacheContent(["line"], "etag", 10)
         cache["url"] = content
         cache.remove("url") shouldNotBe null
         cache["url"] shouldBe null
@@ -89,10 +89,10 @@ class ContentCacheTest :
 
       "ContentCache sortedByLastReferenced ordering" {
         val cache = ContentCache()
-        val content1 = CacheContent(listOf(), "e1", 10)
+        val content1 = CacheContent(emptyList(), "e1", 10)
         cache["url1"] = content1
         Thread.sleep(15)
-        val content2 = CacheContent(listOf(), "e2", 20)
+        val content2 = CacheContent(emptyList(), "e2", 20)
         cache["url2"] = content2
         // url2 was created later, so its lastReferenced elapsed time is smaller
         // sortedBy ascending: smallest elapsed (most recent) first
@@ -103,15 +103,15 @@ class ContentCacheTest :
 
       "ContentCache overwrite replaces entry" {
         val cache = ContentCache()
-        cache["url"] = CacheContent(listOf("old"), "e1", 10)
-        cache["url"] = CacheContent(listOf("new"), "e2", 20)
-        cache["url"]!!.pageLines shouldBe listOf("new")
+        cache["url"] = CacheContent(["old"], "e1", 10)
+        cache["url"] = CacheContent(["new"], "e2", 20)
+        cache["url"]!!.pageLines shouldBe ["new"]
         cache["url"]!!.etag shouldBe "e2"
         cache.size shouldBe 1
       }
 
       "CacheContent markReferenced is visible across threads" {
-        val content = CacheContent(pageLines = listOf("line1"), etag = "abc", contentLength = 10)
+        val content = CacheContent(pageLines = ["line1"], etag = "abc", contentLength = 10)
         Thread.sleep(50)
         // After sleeping, lastReferenced should be at least 50ms
         val elapsedBeforeUpdate = content.lastReferenced

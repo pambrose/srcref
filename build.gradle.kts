@@ -76,6 +76,14 @@ fun Project.configureKotlin() {
     }
   }
 
+  // Collection literals are experimental, so they need the opt-in flag on every
+  // compilation that uses them — production and test alike.
+  tasks.withType<KotlinCompile>().configureEach {
+    compilerOptions {
+      freeCompilerArgs.add("-Xcollection-literals")
+    }
+  }
+
   // Run the unused-return-value checker over production code only. Kotest's
   // assertion DSL (e.g. shouldBe) returns its receiver, and tests intentionally
   // discard that result, so applying the checker to the test source set would
