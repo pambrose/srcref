@@ -40,7 +40,7 @@ clean:  ## Remove Gradle build outputs
 	./gradlew clean
 
 build:  ## Build without running tests
-	./gradlew build -xtest
+	./gradlew build -x test
 
 lint:  ## Run kotlinter and detekt
 	./gradlew lintKotlin detekt

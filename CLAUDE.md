@@ -11,7 +11,7 @@ at https://www.srcref.com.
 ## Build Commands
 
 ```bash
-./gradlew build -xtest        # Build without tests
+./gradlew build -x test        # Build without tests
 ./gradlew test                 # Run all tests (Kotest/JUnit5)
 ./gradlew check                # Full check including lint
 ./gradlew lintKotlin           # Lint only
