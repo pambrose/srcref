@@ -42,7 +42,8 @@ Makefile shortcuts: `make build`, `make tests`, `make run`, `make uber`, `make r
 `make kdocs`, `make coverage`, `make coverage-xml`, `make coverage-verify`, `make coverage-packages`
 (per-package coverage summary via `scripts/coverage_packages.py`), `make lint` (kotlinter + detekt),
 `make detekt-baseline`, `make publish-local`, `make publish-maven-central`, `make check-site`,
-`make upgrade-site` (check for / apply website dependency updates). Run `make help` to list
+`make upgrade-site` (check for / apply website dependency updates), `make upgrade-wrapper`
+(upgrade the Gradle wrapper to the `gradle-wrapper` version in `libs.versions.toml`). Run `make help` to list
 all annotated targets with descriptions.
 Default `make` target runs `./gradlew dependencyUpdates` to check for outdated dependencies.
 
@@ -118,10 +119,13 @@ Test log output is quieted by `src/test/resources/logback-test.xml`, which sets 
 - Disabled ktlint rules (via `.editorconfig`): `no-wildcard-imports`, `string-template-indent`, `indent`,
   `chain-method-continuation`, `import-ordering`.
 - 120 char line length, 2-space indentation, UTF-8, LF line endings.
+- `.gitattributes` normalizes line endings on commit (`* text=auto`), pins `gradlew` to LF (CRLF breaks the
+  Docker/Heroku build) and `*.bat` to CRLF, and marks `website/uv.lock` generated / `website/srcref/docs/**`
+  as documentation for GitHub language stats.
 
 ## Version Management
 
-Version is defined in `gradle.properties` (`version=2.2.0`). The Makefile `VERSION` is derived automatically from
+Version is defined in `gradle.properties` (`version=2.3.0`). The Makefile `VERSION` is derived automatically from
 `gradle.properties`. The following must still be updated manually when changing the version:
 
 - `README.md` (Maven/Gradle dependency snippets and Kotlin version badge)
@@ -131,6 +135,10 @@ Version is defined in `gradle.properties` (`version=2.2.0`). The Makefile `VERSI
 
 The build is reproducible: pass `-PreleaseDate=MM/dd/yyyy` and `-PbuildTime=<epoch-ms>` to override the values
 embedded in `BuildConfig`. Without overrides they default to "now".
+
+`llms.txt` exists in two identical copies with no build step or script to sync them: the repo-root copy, and
+`src/main/resources/public/llms.txt`, which Ktor serves at https://www.srcref.com/llms.txt via `staticResources`.
+Edit both together. Neither mentions the version, so a version bump alone does not touch them.
 
 ## Dependencies
 
@@ -154,7 +162,7 @@ Dokka generates the javadoc jar from KDoc comments. Signing uses in-memory GPG k
 
 ## License
 
-Apache License 2.0. See `LICENSE.md`.
+Apache License 2.0. See `LICENSE.txt`.
 
 ## Environment Variables
 
@@ -169,4 +177,24 @@ Apache License 2.0. See `LICENSE.md`.
 ## Deployment
 
 Docker multi-arch build (amd64/arm64) via `make release`. Image runs on the BellSoft Liberica OpenJRE 17 Alpine base image (`bellsoft/liberica-openjre-alpine:17`).
-Heroku supported via `system.properties` (Java 17 runtime). No CI/CD pipeline — deployment is manual.
+Heroku supported via `system.properties` (Java 17 runtime). Deployment itself is manual — no workflow publishes
+the Docker image or deploys the app.
+
+## Continuous Integration
+
+Two GitHub Actions workflows in `.github/workflows/`:
+
+| Workflow                      | Triggers                                                        | What it does                                                                |
+|-------------------------------|-----------------------------------------------------------------|-----------------------------------------------------------------------------|
+| `tests.yml` (Tests)           | Push to `master`/`main`, any pull request, `workflow_dispatch`  | Runs `./gradlew check koverXmlReport`, uploads coverage to Codecov          |
+| `docs.yml` (Documentation)    | Push to `master`/`main`, `workflow_dispatch`                    | Builds Dokka KDoc + the Zensical site, deploys both to GitHub Pages         |
+
+Both run on `ubuntu-latest` with Temurin JDK 17 and `gradle/actions/setup-gradle`. `docs.yml` copies
+`build/dokka/html` into `website/srcref/site/api-docs` so the KDoc is published under `/api-docs/`.
+
+Notes:
+
+- Pushing a feature branch runs nothing on its own; Tests runs on the branch only once it has an open PR.
+- Neither workflow has path filters, so every merge to `master` redeploys the docs site.
+- Manually dispatching Documentation from a non-default branch will likely fail at the deploy step, since the
+  `github-pages` environment normally only accepts deploys from the default branch.

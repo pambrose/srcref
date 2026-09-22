@@ -1,0 +1,15 @@
+# Normalize line endings on commit for all text files Git detects as text
+* text=auto
+
+# Linux start script must use LF (breaks the Docker/Heroku build otherwise)
+/gradlew        text eol=lf
+
+# Windows script files should use CRLF
+*.bat           text eol=crlf
+
+# Binary files left untouched
+*.jar           binary
+
+# Collapse generated lockfile in diffs / exclude docs site from language stats
+website/uv.lock        linguist-generated=true
+website/srcref/docs/** linguist-documentation

@@ -2,6 +2,25 @@
 
 Full release notes for every published version, newest first. Mirrors https://github.com/pambrose/srcref/releases.
 
+## [v2.3.0](https://github.com/pambrose/srcref/releases/tag/2.3.0) — 2026-09-21
+
+## What's Changed
+
+- Upgrade Gradle wrapper to 9.7.1 ([#57](https://github.com/pambrose/srcref/pull/57), [#58](https://github.com/pambrose/srcref/pull/58))
+- Bump dependencies: Kotlin 2.4.20, Ktor 3.6.0, Kotest 6.2.4, Logback 1.6.3, Dropwizard 4.2.40, common-utils 4.1.0 ([#57](https://github.com/pambrose/srcref/pull/57), [#58](https://github.com/pambrose/srcref/pull/58))
+- Bump build plugins: buildconfig 6.1.1, detekt 2.0.0-alpha.6, gradle-plugins 1.1.5, ben-manes versions 0.64.0 ([#57](https://github.com/pambrose/srcref/pull/57), [#58](https://github.com/pambrose/srcref/pull/58))
+- Move the ben-manes versions plugin to its new `io.github.ben-manes.versions` plugin id ([#58](https://github.com/pambrose/srcref/pull/58))
+- Bump website tooling: zensical 0.0.59, pymdown-extensions 11.0.2, pygments 2.21.0, deepmerge 3.0.1, click 8.5.0, markdown 3.10.3 ([#57](https://github.com/pambrose/srcref/pull/57), [#58](https://github.com/pambrose/srcref/pull/58))
+- Add `.gitattributes` to normalize line endings across the repository ([#58](https://github.com/pambrose/srcref/pull/58))
+- Add a `workflow_dispatch` trigger to the Tests and Documentation GitHub Actions workflows so both can be started manually ([#58](https://github.com/pambrose/srcref/pull/58))
+- Document the Tests and Documentation GitHub Actions workflows in `CLAUDE.md`, replacing the inaccurate "No CI/CD pipeline" note ([#58](https://github.com/pambrose/srcref/pull/58))
+- Fix the README local-run instructions, which pointed at a `build/libs/srcref.jar` the build never produces; use `./gradlew run` or `buildFatJar` + `srcref-all.jar` ([#58](https://github.com/pambrose/srcref/pull/58))
+- Correct the `LICENSE.md` reference in `CLAUDE.md` to `LICENSE.txt`, and document `.gitattributes`, `make upgrade-wrapper`, and the two hand-synced copies of `llms.txt` ([#58](https://github.com/pambrose/srcref/pull/58))
+
+There are no public API changes in this release, and no changes under `src/`; the work is build, dependency, CI, and documentation maintenance.
+
+**Full Changelog**: https://github.com/pambrose/srcref/compare/2.2.0...2.3.0
+
 ## [v2.2.0](https://github.com/pambrose/srcref/releases/tag/2.2.0) — 2026-07-25
 
 ## What's Changed
