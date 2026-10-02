@@ -1,0 +1,32 @@
+version: 2
+updates:
+  # Kotlin/JVM dependencies and plugins from gradle/libs.versions.toml
+  - package-ecosystem: gradle
+    directory: /
+    schedule:
+      interval: weekly
+    ignore:
+      # The wrapper version lives in libs.versions.toml and is applied with `make upgrade-wrapper`,
+      # which also regenerates gradle-wrapper.jar and the gradlew scripts.
+      - dependency-name: gradle-wrapper
+    groups:
+      gradle-minor-and-patch:
+        update-types: [minor, patch]
+
+  # Actions used by .github/workflows
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      github-actions:
+        patterns: ["*"]
+
+  # Zensical documentation site
+  - package-ecosystem: uv
+    directory: /website
+    schedule:
+      interval: weekly
+    groups:
+      website:
+        patterns: ["*"]
