@@ -198,3 +198,15 @@ Notes:
 - Neither workflow has path filters, so every merge to `master` redeploys the docs site.
 - Manually dispatching Documentation from a non-default branch will likely fail at the deploy step, since the
   `github-pages` environment normally only accepts deploys from the default branch.
+
+### Dependabot
+
+`.github/dependabot.yml` opens weekly update PRs for three ecosystems: `gradle` (the version catalog), `github-actions`,
+and `uv` (`website/`). Gradle minor/patch bumps are grouped into one PR, with majors opened individually; Actions and uv
+updates are each grouped into a single PR. Dependabot PRs trigger the Tests workflow like any other PR.
+
+- The `gradle-wrapper` dependency is ignored: bump `gradle-wrapper` in `libs.versions.toml` and run
+  `make upgrade-wrapper` instead, so the jar and `gradlew` scripts are regenerated along with the properties file.
+- Docker is not tracked: `bellsoft/liberica-openjre-alpine:17` is a floating tag, so the only updates Dependabot
+  could offer are Java major versions, which must move together with the toolchain, CI, and `system.properties`.
+- A Kotlin bump PR does not update the Kotlin version badge in `README.md`; fix that by hand.
