@@ -1,6 +1,6 @@
 [versions]
 # Toolchain
-gradle-wrapper = "9.8.0"
+gradle-wrapper = "9.8.1"
 jvm = "17"
 
 # Plugins
@@ -11,7 +11,7 @@ gradle-plugins = "1.1.6"
 dokka = "2.2.0"
 kover = "0.9.11"
 maven-publish = "0.37.0"
-versions = "0.64.0"
+versions = "0.65.0"
 
 # Libraries
 coroutines = "1.11.0"
