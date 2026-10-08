@@ -28,8 +28,8 @@ val projectUrl = "https://github.com/pambrose/srcref"
 val detektConfigDir = "$rootDir/config/detekt"
 val jvmTargetVersion = libs.versions.jvm.get()
 
-val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
-val releaseDate = providers.gradleProperty("releaseDate").orNull ?: LocalDate.now().format(formatter)
+val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")!!
+val releaseDate = providers.gradleProperty("releaseDate").orNull ?: LocalDate.now().format(formatter)!!
 val buildTime = providers.gradleProperty("buildTime").orNull?.toLong() ?: System.currentTimeMillis()
 
 buildConfig {

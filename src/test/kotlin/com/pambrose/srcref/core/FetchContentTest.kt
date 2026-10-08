@@ -36,7 +36,6 @@ import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
 import java.util.concurrent.atomic.AtomicReference
-import kotlinx.coroutines.runBlocking
 
 /**
  * Exercises [ContentCache.Companion.fetchContent] against a real local HTTP server,
@@ -75,12 +74,12 @@ class FetchContentTest :
               }
             }
           }
-        server.start(wait = false)
-        port = runBlocking { server.engine.resolvedConnectors().first().port }
+        server.startSuspend(wait = false)
+        port = server.engine.resolvedConnectors().first().port
       }
 
       afterSpec {
-        server.stop(0, 0)
+        server.stopSuspend(0, 0)
       }
 
       fun reset(

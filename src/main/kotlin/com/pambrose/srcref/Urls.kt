@@ -34,7 +34,6 @@ import com.pambrose.srcref.QueryParams.END_REGEX
 import com.pambrose.srcref.QueryParams.END_TOPDOWN
 import com.pambrose.srcref.QueryParams.PATH
 import com.pambrose.srcref.QueryParams.REPO
-import com.pambrose.srcref.Urls.calcLineNumber
 import com.pambrose.srcref.pages.Common.hasValues
 import java.util.regex.PatternSyntaxException
 import kotlin.time.Duration.Companion.seconds
@@ -58,7 +57,7 @@ object Urls {
    * @param ignoreEndParams if `true`, omits optional end-range parameters from the output.
    */
   internal fun Map<String, String?>.toQueryParams(ignoreEndParams: Boolean) =
-    filter { if (ignoreEndParams) it.key !in QueryParams.optionalParams else true }
+    filter { !ignoreEndParams || it.key !in QueryParams.optionalParams }
       .map { (k, v) -> if (v.isNotNull()) "$k=${v.encode()}" else "" }
       .filter { it.isNotBlank() }
       .joinToString("&")
