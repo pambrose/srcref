@@ -41,7 +41,8 @@ Run a single named test (Kotest string spec name):
 Makefile shortcuts: `make build`, `make tests`, `make run`, `make uber`, `make release`, `make deploy`,
 `make kdocs`, `make coverage`, `make coverage-xml`, `make coverage-verify`, `make coverage-packages`
 (per-package coverage summary via `scripts/coverage_packages.py`), `make lint` (kotlinter + detekt),
-`make detekt-baseline`, `make publish-local`, `make publish-maven-central`, `make check-site`,
+`make detekt-baseline`, `make zizmor` (audit GitHub Actions workflows and `dependabot.yml` via `uvx zizmor`),
+`make publish-local`, `make publish-maven-central`, `make check-site`,
 `make upgrade-site` (check for / apply website dependency updates), `make upgrade-wrapper`
 (upgrade the Gradle wrapper to the `gradle-wrapper` version in `libs.versions.toml`). Run `make help` to list
 all annotated targets with descriptions.
@@ -182,20 +183,32 @@ the Docker image or deploys the app.
 
 ## Continuous Integration
 
-Two GitHub Actions workflows in `.github/workflows/`:
+Three GitHub Actions workflows in `.github/workflows/`:
 
 | Workflow                      | Triggers                                                        | What it does                                                                |
 |-------------------------------|-----------------------------------------------------------------|-----------------------------------------------------------------------------|
 | `tests.yml` (Tests)           | Push to `master`/`main`, any pull request, `workflow_dispatch`  | Runs `./gradlew check koverXmlReport`, uploads coverage to Codecov          |
 | `docs.yml` (Documentation)    | Push to `master`/`main`, `workflow_dispatch`                    | Builds Dokka KDoc + the Zensical site, deploys both to GitHub Pages         |
+| `zizmor.yml` (zizmor)         | Push to `master`/`main`, any pull request, `workflow_dispatch`  | Audits workflows and `dependabot.yml` with zizmor, uploads to code scanning |
 
-Both run on `ubuntu-latest` with Temurin JDK 17 and `gradle/actions/setup-gradle`. `docs.yml` copies
-`build/dokka/html` into `website/srcref/site/api-docs` so the KDoc is published under `/api-docs/`.
+All run on `ubuntu-latest`. Tests and Documentation use Temurin JDK 17 and `gradle/actions/setup-gradle`. `docs.yml`
+copies `build/dokka/html` into `website/srcref/site/api-docs` so the KDoc is published under `/api-docs/`.
+
+The zizmor workflow uses `zizmorcore/zizmor-action` in its default Advanced Security mode: findings are uploaded as
+SARIF and appear in the repository's Security tab and as PR annotations, rather than failing the zizmor job itself.
+Run `make zizmor` locally before pushing workflow changes. The local run is offline-only unless `GH_TOKEN` is set,
+while CI also runs zizmor's online audits (e.g. impostor commits, known-vulnerable actions).
+
+Workflow conventions that keep zizmor clean:
+
+- Pin every action to a full commit SHA with a trailing `# vX.Y.Z` comment; Dependabot updates both.
+- Set `persist-credentials: false` on `actions/checkout`.
+- Declare an explicit `permissions:` block (least privilege) in every workflow.
 
 Notes:
 
-- Pushing a feature branch runs nothing on its own; Tests runs on the branch only once it has an open PR.
-- Neither workflow has path filters, so every merge to `master` redeploys the docs site.
+- Pushing a feature branch runs nothing on its own; Tests and zizmor run on the branch only once it has an open PR.
+- No workflow has path filters, so every merge to `master` redeploys the docs site.
 - Manually dispatching Documentation from a non-default branch will likely fail at the deploy step, since the
   `github-pages` environment normally only accepts deploys from the default branch.
 
@@ -203,8 +216,10 @@ Notes:
 
 `.github/dependabot.yml` opens weekly update PRs for three ecosystems: `gradle` (the version catalog), `github-actions`,
 and `uv` (`website/`). Gradle minor/patch bumps are grouped into one PR, with majors opened individually; Actions and uv
-updates are each grouped into a single PR. Dependabot PRs trigger the Tests workflow like any other PR.
+updates are each grouped into a single PR. Dependabot PRs trigger the Tests and zizmor workflows like any other PR.
 
+- Every ecosystem has a 7-day `cooldown`, so Dependabot only proposes releases at least a week old (zizmor's
+  `dependabot-cooldown` audit requires this). Security updates are not delayed by the cooldown.
 - The `gradle-wrapper` dependency is ignored: bump `gradle-wrapper` in `libs.versions.toml` and run
   `make upgrade-wrapper` instead, so the jar and `gradlew` scripts are regenerated along with the properties file.
 - Docker is not tracked: `bellsoft/liberica-openjre-alpine:17` is a floating tag, so the only updates Dependabot

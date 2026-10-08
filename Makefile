@@ -3,7 +3,7 @@
 	purge versions kdocs coverage coverage-html coverage-xml coverage-log \
 	coverage-open coverage-packages coverage-clean coverage-verify check-site upgrade-site clean-site site \
 	publish-local publish-local-snapshot publish-snapshot publish-maven-central \
-	upgrade-wrapper lint detekt detekt-baseline \
+	upgrade-wrapper lint detekt detekt-baseline zizmor \
 	_check-gpg-env _require-version _require-gradle-version
 
 VERSION := $(shell sed -n 's/^version=\(.*\)/\1/p' gradle.properties)
@@ -50,6 +50,9 @@ detekt:  ## Run detekt static analysis
 
 detekt-baseline:  ## Regenerate the detekt baseline
 	./gradlew detektBaseline
+
+zizmor:  ## Audit GitHub Actions workflows and Dependabot config with zizmor
+	uvx zizmor .
 
 coverage:  ## Generate HTML and XML coverage reports
 	./gradlew koverHtmlReport koverXmlReport
