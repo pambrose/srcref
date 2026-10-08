@@ -4,6 +4,8 @@ All notable changes to this project. Format is loosely based on [Keep a Changelo
 
 ## [2.3.0](https://github.com/pambrose/srcref/releases/tag/2.3.0) — 2026-10-08
 
+- Simplify `toQueryParams()` and `hasValues()` and drop a redundant self-import in `Urls.kt`, with no behavior change ([#64](https://github.com/pambrose/srcref/pull/64))
+- Call Ktor's suspending `resolvedConnectors()`, `startSuspend()`, and `stopSuspend()` directly in `FetchContentTest` instead of blocking with `runBlocking` and the blocking `start()`/`stop()` ([#64](https://github.com/pambrose/srcref/pull/64))
 - Upgrade Gradle wrapper to 9.8.1, regenerating `gradle-wrapper.jar` and `gradlew.bat` ([#57](https://github.com/pambrose/srcref/pull/57), [#58](https://github.com/pambrose/srcref/pull/58), [#59](https://github.com/pambrose/srcref/pull/59), [#63](https://github.com/pambrose/srcref/pull/63))
 - Bump dependencies: Kotlin 2.4.21, Ktor 3.6.0, Kotest 6.2.5, Logback 1.6.5, Dropwizard 4.2.40, common-utils 5.1.1 ([#57](https://github.com/pambrose/srcref/pull/57), [#58](https://github.com/pambrose/srcref/pull/58), [#59](https://github.com/pambrose/srcref/pull/59), [#61](https://github.com/pambrose/srcref/pull/61), [#64](https://github.com/pambrose/srcref/pull/64))
 - Bump build plugins: buildconfig 6.1.2, detekt 2.0.0-alpha.6, gradle-plugins 1.1.7, Kover 0.9.11, ben-manes versions 0.65.0 ([#57](https://github.com/pambrose/srcref/pull/57), [#58](https://github.com/pambrose/srcref/pull/58), [#59](https://github.com/pambrose/srcref/pull/59), [#63](https://github.com/pambrose/srcref/pull/63), [#64](https://github.com/pambrose/srcref/pull/64))
