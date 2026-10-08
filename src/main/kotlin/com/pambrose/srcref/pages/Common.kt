@@ -29,5 +29,5 @@ object Common {
   internal fun HTMLTag.rawHtml(html: String) = unsafe { raw(html) }
 
   /** Returns `true` if this parameter map contains at least one non-blank value. */
-  internal fun Map<String, String?>.hasValues() = values.asSequence().filter { it?.isNotBlank() == true }.any()
+  internal fun Map<String, String?>.hasValues() = values.any { it?.isNotBlank() == true }
 }

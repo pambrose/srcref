@@ -4,10 +4,10 @@ gradle-wrapper = "9.8.1"
 jvm = "17"
 
 # Plugins
-kotlin = "2.4.20"
+kotlin = "2.4.21"
 buildconfig = "6.1.2"
 detekt = "2.0.0-alpha.6"
-gradle-plugins = "1.1.6"
+gradle-plugins = "1.1.7"
 dokka = "2.2.0"
 kover = "0.9.11"
 maven-publish = "0.37.0"
@@ -21,7 +21,7 @@ ktor = "3.6.0"
 logback = "1.6.5"
 logging = "8.0.4"
 text = "1.15.0"
-utils = "5.1.0"
+utils = "5.1.1"
 
 [libraries]
 # Kotlin

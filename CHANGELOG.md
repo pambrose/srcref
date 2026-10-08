@@ -2,16 +2,22 @@
 
 All notable changes to this project. Format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
-## [2.3.0](https://github.com/pambrose/srcref/releases/tag/2.3.0) — 2026-09-21
+## [2.3.0](https://github.com/pambrose/srcref/releases/tag/2.3.0) — 2026-10-08
 
-- Upgrade Gradle wrapper to 9.7.1 ([#57](https://github.com/pambrose/srcref/pull/57), [#58](https://github.com/pambrose/srcref/pull/58))
-- Bump dependencies: Kotlin 2.4.20, Ktor 3.6.0, Kotest 6.2.4, Logback 1.6.3, Dropwizard 4.2.40, common-utils 4.1.0 ([#57](https://github.com/pambrose/srcref/pull/57), [#58](https://github.com/pambrose/srcref/pull/58))
-- Bump build plugins: buildconfig 6.1.1, detekt 2.0.0-alpha.6, gradle-plugins 1.1.5, ben-manes versions 0.64.0 ([#57](https://github.com/pambrose/srcref/pull/57), [#58](https://github.com/pambrose/srcref/pull/58))
+- Simplify `toQueryParams()` and `hasValues()` and drop a redundant self-import in `Urls.kt`, with no behavior change ([#64](https://github.com/pambrose/srcref/pull/64))
+- Call Ktor's suspending `resolvedConnectors()`, `startSuspend()`, and `stopSuspend()` directly in `FetchContentTest` instead of blocking with `runBlocking` and the blocking `start()`/`stop()` ([#64](https://github.com/pambrose/srcref/pull/64))
+- Upgrade Gradle wrapper to 9.8.1, regenerating `gradle-wrapper.jar` and `gradlew.bat` ([#57](https://github.com/pambrose/srcref/pull/57), [#58](https://github.com/pambrose/srcref/pull/58), [#59](https://github.com/pambrose/srcref/pull/59), [#63](https://github.com/pambrose/srcref/pull/63))
+- Bump dependencies: Kotlin 2.4.21, Ktor 3.6.0, Kotest 6.2.5, Logback 1.6.5, Dropwizard 4.2.40, common-utils 5.1.1 ([#57](https://github.com/pambrose/srcref/pull/57), [#58](https://github.com/pambrose/srcref/pull/58), [#59](https://github.com/pambrose/srcref/pull/59), [#61](https://github.com/pambrose/srcref/pull/61), [#64](https://github.com/pambrose/srcref/pull/64))
+- Bump build plugins: buildconfig 6.1.2, detekt 2.0.0-alpha.6, gradle-plugins 1.1.7, Kover 0.9.11, ben-manes versions 0.65.0 ([#57](https://github.com/pambrose/srcref/pull/57), [#58](https://github.com/pambrose/srcref/pull/58), [#59](https://github.com/pambrose/srcref/pull/59), [#63](https://github.com/pambrose/srcref/pull/63), [#64](https://github.com/pambrose/srcref/pull/64))
 - Move the ben-manes versions plugin to its new `io.github.ben-manes.versions` plugin id ([#58](https://github.com/pambrose/srcref/pull/58))
-- Bump website tooling: zensical 0.0.59, pymdown-extensions 11.0.2, pygments 2.21.0, deepmerge 3.0.1, click 8.5.0, markdown 3.10.3 ([#57](https://github.com/pambrose/srcref/pull/57), [#58](https://github.com/pambrose/srcref/pull/58))
+- Bump website tooling: zensical 0.0.68, pymdown-extensions 12.1, markdown 3.11, pygments 2.21.0, deepmerge 3.0.1, click 8.5.0, markupsafe 3.0.4, tomli 2.5.0 ([#57](https://github.com/pambrose/srcref/pull/57), [#58](https://github.com/pambrose/srcref/pull/58), [#59](https://github.com/pambrose/srcref/pull/59), [#63](https://github.com/pambrose/srcref/pull/63))
+- Add Dependabot version updates for the Gradle version catalog, GitHub Actions, and the website's uv lockfile: weekly, with Gradle minor/patch bumps grouped, a 7-day cooldown, and the Gradle wrapper left to `make upgrade-wrapper` ([#60](https://github.com/pambrose/srcref/pull/60), [#63](https://github.com/pambrose/srcref/pull/63))
+- Upgrade GitHub Actions to their latest major versions: checkout v7, setup-java v6, gradle/actions v6, codecov-action v7, setup-python v7, configure-pages v6, upload-pages-artifact v5, deploy-pages v5 ([#62](https://github.com/pambrose/srcref/pull/62))
+- Add a zizmor workflow that audits the GitHub Actions workflows and Dependabot config on every push and pull request and uploads findings to code scanning, plus a `make zizmor` target for local audits ([#63](https://github.com/pambrose/srcref/pull/63))
+- Harden the GitHub Actions workflows: pin every action to a full commit SHA, set `persist-credentials: false` on checkout, and give the Tests workflow an explicit read-only `permissions` block ([#63](https://github.com/pambrose/srcref/pull/63))
 - Add `.gitattributes` to normalize line endings across the repository ([#58](https://github.com/pambrose/srcref/pull/58))
 - Add a `workflow_dispatch` trigger to the Tests and Documentation GitHub Actions workflows so both can be started manually ([#58](https://github.com/pambrose/srcref/pull/58))
-- Document the Tests and Documentation GitHub Actions workflows in `CLAUDE.md`, replacing the inaccurate "No CI/CD pipeline" note ([#58](https://github.com/pambrose/srcref/pull/58))
+- Document the GitHub Actions workflows, Dependabot, and zizmor in `CLAUDE.md`, replacing the inaccurate "No CI/CD pipeline" note ([#58](https://github.com/pambrose/srcref/pull/58), [#60](https://github.com/pambrose/srcref/pull/60), [#63](https://github.com/pambrose/srcref/pull/63))
 - Fix the README local-run instructions, which pointed at a `build/libs/srcref.jar` the build never produces; use `./gradlew run` or `buildFatJar` + `srcref-all.jar` ([#58](https://github.com/pambrose/srcref/pull/58))
 - Correct the `LICENSE.md` reference in `CLAUDE.md` to `LICENSE.txt`, and document `.gitattributes`, `make upgrade-wrapper`, and the two hand-synced copies of `llms.txt` ([#58](https://github.com/pambrose/srcref/pull/58))
 
