@@ -4,7 +4,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.pambrose/srcref)](https://central.sonatype.com/artifact/com.pambrose/srcref)
 [![Tests](https://img.shields.io/github/actions/workflow/status/pambrose/srcref/tests.yml?branch=master&label=tests)](https://github.com/pambrose/srcref/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/pambrose/srcref/branch/master/graph/badge.svg)](https://codecov.io/gh/pambrose/srcref)
-[![Kotlin version](https://img.shields.io/badge/kotlin-2.4.20-red?logo=kotlin)](http://kotlinlang.org)
+[![Kotlin version](https://img.shields.io/badge/kotlin-2.4.21-red?logo=kotlin)](http://kotlinlang.org)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 ## Overview
@@ -329,6 +329,9 @@ make coverage
 
 # Per-package coverage summary (uses scripts/coverage_packages.py)
 make coverage-packages
+
+# Audit the GitHub Actions workflows and Dependabot config (uses uvx zizmor)
+make zizmor
 
 # Start development server
 ./gradlew run
