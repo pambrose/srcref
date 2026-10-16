@@ -16,7 +16,7 @@ versions = "0.65.0"
 # Libraries
 coroutines = "1.11.0"
 dropwizard = "4.2.40"
-kotest = "6.2.5"
+kotest = "6.2.6"
 ktor = "3.6.0"
 logback = "1.6.5"
 logging = "8.0.4"

@@ -38,15 +38,18 @@ Run a single named test (Kotest string spec name):
 ./gradlew test --tests "FileTests.calcLineNumber top-down and bottom-up"
 ```
 
-Makefile shortcuts: `make build`, `make tests`, `make run`, `make uber`, `make release`, `make deploy`,
-`make kdocs`, `make coverage`, `make coverage-xml`, `make coverage-verify`, `make coverage-packages`
-(per-package coverage summary via `scripts/coverage_packages.py`), `make lint` (kotlinter + detekt),
-`make detekt-baseline`, `make zizmor` (audit GitHub Actions workflows and `dependabot.yml` via `uvx zizmor`),
-`make publish-local`, `make publish-maven-central`, `make check-site`,
+Makefile shortcuts: `make build`, `make tests`, `make run`, `make uber`, `make release` and `make release-check`
+(see Releasing), `make deploy`, `make kdocs`, `make coverage`, `make coverage-xml`, `make coverage-verify`,
+`make coverage-packages` (per-package coverage summary via `scripts/coverage_packages.py`), `make lint`
+(kotlinter + detekt), `make detekt-baseline`, `make zizmor` (audit GitHub Actions workflows and `dependabot.yml`
+via `uvx zizmor`), `make publish-local`, `make publish-maven-central`, `make check-site`,
 `make upgrade-site` (check for / apply website dependency updates), `make upgrade-wrapper`
 (upgrade the Gradle wrapper to the `gradle-wrapper` version in `libs.versions.toml`). Run `make help` to list
-all annotated targets with descriptions.
-Default `make` target runs `./gradlew dependencyUpdates` to check for outdated dependencies.
+all annotated targets with descriptions; it is also the default `make` target.
+
+`make versions` runs `./gradlew dependencyUpdates` and lists only the dependencies with newer versions (and any it
+could not check), via the `outputFormatter` on `DependencyUpdatesTask` in `build.gradle.kts`. `make versions-all`
+passes `--output-formatter=plain` for the plugin's full report, which also lists every up-to-date dependency.
 
 ## Architecture
 
@@ -134,6 +137,9 @@ Version is defined in `gradle.properties` (`version=2.3.0`). The Makefile `VERSI
 - `website/srcref/docs/getting-started.md` (dependency snippets)
 - `CHANGELOG.md` and `RELEASE_NOTES.md` (new version section)
 
+`make release-check` fails unless each of the first three files mentions the new version. That list is
+`RELEASE_VERSION_FILES` in the `Makefile`; keep the two in step.
+
 The build is reproducible: pass `-PreleaseDate=MM/dd/yyyy` and `-PbuildTime=<epoch-ms>` to override the values
 embedded in `BuildConfig`. Without overrides they default to "now".
 
@@ -158,8 +164,32 @@ Dokka generates the javadoc jar from KDoc comments. Signing uses in-memory GPG k
 - `make publish-local` — publish to `~/.m2/repository` for local testing. Note: this build only resolves from
   `mavenCentral()` (see `settings.gradle.kts`); to consume locally-published artifacts, add `mavenLocal()` to the
   consuming build's repositories.
-- `make publish-maven-central` — publish and release to Maven Central.
+- `make publish-maven-central` — publish and release to Maven Central (`make release` runs it as its last step).
 - `make kdocs` — generate KDoc HTML documentation to `build/dokka/html/`.
+
+## Releasing
+
+Bump the version and update the files listed under Version Management, merge to `master`, and let CI finish. Then
+`make release`, run from a clean, up-to-date `master` checkout, first runs `make release-check`, which publishes
+nothing and fails unless:
+
+- the working tree is clean, on `master` (`RELEASE_BRANCH`), and matches `origin/master`;
+- every GitHub check run for HEAD has passed;
+- `CHANGELOG.md` has a `[VERSION]` section, `RELEASE_NOTES.md` a `[vVERSION]` one, and every file in
+  `RELEASE_VERSION_FILES` mentions the version;
+- the version has no pre-release (`-…`) suffix, its tag (if one exists) points at HEAD, and it isn't already on
+  Docker Hub or Maven Central;
+- the GPG setup `publish-maven-central` needs is in place, and Docker is running.
+
+It then runs `make tests` and `make docker-prebuild` (every image platform, built but not pushed), and asks once,
+refusing if HEAD moved or the working tree changed during those steps. After a `y` it runs `make docker-push`,
+`make docker-verify` (both platforms present, `:latest` matches `:VERSION`), and `make publish-maven-central`. Docker
+Hub goes first because its tags can be overwritten while a Maven Central release can't be removed, and because a
+pushed tag shows on Docker Hub at once (repo1.maven.org can take a while to list a release), so the Docker Hub check
+is what stops an accidental second run. It ends by printing the manual steps: the GitHub release, then `make deploy`.
+
+Run `make release-check` on its own to see what's still missing. If a release stops partway, finish it with the
+remaining targets, since `release-check` refuses a version that is already on Docker Hub.
 
 ## License
 
@@ -177,9 +207,10 @@ Apache License 2.0. See `LICENSE.txt`.
 
 ## Deployment
 
-Docker multi-arch build (amd64/arm64) via `make release`. Image runs on the BellSoft Liberica OpenJRE 17 Alpine base image (`bellsoft/liberica-openjre-alpine:17`).
-Heroku supported via `system.properties` (Java 17 runtime). Deployment itself is manual — no workflow publishes
-the Docker image or deploys the app.
+Multi-arch (amd64/arm64) Docker images are pushed by `make release` (see Releasing); `make build-docker` builds a
+local single-arch image. Image runs on the BellSoft Liberica OpenJRE 17 Alpine base image
+(`bellsoft/liberica-openjre-alpine:17`). Heroku supported via `system.properties` (Java 17 runtime). Deployment
+itself is manual — no workflow publishes the Docker image or deploys the app.
 
 ## Continuous Integration
 
