@@ -58,11 +58,12 @@ Build a self-contained JAR that includes all dependencies:
 
 ### Building the Docker Image
 
-The project includes a multi-architecture Docker build (amd64/arm64) using
-Alpine Linux with OpenJDK 17 JRE:
+The published `pambrose/srcref` images are multi-architecture (amd64/arm64),
+built on Alpine Linux with the Liberica OpenJRE 17. To build a local image for
+your own platform, tagged `pambrose/srcref:<version>`:
 
 ```bash
-make release
+make build-docker
 ```
 
 ## Heroku
