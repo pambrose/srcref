@@ -38,8 +38,9 @@ Run a single named test (Kotest string spec name):
 ./gradlew test --tests "FileTests.calcLineNumber top-down and bottom-up"
 ```
 
-Makefile shortcuts: `make build`, `make tests`, `make run`, `make uber`, `make release` and `make release-check`
-(see Releasing), `make deploy`, `make kdocs`, `make coverage`, `make coverage-xml`, `make coverage-verify`,
+Makefile shortcuts: `make build`, `make tests`, `make ci` (run the CI workflows' build steps locally; see
+Continuous Integration), `make run`, `make uber`, `make release` and `make release-check` (see Releasing),
+`make deploy`, `make kdocs`, `make coverage`, `make coverage-xml`, `make coverage-verify`,
 `make coverage-packages` (per-package coverage summary via `scripts/coverage_packages.py`), `make lint`
 (kotlinter + detekt), `make detekt-baseline`, `make zizmor` (audit GitHub Actions workflows and `dependabot.yml`
 via `uvx zizmor`), `make publish-local`, `make publish-maven-central`, `make check-site`,
@@ -129,7 +130,7 @@ Test log output is quieted by `src/test/resources/logback-test.xml`, which sets 
 
 ## Version Management
 
-Version is defined in `gradle.properties` (`version=2.3.0`). The Makefile `VERSION` is derived automatically from
+Version is defined in `gradle.properties` (`version=2.3.1`). The Makefile `VERSION` is derived automatically from
 `gradle.properties`. The following must still be updated manually when changing the version:
 
 - `README.md` (Maven/Gradle dependency snippets and Kotlin version badge)
@@ -224,6 +225,12 @@ Three GitHub Actions workflows in `.github/workflows/`:
 
 All run on `ubuntu-latest`. Tests and Documentation use Temurin JDK 17 and `gradle/actions/setup-gradle`. `docs.yml`
 copies `build/dokka/html` into `website/srcref/site/api-docs` so the KDoc is published under `/api-docs/`.
+
+`make ci` runs the build steps of all three workflows locally, one after another, on the working tree (uncommitted
+changes included): `./gradlew --rerun-tasks check koverXmlReport`, the Dokka + Zensical site build with the KDoc copied
+in, and `make zizmor`. It skips the Codecov upload and the Pages deploy. It differs from CI in two ways: it builds the
+site with the zensical version locked in `website/uv.lock` (`uv run`), whereas `docs.yml` runs `pip install zensical`
+and gets the latest release; and a zizmor finding fails `make ci`, where the workflow only uploads it.
 
 The zizmor workflow uses `zizmorcore/zizmor-action` in its default Advanced Security mode: findings are uploaded as
 SARIF and appear in the repository's Security tab and as PR annotations, rather than failing the zizmor job itself.

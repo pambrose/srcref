@@ -102,7 +102,7 @@ _srcref_ URLs can be generated programmatically with the `srcrefUrl()` call. An 
 
 ```kotlin
 dependencies {
-   implementation("com.pambrose:srcref:2.3.0")
+   implementation("com.pambrose:srcref:2.3.1")
 }
 ```
 
@@ -113,7 +113,7 @@ dependencies {
 
 ```groovy
 dependencies {
-   implementation 'com.pambrose:srcref:2.3.0'
+   implementation 'com.pambrose:srcref:2.3.1'
 }
 ```
 
@@ -127,7 +127,7 @@ dependencies {
 <dependency>
    <groupId>com.pambrose</groupId>
    <artifactId>srcref</artifactId>
-   <version>2.3.0</version>
+   <version>2.3.1</version>
 </dependency>
 ```
 
@@ -332,6 +332,9 @@ make coverage-packages
 
 # Audit the GitHub Actions workflows and Dependabot config (uses uvx zizmor)
 make zizmor
+
+# Run the CI workflows' build steps locally: tests, docs site build, and zizmor
+make ci
 
 # Start development server
 ./gradlew run
