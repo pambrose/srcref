@@ -2,6 +2,23 @@
 
 All notable changes to this project. Format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [2.3.1](https://github.com/pambrose/srcref/releases/tag/2.3.1) — 2026-10-25
+
+- Add `make release-check`, which publishes nothing and fails unless the checkout is a clean, up-to-date `master` whose GitHub CI checks have all passed, `CHANGELOG.md`, `RELEASE_NOTES.md`, and the dependency snippets mention the version, the version has no pre-release suffix, and it isn't already on Docker Hub or Maven Central ([#66](https://github.com/pambrose/srcref/pull/66))
+- Rework `make release` to run `release-check`, the tests, and a build of every image platform, ask once (refusing if HEAD or the working tree changed in the meantime), then push to Docker Hub, verify the published image, and publish to Maven Central last ([#66](https://github.com/pambrose/srcref/pull/66))
+- Add `docker-prebuild` (build every image platform without pushing) and `docker-verify` (check the pushed image has every platform and `:latest` matches the version) Makefile targets, refuse to push pre-release versions, and list the arm64 platform as `linux/arm64`, the form buildx records in the image index ([#66](https://github.com/pambrose/srcref/pull/66))
+- Make `make versions` list only the dependencies with newer versions, and any it could not check, via an `outputFormatter` on `dependencyUpdates`; add `make versions-all` for the plugin's full report ([#66](https://github.com/pambrose/srcref/pull/66))
+- Treat an empty keychain signing password as missing in the GPG preflight check ([#66](https://github.com/pambrose/srcref/pull/66))
+- Add a `make ci` target that runs the build steps of the Tests, Documentation, and zizmor workflows locally, without the Codecov upload or the Pages deploy
+- Upgrade Gradle wrapper to 9.8.2
+- Bump dependencies: Kotest 6.2.6 ([#66](https://github.com/pambrose/srcref/pull/66)), Logback 1.6.6
+- Bump build plugins: ben-manes versions 0.66.0 ([#67](https://github.com/pambrose/srcref/pull/67)), gradle-plugins 1.1.8
+- Bump website tooling: zensical 0.0.72, pymdown-extensions 12.3, markdown 3.11.2 ([#65](https://github.com/pambrose/srcref/pull/65), [#66](https://github.com/pambrose/srcref/pull/66))
+- Bump GitHub Actions: setup-java v6.1.0, zizmor-action v0.7.1 ([#68](https://github.com/pambrose/srcref/pull/68))
+- Document the release flow in `CLAUDE.md`, and point the deployment docs at `make build-docker` for building a local image ([#66](https://github.com/pambrose/srcref/pull/66))
+
+**Full Changelog**: https://github.com/pambrose/srcref/compare/2.3.0...2.3.1
+
 ## [2.3.0](https://github.com/pambrose/srcref/releases/tag/2.3.0) — 2026-10-08
 
 - Simplify `toQueryParams()` and `hasValues()` and drop a redundant self-import in `Urls.kt`, with no behavior change ([#64](https://github.com/pambrose/srcref/pull/64))

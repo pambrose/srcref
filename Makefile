@@ -1,4 +1,4 @@
-.PHONY: default help build-all stop clean build tests run refresh \
+.PHONY: default help build-all stop clean build tests ci run refresh \
 	fatjar uber run-docker build-docker docker-prebuild docker-push docker-verify \
 	release release-check _confirm-release deploy do-log dist stage \
 	purge versions versions-all kdocs coverage coverage-html coverage-xml coverage-log \
@@ -93,6 +93,20 @@ coverage-clean:  ## Clean all coverage artifacts
 
 tests:  ## Run all tests and checks
 	./gradlew --rerun-tasks check
+
+# The build steps of the three GitHub Actions workflows, run on the working tree (uncommitted changes included):
+# tests.yml without the Codecov upload, docs.yml without the Pages deploy, and zizmor.yml. --rerun-tasks, as in
+# `tests`, makes every check run rather than be skipped as up to date. zizmor fails here on any finding, where CI only
+# uploads them to code scanning.
+ci:  ## Run the CI workflows' build steps locally (tests, docs site, zizmor), without uploading or deploying
+	# tests.yml
+	./gradlew --rerun-tasks check koverXmlReport
+	# docs.yml
+	./gradlew dokkaGeneratePublicationHtml
+	cd $(SITE_DIR) && uv run zensical build --clean
+	cp -r build/dokka/html $(SITE_DIR)/site/api-docs
+	# zizmor.yml
+	$(MAKE) zizmor
 
 run:  ## Run the dev server (port 8080)
 	./gradlew run
