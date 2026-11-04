@@ -22,9 +22,12 @@ import com.pambrose.srcref.module
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.string.shouldEndWith
 import io.kotest.matchers.string.shouldNotContain
 import io.ktor.client.request.get
+import io.ktor.client.request.head
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.testApplication
 
@@ -50,6 +53,30 @@ class RoutesIntegrationTest :
           client.get("/ping").apply {
             status shouldBe HttpStatusCode.OK
             bodyAsText() shouldBe "pong"
+          }
+        }
+      }
+
+      "HEAD / redirects to /edit" {
+        testApplication {
+          application { module() }
+          val noRedirectClient =
+            createClient {
+              followRedirects = false
+            }
+          noRedirectClient.head("/").apply {
+            status shouldBe HttpStatusCode.Found
+            headers[HttpHeaders.Location] shouldEndWith "/edit"
+          }
+        }
+      }
+
+      "HEAD /ping returns OK with an empty body" {
+        testApplication {
+          application { module() }
+          client.head("/ping").apply {
+            status shouldBe HttpStatusCode.OK
+            bodyAsText() shouldBe ""
           }
         }
       }

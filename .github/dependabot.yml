@@ -36,3 +36,15 @@ updates:
     groups:
       website:
         patterns: ["*"]
+
+  # The Dockerfile's base image, pinned by digest. Dependabot moves the digest as the tag gets rebuilt with Alpine and
+  # JRE fixes. A new Java major has to move together with `jre` in gradle/libs.versions.toml, so majors are ignored.
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    ignore:
+      - dependency-name: eclipse-temurin
+        update-types: [version-update:semver-major]

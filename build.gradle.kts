@@ -27,6 +27,7 @@ providers.gradleProperty("overrideVersion").orNull?.let { version = it }
 val projectUrl = "https://github.com/pambrose/srcref"
 val detektConfigDir = "$rootDir/config/detekt"
 val jvmTargetVersion = libs.versions.jvm.get()
+val jreVersion = libs.versions.jre.get()
 
 val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")!!
 val releaseDate = providers.gradleProperty("releaseDate").orNull ?: LocalDate.now().format(formatter)!!
@@ -82,6 +83,16 @@ fun Project.configureKotlin() {
     compilerOptions {
       freeCompilerArgs.add("-Xcollection-literals")
     }
+  }
+
+  // The code is compiled for jvmTargetVersion, so library users can stay on it, but the Docker image runs it on
+  // jreVersion. Run the tests there, so they cover the Java that production uses. Gradle downloads that JDK
+  // through the foojay resolver in settings.gradle.kts if it isn't installed.
+  tasks.withType<Test>().configureEach {
+    javaLauncher.set(javaToolchains.launcherFor { languageVersion.set(JavaLanguageVersion.of(jreVersion)) })
+    // Jansi loads a native library; without this, Java 22+ warns that a future release will block the call. The
+    // Dockerfile's ENTRYPOINT passes the same flag.
+    jvmArgs("--enable-native-access=ALL-UNNAMED")
   }
 
   // Run the unused-return-value checker over production code only. Kotest's

@@ -2,6 +2,7 @@
 
 [![GitHub release](https://img.shields.io/github/v/release/pambrose/srcref?sort=semver)](https://github.com/pambrose/srcref/releases/latest)
 [![Maven Central](https://img.shields.io/maven-central/v/com.pambrose/srcref)](https://central.sonatype.com/artifact/com.pambrose/srcref)
+[![Docs](https://img.shields.io/badge/docs-pambrose.github.io%2Fsrcref-blue)](https://pambrose.github.io/srcref/)
 [![Tests](https://img.shields.io/github/actions/workflow/status/pambrose/srcref/tests.yml?branch=master&label=tests)](https://github.com/pambrose/srcref/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/pambrose/srcref/branch/master/graph/badge.svg)](https://codecov.io/gh/pambrose/srcref)
 [![Kotlin version](https://img.shields.io/badge/kotlin-2.4.21-red?logo=kotlin)](http://kotlinlang.org)
@@ -14,6 +15,9 @@ changes to the target file can invalidate the permalink line references.
 
 **srcref** solves this problem by using regex patterns to dynamically locate code sections,
 generating GitHub permalinks that remain valid even when files are modified.
+
+The full documentation, including a regex guide, deployment instructions, and the KDoc API reference, is at
+[pambrose.github.io/srcref](https://pambrose.github.io/srcref/).
 
 **Key Benefits:**
 
@@ -102,7 +106,7 @@ _srcref_ URLs can be generated programmatically with the `srcrefUrl()` call. An 
 
 ```kotlin
 dependencies {
-   implementation("com.pambrose:srcref:2.3.1")
+   implementation("com.pambrose:srcref:2.4.0")
 }
 ```
 
@@ -113,7 +117,7 @@ dependencies {
 
 ```groovy
 dependencies {
-   implementation 'com.pambrose:srcref:2.3.1'
+   implementation 'com.pambrose:srcref:2.4.0'
 }
 ```
 
@@ -127,7 +131,7 @@ dependencies {
 <dependency>
    <groupId>com.pambrose</groupId>
    <artifactId>srcref</artifactId>
-   <version>2.3.1</version>
+   <version>2.4.0</version>
 </dependency>
 ```
 
@@ -229,23 +233,15 @@ docker run -p 8080:8080 \
   srcref
 ```
 
-### Option 3: Heroku Deployment
-
-```bash
-# Deploy to Heroku
-heroku create your-srcref-app
-git push heroku master
-```
-
 ### Environment Variables
 
-| Variable         | Default                  | Description                                               |
-|------------------|--------------------------|-----------------------------------------------------------|
-| `PORT`           | 8080                     | HTTP port to listen on                                    |
-| `PREFIX`         | "https://www.srcref.com" | Prefix for generated URLs                                 |
-| `MAX_LENGTH`     | 5MB                      | Maximum allowed file size                                 |
-| `MAX_CACHE_SIZE` | 2048                     | Maximum cache size before evictions                       |
-| `DEFAULT_BRANCH` | "master"                 | Default branch name to use if branch parameter is missing |
+| Variable         | Default                 | Description                                                    |
+|------------------|-------------------------|----------------------------------------------------------------|
+| `PORT`           | 8080                    | HTTP port to listen on                                         |
+| `PREFIX`         | "http://localhost:8080" | Prefix for generated URLs; set it to your public URL to deploy |
+| `MAX_LENGTH`     | 5MB                     | Maximum allowed file size                                      |
+| `MAX_CACHE_SIZE` | 2048                    | Maximum cache size before evictions                            |
+| `DEFAULT_BRANCH` | "master"                | Default branch name to use if branch parameter is missing      |
 
 ## API Reference
 

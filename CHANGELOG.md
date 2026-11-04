@@ -2,6 +2,20 @@
 
 All notable changes to this project. Format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [2.4.0](https://github.com/pambrose/srcref/releases/tag/2.4.0) — 2026-11-04
+
+- Switch the Docker base image to `eclipse-temurin:25-jre-alpine`, pinned by digest, and upgrade its `libexpat` to 2.10.0-r0 for CVE fixes the base image doesn't include yet
+- Run the tests on Java 25, the Java the Docker image runs, while still compiling for Java 17; pass `--enable-native-access=ALL-UNNAMED` to the test JVM and to the image's `java` so Jansi loads its native library without a warning
+- Drop Heroku support: remove `Procfile`, `system.properties`, the `stage` and `purge` Makefile targets, and the Heroku deployment docs; `make build-all` now cleans and builds the fat JAR
+- Answer HEAD requests on every GET route by installing Ktor's `AutoHeadResponse`, instead of returning 405
+- Track the Docker base image with Dependabot: digest updates with a 7-day cooldown, Java majors ignored
+- Add Railway Makefile targets: `make log` (the last lines of the deployment log), `make railway-restart`, and `make railway-redeploy` (redeploys the latest image from the service's source)
+- Remove the DigitalOcean `make deploy` and `make do-log` targets; `make release` now ends by pointing to `make railway-redeploy`
+- Correct the documented `PREFIX` default to `http://localhost:8080`
+- Bump dependencies: Ktor 3.6.1, common-utils 5.2.0; bump build plugins: ben-manes versions 0.67.0
+
+**Full Changelog**: https://github.com/pambrose/srcref/compare/2.3.1...2.4.0
+
 ## [2.3.1](https://github.com/pambrose/srcref/releases/tag/2.3.1) — 2026-10-25
 
 - Add `make release-check`, which publishes nothing and fails unless the checkout is a clean, up-to-date `master` whose GitHub CI checks have all passed, `CHANGELOG.md`, `RELEASE_NOTES.md`, and the dependency snippets mention the version, the version has no pre-release suffix, and it isn't already on Docker Hub or Maven Central ([#66](https://github.com/pambrose/srcref/pull/66))

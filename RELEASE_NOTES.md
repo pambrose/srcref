@@ -2,6 +2,24 @@
 
 Full release notes for every published version, newest first. Mirrors https://github.com/pambrose/srcref/releases.
 
+## [v2.4.0](https://github.com/pambrose/srcref/releases/tag/2.4.0) — 2026-11-04
+
+## What's Changed
+
+- Switch the Docker base image to `eclipse-temurin:25-jre-alpine`, pinned by digest, and upgrade its `libexpat` to 2.10.0-r0 for CVE fixes the base image doesn't include yet
+- Run the tests on Java 25, the Java the Docker image runs, while still compiling for Java 17; pass `--enable-native-access=ALL-UNNAMED` to the test JVM and to the image's `java` so Jansi loads its native library without a warning
+- Drop Heroku support: remove `Procfile`, `system.properties`, the `stage` and `purge` Makefile targets, and the Heroku deployment docs; `make build-all` now cleans and builds the fat JAR
+- Answer HEAD requests on every GET route by installing Ktor's `AutoHeadResponse`, instead of returning 405
+- Track the Docker base image with Dependabot: digest updates with a 7-day cooldown, Java majors ignored
+- Add Railway Makefile targets: `make log` (the last lines of the deployment log), `make railway-restart`, and `make railway-redeploy` (redeploys the latest image from the service's source)
+- Remove the DigitalOcean `make deploy` and `make do-log` targets; `make release` now ends by pointing to `make railway-redeploy`
+- Correct the documented `PREFIX` default to `http://localhost:8080`
+- Bump dependencies: Ktor 3.6.1, common-utils 5.2.0; bump build plugins: ben-manes versions 0.67.0
+
+The one behavior change is that HEAD requests are now answered on every GET route instead of returning 405. The Docker image moves to the Eclipse Temurin 25 JRE and the tests now run on Java 25, but the library is still compiled for Java 17, so Maven Central users can stay on Java 17. Heroku is no longer a supported deployment target.
+
+**Full Changelog**: https://github.com/pambrose/srcref/compare/2.3.1...2.4.0
+
 ## [v2.3.1](https://github.com/pambrose/srcref/releases/tag/2.3.1) — 2026-10-25
 
 ## What's Changed
