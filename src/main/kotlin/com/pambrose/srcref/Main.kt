@@ -28,6 +28,7 @@ import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.cio.CIO
 import io.ktor.server.engine.embeddedServer
+import io.ktor.server.plugins.autohead.AutoHeadResponse
 import io.ktor.server.plugins.calllogging.CallLogging
 import io.ktor.server.plugins.calllogging.processingTimeMillis
 import io.ktor.server.plugins.compression.Compression
@@ -83,6 +84,7 @@ fun String.startsWithList(prefixes: Iterable<String>) = prefixes.any { startsWit
  * - [DefaultHeaders] — standard HTTP response headers.
  * - [StatusPages] — custom 404 handling.
  * - [Compression] — gzip and deflate response compression.
+ * - [AutoHeadResponse] — answers HEAD requests for every GET route, without a body.
  */
 fun Application.module() {
   install(CallLogging) {
@@ -119,5 +121,6 @@ fun Application.module() {
       minimumSize(1024)
     }
   }
+  install(AutoHeadResponse)
   configureRoutes()
 }

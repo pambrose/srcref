@@ -102,7 +102,7 @@ _srcref_ URLs can be generated programmatically with the `srcrefUrl()` call. An 
 
 ```kotlin
 dependencies {
-   implementation("com.pambrose:srcref:2.3.1")
+   implementation("com.pambrose:srcref:2.4.0")
 }
 ```
 
@@ -113,7 +113,7 @@ dependencies {
 
 ```groovy
 dependencies {
-   implementation 'com.pambrose:srcref:2.3.1'
+   implementation 'com.pambrose:srcref:2.4.0'
 }
 ```
 
@@ -127,7 +127,7 @@ dependencies {
 <dependency>
    <groupId>com.pambrose</groupId>
    <artifactId>srcref</artifactId>
-   <version>2.3.1</version>
+   <version>2.4.0</version>
 </dependency>
 ```
 
@@ -229,23 +229,15 @@ docker run -p 8080:8080 \
   srcref
 ```
 
-### Option 3: Heroku Deployment
-
-```bash
-# Deploy to Heroku
-heroku create your-srcref-app
-git push heroku master
-```
-
 ### Environment Variables
 
-| Variable         | Default                  | Description                                               |
-|------------------|--------------------------|-----------------------------------------------------------|
-| `PORT`           | 8080                     | HTTP port to listen on                                    |
-| `PREFIX`         | "https://www.srcref.com" | Prefix for generated URLs                                 |
-| `MAX_LENGTH`     | 5MB                      | Maximum allowed file size                                 |
-| `MAX_CACHE_SIZE` | 2048                     | Maximum cache size before evictions                       |
-| `DEFAULT_BRANCH` | "master"                 | Default branch name to use if branch parameter is missing |
+| Variable         | Default                 | Description                                                    |
+|------------------|-------------------------|----------------------------------------------------------------|
+| `PORT`           | 8080                    | HTTP port to listen on                                         |
+| `PREFIX`         | "http://localhost:8080" | Prefix for generated URLs; set it to your public URL to deploy |
+| `MAX_LENGTH`     | 5MB                     | Maximum allowed file size                                      |
+| `MAX_CACHE_SIZE` | 2048                    | Maximum cache size before evictions                            |
+| `DEFAULT_BRANCH` | "master"                | Default branch name to use if branch parameter is missing      |
 
 ## API Reference
 

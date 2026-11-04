@@ -20,13 +20,13 @@ All deployment methods support these environment variables:
 --8<-- "src/test/kotlin/website/DeploymentExamples.txt:env-vars"
 ```
 
-| Variable         | Default                  | Description                     |
-|------------------|--------------------------|---------------------------------|
-| `PORT`           | `8080`                   | HTTP server port                |
-| `PREFIX`         | `https://www.srcref.com` | URL prefix for generated links  |
-| `DEFAULT_BRANCH` | `master`                 | Default branch when not specified |
-| `MAX_CACHE_SIZE` | `2048`                   | Maximum cached file entries     |
-| `MAX_LENGTH`     | `5242880` (5MB)          | Maximum file size to process    |
+| Variable         | Default                 | Description                                                         |
+|------------------|-------------------------|---------------------------------------------------------------------|
+| `PORT`           | `8080`                  | HTTP server port                                                    |
+| `PREFIX`         | `http://localhost:8080` | URL prefix for generated links; set it to your public URL to deploy |
+| `DEFAULT_BRANCH` | `master`                | Default branch when not specified                                   |
+| `MAX_CACHE_SIZE` | `2048`                  | Maximum cached file entries                                         |
+| `MAX_LENGTH`     | `5242880` (5MB)         | Maximum file size to process                                        |
 
 ## Local Development
 
@@ -59,19 +59,11 @@ Build a self-contained JAR that includes all dependencies:
 ### Building the Docker Image
 
 The published `pambrose/srcref` images are multi-architecture (amd64/arm64),
-built on Alpine Linux with the Liberica OpenJRE 17. To build a local image for
+built on Alpine Linux with the Eclipse Temurin 25 JRE. To build a local image for
 your own platform, tagged `pambrose/srcref:<version>`:
 
 ```bash
 make build-docker
-```
-
-## Heroku
-
-srcref includes a `system.properties` file for Heroku's Java runtime (Java 17):
-
-```bash
---8<-- "src/test/kotlin/website/DeploymentExamples.txt:heroku"
 ```
 
 ## Endpoints Reference

@@ -26,7 +26,8 @@ services:
 # Environment variables control runtime behavior:
 #
 # PORT           - HTTP server port (default: 8080)
-# PREFIX         - URL prefix for generated links (default: https://www.srcref.com)
+# PREFIX         - URL prefix for generated links (default: http://localhost:8080;
+#                  set it to your public URL when deploying)
 # DEFAULT_BRANCH - Default GitHub branch (default: master)
 # MAX_CACHE_SIZE - Maximum cached file entries (default: 2048)
 # MAX_LENGTH     - Maximum file size to process (default: 5MB)
@@ -54,10 +55,3 @@ java -jar build/libs/srcref-all.jar
 # Or with custom environment variables
 PORT=9090 PREFIX=https://srcref.mycompany.com java -jar build/libs/srcref-all.jar
 ; --8<-- [end:fat-jar]
-
-; --8<-- [start:heroku]
-# Deploy to Heroku
-heroku create your-srcref-app
-heroku config:set PREFIX=https://your-srcref-app.herokuapp.com
-git push heroku master
-; --8<-- [end:heroku]

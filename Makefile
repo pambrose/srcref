@@ -1,7 +1,7 @@
 .PHONY: default help build-all stop clean build tests ci run refresh \
 	fatjar uber run-docker build-docker docker-prebuild docker-push docker-verify \
-	release release-check _confirm-release deploy do-log dist stage \
-	purge versions versions-all kdocs coverage coverage-html coverage-xml coverage-log \
+	release release-check _confirm-release log dist \
+	versions versions-all kdocs coverage coverage-html coverage-xml coverage-log \
 	coverage-open coverage-packages coverage-clean coverage-verify check-site upgrade-site clean-site site \
 	publish-local publish-local-snapshot publish-snapshot publish-maven-central \
 	upgrade-wrapper lint detekt detekt-baseline zizmor \
@@ -43,7 +43,7 @@ help:  ## Show this help (list of targets)
 # so serial top-level execution is what we want.
 .NOTPARALLEL:
 
-build-all: clean stage  ## Clean and stage a full build
+build-all: clean fatjar  ## Clean, then build the fat JAR
 
 stop:  ## Stop the Gradle daemon
 	./gradlew --stop
@@ -210,23 +210,18 @@ release:  ## Gate, test, build, then publish VERSION to Docker Hub and Maven Cen
 	echo "  1. Create the GitHub release (tag $(VERSION), title v$(VERSION)) with a summary that ends with"; \
 	echo "     **Full Changelog**: https://github.com/pambrose/srcref/compare/$$prev...$(VERSION)"; \
 	echo "     gh release create $(VERSION) --target $$(git rev-parse HEAD) --title v$(VERSION) --notes-file <notes>"; \
-	echo "  2. make deploy"
+	echo "  2. Redeploy on Railway with the new image: railway redeploy --from-source"; \
+	echo "     (a plain \`railway redeploy\` reruns the image already deployed)"
 
-deploy:  ## Deploy the app via secrets/deploy-app.sh
-	./secrets/deploy-app.sh
-	say finished app deployment
+# Reads the Railway service this directory is linked to; run `railway link` once first. `make log LOG_LINES=500`
+# fetches more lines.
+LOG_LINES ?= 200
 
-do-log:  ## Tail the deployed app log
-	./secrets/app-log.sh
+log:  ## Print the last LOG_LINES (default 200) lines of the Railway deployment log
+	railway logs --deployment --lines $(LOG_LINES)
 
 dist:  ## Install distribution via Gradle
 	./gradlew installDist
-
-stage:  ## Run the Gradle stage task
-	./gradlew stage
-
-purge:  ## Purge the Heroku build cache
-	heroku builds:cache:purge -a srcref --confirm srcref
 
 # dependencyUpdates is marked incompatible with the configuration cache (build.gradle.kts), so a run with the cache on
 # builds an entry only to discard it, and says so. --no-configuration-cache skips the cache for this run instead, and
