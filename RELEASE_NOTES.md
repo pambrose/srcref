@@ -11,8 +11,8 @@ Full release notes for every published version, newest first. Mirrors https://gi
 - Drop Heroku support: remove `Procfile`, `system.properties`, the `stage` and `purge` Makefile targets, and the Heroku deployment docs; `make build-all` now cleans and builds the fat JAR
 - Answer HEAD requests on every GET route by installing Ktor's `AutoHeadResponse`, instead of returning 405
 - Track the Docker base image with Dependabot: digest updates with a 7-day cooldown, Java majors ignored
-- Add `make log`, which prints the last lines of the Railway deployment log
-- Remove the DigitalOcean `make deploy` and `make do-log` targets; `make release` now ends by pointing to `railway redeploy --from-source`
+- Add Railway Makefile targets: `make log` (the last lines of the deployment log), `make railway-restart`, and `make railway-redeploy` (redeploys the latest image from the service's source)
+- Remove the DigitalOcean `make deploy` and `make do-log` targets; `make release` now ends by pointing to `make railway-redeploy`
 - Correct the documented `PREFIX` default to `http://localhost:8080`
 - Bump dependencies: Ktor 3.6.1, common-utils 5.2.0; bump build plugins: ben-manes versions 0.67.0
 

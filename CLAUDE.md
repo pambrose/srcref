@@ -40,8 +40,9 @@ Run a single named test (Kotest string spec name):
 
 Makefile shortcuts: `make build`, `make tests`, `make ci` (run the CI workflows' build steps locally; see
 Continuous Integration), `make run`, `make uber`, `make release` and `make release-check` (see Releasing),
-`make log` (last `LOG_LINES`, default 200, of the Railway deployment log; run `railway link`
-once first), `make kdocs`, `make coverage`, `make coverage-xml`, `make coverage-verify`,
+`make log` (last `LOG_LINES`, default 200, of the Railway deployment log), `make railway-restart`,
+`make railway-redeploy` (redeploys the latest image; all three Railway targets need a one-time `railway link`),
+`make kdocs`, `make coverage`, `make coverage-xml`, `make coverage-verify`,
 `make coverage-packages` (per-package coverage summary via `scripts/coverage_packages.py`), `make lint`
 (kotlinter + detekt), `make detekt-baseline`, `make zizmor` (audit GitHub Actions workflows and `dependabot.yml`
 via `uvx zizmor`), `make publish-local`, `make publish-maven-central`, `make check-site`,
@@ -191,8 +192,9 @@ refusing if HEAD moved or the working tree changed during those steps. After a `
 `make docker-verify` (both platforms present, `:latest` matches `:VERSION`), and `make publish-maven-central`. Docker
 Hub goes first because its tags can be overwritten while a Maven Central release can't be removed, and because a
 pushed tag shows on Docker Hub at once (repo1.maven.org can take a while to list a release), so the Docker Hub check
-is what stops an accidental second run. It ends by printing the manual steps: the GitHub release, then redeploying on Railway with
-`railway redeploy --from-source`, since a plain `railway redeploy` reruns the image already deployed.
+is what stops an accidental second run. It ends by printing the manual steps: the GitHub release, then
+`make railway-redeploy`, which runs `railway redeploy --from-source` (a plain `railway redeploy` reruns the image
+already deployed).
 
 Run `make release-check` on its own to see what's still missing. If a release stops partway, finish it with the
 remaining targets, since `release-check` refuses a version that is already on Docker Hub.

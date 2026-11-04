@@ -1,6 +1,6 @@
 .PHONY: default help build-all stop clean build tests ci run refresh \
 	fatjar uber run-docker build-docker docker-prebuild docker-push docker-verify \
-	release release-check _confirm-release log dist \
+	release release-check _confirm-release log railway-restart railway-redeploy dist \
 	versions versions-all kdocs coverage coverage-html coverage-xml coverage-log \
 	coverage-open coverage-packages coverage-clean coverage-verify check-site upgrade-site clean-site site \
 	publish-local publish-local-snapshot publish-snapshot publish-maven-central \
@@ -210,15 +210,21 @@ release:  ## Gate, test, build, then publish VERSION to Docker Hub and Maven Cen
 	echo "  1. Create the GitHub release (tag $(VERSION), title v$(VERSION)) with a summary that ends with"; \
 	echo "     **Full Changelog**: https://github.com/pambrose/srcref/compare/$$prev...$(VERSION)"; \
 	echo "     gh release create $(VERSION) --target $$(git rev-parse HEAD) --title v$(VERSION) --notes-file <notes>"; \
-	echo "  2. Redeploy on Railway with the new image: railway redeploy --from-source"; \
-	echo "     (a plain \`railway redeploy\` reruns the image already deployed)"
+	echo "  2. make railway-redeploy"
 
-# Reads the Railway service this directory is linked to; run `railway link` once first. `make log LOG_LINES=500`
-# fetches more lines.
+# The Railway targets act on the service this directory is linked to; run `railway link` once first.
+# `make log LOG_LINES=500` fetches more lines.
 LOG_LINES ?= 200
 
 log:  ## Print the last LOG_LINES (default 200) lines of the Railway deployment log
 	railway logs --deployment --lines $(LOG_LINES)
+
+railway-restart:  ## Restart the Railway deployment as-is (same image, nothing redeployed)
+	railway restart
+
+# --from-source pulls the latest image from the service's source; without it, redeploy reruns the deployed image.
+railway-redeploy:  ## Redeploy on Railway with the latest image from the service's source
+	railway redeploy --from-source
 
 dist:  ## Install distribution via Gradle
 	./gradlew installDist
