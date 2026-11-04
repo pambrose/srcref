@@ -6,15 +6,19 @@ Full release notes for every published version, newest first. Mirrors https://gi
 
 ## What's Changed
 
-- Switch the Docker base image to `eclipse-temurin:25-jre-alpine`, pinned by digest, and upgrade its `libexpat` to 2.10.0-r0 for CVE fixes the base image doesn't include yet
-- Run the tests on Java 25, the Java the Docker image runs, while still compiling for Java 17; pass `--enable-native-access=ALL-UNNAMED` to the test JVM and to the image's `java` so Jansi loads its native library without a warning
-- Drop Heroku support: remove `Procfile`, `system.properties`, the `stage` and `purge` Makefile targets, and the Heroku deployment docs; `make build-all` now cleans and builds the fat JAR
-- Answer HEAD requests on every GET route by installing Ktor's `AutoHeadResponse`, instead of returning 405
-- Track the Docker base image with Dependabot: digest updates with a 7-day cooldown, Java majors ignored
-- Add Railway Makefile targets: `make log` (the last lines of the deployment log), `make railway-restart`, and `make railway-redeploy` (redeploys the latest image from the service's source)
-- Remove the DigitalOcean `make deploy` and `make do-log` targets; `make release` now ends by pointing to `make railway-redeploy`
-- Correct the documented `PREFIX` default to `http://localhost:8080`
-- Bump dependencies: Ktor 3.6.1, common-utils 5.2.0; bump build plugins: ben-manes versions 0.67.0
+- Switch the Docker base image to `eclipse-temurin:25-jre-alpine`, pinned by digest, and upgrade its `libexpat` to 2.10.0-r0 for CVE fixes the base image doesn't include yet ([#71](https://github.com/pambrose/srcref/pull/71))
+- Run the tests on Java 25, the Java the Docker image runs, while still compiling for Java 17; pass `--enable-native-access=ALL-UNNAMED` to the test JVM and to the image's `java` so Jansi loads its native library without a warning ([#71](https://github.com/pambrose/srcref/pull/71))
+- Drop Heroku support: remove `Procfile`, `system.properties`, the `stage` and `purge` Makefile targets, and the Heroku deployment docs; `make build-all` now cleans and builds the fat JAR ([#71](https://github.com/pambrose/srcref/pull/71))
+- Answer HEAD requests on every GET route by installing Ktor's `AutoHeadResponse`, instead of returning 405 ([#71](https://github.com/pambrose/srcref/pull/71))
+- Track the Docker base image with Dependabot: digest updates with a 7-day cooldown, Java majors ignored ([#71](https://github.com/pambrose/srcref/pull/71))
+- Add Railway Makefile targets: `make log` (the last lines of the deployment log), `make railway-restart`, and `make railway-redeploy` (redeploys the latest image from the service's source) ([#71](https://github.com/pambrose/srcref/pull/71))
+- Remove the DigitalOcean `make deploy` and `make do-log` targets; `make release` now ends by pointing to `make railway-redeploy` ([#71](https://github.com/pambrose/srcref/pull/71))
+- Correct the documented `PREFIX` default to `http://localhost:8080` ([#71](https://github.com/pambrose/srcref/pull/71))
+- Link the documentation site from the README, and set the site's `site_url` to its GitHub Pages address so its canonical links and sitemap resolve ([#71](https://github.com/pambrose/srcref/pull/71))
+- Bump dependencies: Ktor 3.6.1, common-utils 5.2.0 ([#71](https://github.com/pambrose/srcref/pull/71))
+- Bump build plugins: ben-manes versions 0.67.0 ([#71](https://github.com/pambrose/srcref/pull/71))
+- Bump website tooling: zensical 0.0.73 ([#72](https://github.com/pambrose/srcref/pull/72))
+- Bump GitHub Actions: setup-python v7.1.0, zizmor-action v0.8.0 ([#70](https://github.com/pambrose/srcref/pull/70)), setup-gradle v6.4.1 ([#73](https://github.com/pambrose/srcref/pull/73))
 
 The one behavior change is that HEAD requests are now answered on every GET route instead of returning 405. The Docker image moves to the Eclipse Temurin 25 JRE and the tests now run on Java 25, but the library is still compiled for Java 17, so Maven Central users can stay on Java 17. Heroku is no longer a supported deployment target.
 
