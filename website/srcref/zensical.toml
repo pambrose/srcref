@@ -2,7 +2,7 @@
 site_name = "srcref"
 site_description = "Dynamic line-specific GitHub permalinks using regex patterns"
 site_author = "Paul Ambrose"
-site_url = "https://www.srcref.com/"
+site_url = "https://pambrose.github.io/srcref/"
 
 copyright = """
 Copyright &copy; 2026 Paul Ambrose

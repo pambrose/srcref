@@ -2,6 +2,7 @@
 
 [![GitHub release](https://img.shields.io/github/v/release/pambrose/srcref?sort=semver)](https://github.com/pambrose/srcref/releases/latest)
 [![Maven Central](https://img.shields.io/maven-central/v/com.pambrose/srcref)](https://central.sonatype.com/artifact/com.pambrose/srcref)
+[![Docs](https://img.shields.io/badge/docs-pambrose.github.io%2Fsrcref-blue)](https://pambrose.github.io/srcref/)
 [![Tests](https://img.shields.io/github/actions/workflow/status/pambrose/srcref/tests.yml?branch=master&label=tests)](https://github.com/pambrose/srcref/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/pambrose/srcref/branch/master/graph/badge.svg)](https://codecov.io/gh/pambrose/srcref)
 [![Kotlin version](https://img.shields.io/badge/kotlin-2.4.21-red?logo=kotlin)](http://kotlinlang.org)
@@ -14,6 +15,9 @@ changes to the target file can invalidate the permalink line references.
 
 **srcref** solves this problem by using regex patterns to dynamically locate code sections,
 generating GitHub permalinks that remain valid even when files are modified.
+
+The full documentation, including a regex guide, deployment instructions, and the KDoc API reference, is at
+[pambrose.github.io/srcref](https://pambrose.github.io/srcref/).
 
 **Key Benefits:**
 
