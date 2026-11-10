@@ -231,7 +231,7 @@ Five GitHub Actions workflows in `.github/workflows/`:
 | `docs.yml` (Documentation)          | Push to `master`/`main`, `workflow_dispatch`                           | Builds Dokka KDoc + the Zensical site, deploys both to GitHub Pages         |
 | `zizmor.yml` (zizmor)               | Push to `master`/`main`, any pull request, `workflow_dispatch`         | Audits workflows and `dependabot.yml` with zizmor, uploads to code scanning |
 | `security.yml` (Security)           | Push to `master`/`main`, any pull request, weekly, `workflow_dispatch` | Trivy scans the Docker image; CodeQL analyzes the Kotlin code               |
-| `cache-cleanup.yml` (Cache Cleanup) | Weekly, after Security; `workflow_dispatch`                            | Deletes every Trivy database cache on `master` but the newest               |
+| `cache-cleanup.yml` (Cache Cleanup) | Weekly, after Security; `workflow_dispatch`                            | Deletes old Trivy database caches on `master` and closed PRs' caches        |
 
 All run on `ubuntu-latest`. Tests, Documentation, and Security use Temurin JDK 17 and `gradle/actions/setup-gradle`; the
 test task itself runs on the JDK 25 toolchain, which Gradle downloads through foojay (see Dependencies). `docs.yml`
@@ -245,8 +245,10 @@ SARIF to code scanning; PRs only print the table, since fork and Dependabot PRs 
 job compiles with Gradle's caches and daemon off and the Kotlin compiler in-process, so CodeQL sees every source file;
 it is skipped on fork and Dependabot PRs. Because `make release-check` requires every check run on HEAD to pass, a
 failing scan, including one from the weekly run on an unchanged `master`, blocks a release until it is fixed.
-trivy-action caches about 1 GB of vulnerability database under a new `cache-trivy-YYYY-MM-DD` key each day it scans;
-`cache-cleanup.yml` deletes all but the newest so they don't push `master`'s Gradle caches out of GitHub's 10 GB limit.
+trivy-action caches about 1 GB of vulnerability database under a new `cache-trivy-YYYY-MM-DD` key each day it scans,
+and a PR that scans saves its own copy under its PR ref, where only that PR can read it. Each Monday, after the
+Security run, `cache-cleanup.yml` deletes every Trivy database on `master` but the newest, and every cache (Trivy and
+Gradle) of a closed PR, so they don't push `master`'s Gradle caches out of GitHub's 10 GB limit.
 
 `make ci` runs the build steps of the Tests, Documentation, and zizmor workflows locally, one after another, on the
 working tree (uncommitted changes included): `./gradlew --rerun-tasks check koverXmlReport`, the Dokka + Zensical site
