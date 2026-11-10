@@ -223,23 +223,37 @@ itself is manual — no workflow publishes the Docker image or deploys the app.
 
 ## Continuous Integration
 
-Three GitHub Actions workflows in `.github/workflows/`:
+Five GitHub Actions workflows in `.github/workflows/`:
 
-| Workflow                      | Triggers                                                        | What it does                                                                |
-|-------------------------------|-----------------------------------------------------------------|-----------------------------------------------------------------------------|
-| `tests.yml` (Tests)           | Push to `master`/`main`, any pull request, `workflow_dispatch`  | Runs `./gradlew check koverXmlReport`, uploads coverage to Codecov          |
-| `docs.yml` (Documentation)    | Push to `master`/`main`, `workflow_dispatch`                    | Builds Dokka KDoc + the Zensical site, deploys both to GitHub Pages         |
-| `zizmor.yml` (zizmor)         | Push to `master`/`main`, any pull request, `workflow_dispatch`  | Audits workflows and `dependabot.yml` with zizmor, uploads to code scanning |
+| Workflow                            | Triggers                                                               | What it does                                                                |
+|-------------------------------------|------------------------------------------------------------------------|-----------------------------------------------------------------------------|
+| `tests.yml` (Tests)                 | Push to `master`/`main`, any pull request, `workflow_dispatch`         | Runs `./gradlew check koverXmlReport`, uploads coverage to Codecov          |
+| `docs.yml` (Documentation)          | Push to `master`/`main`, `workflow_dispatch`                           | Builds Dokka KDoc + the Zensical site, deploys both to GitHub Pages         |
+| `zizmor.yml` (zizmor)               | Push to `master`/`main`, any pull request, `workflow_dispatch`         | Audits workflows and `dependabot.yml` with zizmor, uploads to code scanning |
+| `security.yml` (Security)           | Push to `master`/`main`, any pull request, weekly, `workflow_dispatch` | Trivy scans the Docker image; CodeQL analyzes the Kotlin code               |
+| `cache-cleanup.yml` (Cache Cleanup) | Weekly, after Security; `workflow_dispatch`                            | Deletes every Trivy database cache on `master` but the newest               |
 
-All run on `ubuntu-latest`. Tests and Documentation use Temurin JDK 17 and `gradle/actions/setup-gradle`; the test task
-itself runs on the JDK 25 toolchain, which Gradle downloads through foojay (see Dependencies). `docs.yml`
+All run on `ubuntu-latest`. Tests, Documentation, and Security use Temurin JDK 17 and `gradle/actions/setup-gradle`; the
+test task itself runs on the JDK 25 toolchain, which Gradle downloads through foojay (see Dependencies). `docs.yml`
 copies `build/dokka/html` into `website/srcref/site/api-docs` so the KDoc is published under `/api-docs/`.
 
-`make ci` runs the build steps of all three workflows locally, one after another, on the working tree (uncommitted
-changes included): `./gradlew --rerun-tasks check koverXmlReport`, the Dokka + Zensical site build with the KDoc copied
-in, and `make zizmor`. It skips the Codecov upload and the Pages deploy. It differs from CI in two ways: it builds the
-site with the zensical version locked in `website/uv.lock` (`uv run`), whereas `docs.yml` runs `pip install zensical`
-and gets the latest release; and a zizmor finding fails `make ci`, where the workflow only uploads it.
+The Security workflow's `image-scan` job builds the fat JAR and the image (`srcref:scan`), then runs
+`aquasecurity/trivy-action` on it, failing on a HIGH or CRITICAL vulnerability that has a fix, in either the Temurin
+base layer or a library in the fat JAR. It runs weekly as well as on changes, since a newly published CVE can affect
+code that hasn't changed. On non-PR runs it also uploads the HIGH and CRITICAL findings, unfixed ones included, as
+SARIF to code scanning; PRs only print the table, since fork and Dependabot PRs lack the token to upload. The `codeql`
+job compiles with Gradle's caches and daemon off and the Kotlin compiler in-process, so CodeQL sees every source file;
+it is skipped on fork and Dependabot PRs. Because `make release-check` requires every check run on HEAD to pass, a
+failing scan, including one from the weekly run on an unchanged `master`, blocks a release until it is fixed.
+trivy-action caches about 1 GB of vulnerability database under a new `cache-trivy-YYYY-MM-DD` key each day it scans;
+`cache-cleanup.yml` deletes all but the newest so they don't push `master`'s Gradle caches out of GitHub's 10 GB limit.
+
+`make ci` runs the build steps of the Tests, Documentation, and zizmor workflows locally, one after another, on the
+working tree (uncommitted changes included): `./gradlew --rerun-tasks check koverXmlReport`, the Dokka + Zensical site
+build with the KDoc copied in, and `make zizmor`. It skips the Codecov upload and the Pages deploy, and does not run the
+Security workflow. It differs from CI in two ways: it builds the site with the zensical version locked in
+`website/uv.lock` (`uv run`), whereas `docs.yml` runs `pip install zensical` and gets the latest release; and a zizmor
+finding fails `make ci`, where the workflow only uploads it.
 
 The zizmor workflow uses `zizmorcore/zizmor-action` in its default Advanced Security mode: findings are uploaded as
 SARIF and appear in the repository's Security tab and as PR annotations, rather than failing the zizmor job itself.
@@ -254,7 +268,8 @@ Workflow conventions that keep zizmor clean:
 
 Notes:
 
-- Pushing a feature branch runs nothing on its own; Tests and zizmor run on the branch only once it has an open PR.
+- Pushing a feature branch runs nothing on its own; Tests, zizmor, and Security run on the branch only once it has an
+  open PR.
 - No workflow has path filters, so every merge to `master` redeploys the docs site.
 - Manually dispatching Documentation from a non-default branch will likely fail at the deploy step, since the
   `github-pages` environment normally only accepts deploys from the default branch.
@@ -263,8 +278,8 @@ Notes:
 
 `.github/dependabot.yml` opens weekly update PRs for four ecosystems: `gradle` (the version catalog), `github-actions`,
 `uv` (`website/`), and `docker` (the `Dockerfile` base image). Gradle minor/patch bumps are grouped into one PR, with
-majors opened individually; Actions and uv updates are each grouped into a single PR. Dependabot PRs trigger the Tests
-and zizmor workflows like any other PR.
+majors opened individually; Actions and uv updates are each grouped into a single PR. Dependabot PRs trigger the Tests,
+zizmor, and Security workflows like any other PR, though Security skips its CodeQL job on them.
 
 - Every ecosystem has a 7-day `cooldown`, so Dependabot only proposes releases at least a week old (zizmor's
   `dependabot-cooldown` audit requires this). Security updates are not delayed by the cooldown.
@@ -273,5 +288,6 @@ and zizmor workflows like any other PR.
 - The base image is pinned as `eclipse-temurin:25-jre-alpine@sha256:…`, and Dependabot bumps the digest as the tag is
   rebuilt with Alpine and JRE fixes. Java majors are ignored: moving to a new one means changing the tag and `jre` in
   `libs.versions.toml` together. When a digest bump arrives, check whether the base image now ships the fixed `libexpat`
-  so the Dockerfile's upgrade step can go.
+  so the Dockerfile's upgrade step can go: delete the step on the Dependabot PR, and the Security workflow's image scan
+  fails if the base image still carries the vulnerable version (Trivy flags all four CVEs the step cites).
 - A Kotlin bump PR does not update the Kotlin version badge in `README.md`; fix that by hand.
