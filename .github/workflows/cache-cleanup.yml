@@ -1,0 +1,44 @@
+name: Cache Cleanup
+
+# Deletes every dated Trivy vulnerability database on master but the newest, so the repository stays under GitHub's
+# 10 GB cache limit without its least-recently-used eviction reaching master's Gradle caches. trivy-action saves about
+# 1 GB under a new cache-trivy-YYYY-MM-DD key each day it scans. Runs weekly after the Monday Security run, so the
+# database kept is the one that week's scan saved. No untrusted event payloads are referenced.
+on:
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+permissions: {}
+# Two cleanups at once would race to delete the same caches.
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: write # to list and delete caches
+    # gh reads the repository from GH_REPO, so no checkout is needed.
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    # An explicit bash runs with pipefail, so a failed listing fails the step instead of piping nothing to jq.
+    defaults:
+      run:
+        shell: bash
+    # Cache keys are untrusted: a fork's pull request run can save a cache under any key on its own ref. So the newest
+    # database is chosen from master's caches only, and each cache is deleted by its numeric id, read from a
+    # tab-separated record in which @tsv escapes any tab or newline in the key. A cache GitHub evicts between the
+    # listing and the delete is reported as a warning, not a failure.
+    steps:
+      - name: Delete every Trivy database on master but the newest
+        run: |
+          caches=$(gh cache list --ref refs/heads/master --key cache-trivy- --limit 1000 --json id,key)
+          newest=$(jq -r 'map(.key) | max // empty' <<< "$caches")
+          echo "Keeping ${newest:-no Trivy database}"
+          jq -r --arg newest "$newest" '.[] | select(.key != $newest) | [.id, .key] | @tsv' <<< "$caches" |
+            while IFS=$'\t' read -r id key; do
+              echo "Deleting $key ($id)"
+              gh cache delete "$id" || echo "::warning::Could not delete $key ($id)"
+            done
