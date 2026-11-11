@@ -196,7 +196,7 @@ Hub goes first because its tags can be overwritten while a Maven Central release
 pushed tag shows on Docker Hub at once (repo1.maven.org can take a while to list a release), so the Docker Hub check
 is what stops an accidental second run. It ends by printing the manual steps: the GitHub release, then
 `make railway-redeploy`, which runs `railway redeploy --from-source` (a plain `railway redeploy` reruns the image
-already deployed).
+already deployed), then `make railway-version` once the new deployment is up, to confirm it reports the new version.
 
 Run `make release-check` on its own to see what's still missing. If a release stops partway, finish it with the
 remaining targets, since `release-check` refuses a version that is already on Docker Hub.

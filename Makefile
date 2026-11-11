@@ -210,7 +210,8 @@ release:  ## Gate, test, build, then publish VERSION to Docker Hub and Maven Cen
 	echo "  1. Create the GitHub release (tag $(VERSION), title v$(VERSION)) with a summary that ends with"; \
 	echo "     **Full Changelog**: https://github.com/pambrose/srcref/compare/$$prev...$(VERSION)"; \
 	echo "     gh release create $(VERSION) --target $$(git rev-parse HEAD) --title v$(VERSION) --notes-file <notes>"; \
-	echo "  2. make railway-redeploy"
+	echo "  2. make railway-redeploy"; \
+	echo "  3. make railway-version, once the new deployment is up; it should report $(VERSION)"
 
 # The Railway targets act on the service this directory is linked to; run `railway link` once first.
 # `make log LOG_LINES=500` fetches more lines.
