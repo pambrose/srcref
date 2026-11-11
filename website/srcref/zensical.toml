@@ -26,6 +26,8 @@ nav = [
 
 [project.theme]
 language = "en"
+# Template overrides (main.html adds the Context7 chat widget to every page)
+custom_dir = "overrides"
 
 features = [
   "announce.dismiss",
