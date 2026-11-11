@@ -2,6 +2,19 @@
 
 All notable changes to this project. Format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [2.4.1](https://github.com/pambrose/srcref/releases/tag/2.4.1) — 2026-11-10
+
+- Add a Security workflow that runs on pushes to `master`, pull requests, and weekly: Trivy scans the Docker image and fails on a HIGH or CRITICAL vulnerability that has a fix, in either the Temurin base layer or a library in the fat JAR, and CodeQL analyzes the Kotlin code; non-PR runs upload the findings to code scanning ([#75](https://github.com/pambrose/srcref/pull/75))
+- Add a weekly Cache Cleanup workflow, run after Security, that deletes every Trivy vulnerability database cache on `master` but the newest, and every cache of a closed pull request, so they don't push `master`'s Gradle caches out of GitHub's 10 GB limit ([#75](https://github.com/pambrose/srcref/pull/75), [#76](https://github.com/pambrose/srcref/pull/76))
+- Add the Context7 chat widget to every page of the documentation site, through a Zensical theme override, so readers can ask an AI assistant about srcref ([#77](https://github.com/pambrose/srcref/pull/77))
+- Upgrade Gradle wrapper to 9.9.1 ([#77](https://github.com/pambrose/srcref/pull/77))
+- Bump dependencies: kotlin-logging 8.0.7 ([#77](https://github.com/pambrose/srcref/pull/77))
+- Bump build plugins: gradle-plugins 1.1.9, Dokka 2.3.0 ([#77](https://github.com/pambrose/srcref/pull/77))
+- Bump website tooling: zensical 0.1.1, pymdown-extensions 13.0, markdown 3.11.3, click 8.5.1 ([#77](https://github.com/pambrose/srcref/pull/77))
+- Document the Security and Cache Cleanup workflows in `CLAUDE.md` ([#75](https://github.com/pambrose/srcref/pull/75), [#76](https://github.com/pambrose/srcref/pull/76))
+
+**Full Changelog**: https://github.com/pambrose/srcref/compare/2.4.0...2.4.1
+
 ## [2.4.0](https://github.com/pambrose/srcref/releases/tag/2.4.0) — 2026-11-04
 
 - Switch the Docker base image to `eclipse-temurin:25-jre-alpine`, pinned by digest, and upgrade its `libexpat` to 2.10.0-r0 for CVE fixes the base image doesn't include yet ([#71](https://github.com/pambrose/srcref/pull/71))

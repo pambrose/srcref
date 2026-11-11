@@ -132,7 +132,7 @@ Test log output is quieted by `src/test/resources/logback-test.xml`, which sets 
 
 ## Version Management
 
-Version is defined in `gradle.properties` (`version=2.4.0`). The Makefile `VERSION` is derived automatically from
+Version is defined in `gradle.properties` (`version=2.4.1`). The Makefile `VERSION` is derived automatically from
 `gradle.properties`. The following must still be updated manually when changing the version:
 
 - `README.md` (Maven/Gradle dependency snippets and Kotlin version badge)
@@ -236,6 +236,8 @@ Five GitHub Actions workflows in `.github/workflows/`:
 All run on `ubuntu-latest`. Tests, Documentation, and Security use Temurin JDK 17 and `gradle/actions/setup-gradle`; the
 test task itself runs on the JDK 25 toolchain, which Gradle downloads through foojay (see Dependencies). `docs.yml`
 copies `build/dokka/html` into `website/srcref/site/api-docs` so the KDoc is published under `/api-docs/`.
+The site's theme override, `website/srcref/overrides/main.html` (set as `custom_dir` in `zensical.toml`), extends
+`base.html` to add the Context7 chat widget (`data-library="/pambrose/srcref"`) to every page.
 
 The Security workflow's `image-scan` job builds the fat JAR and the image (`srcref:scan`), then runs
 `aquasecurity/trivy-action` on it, failing on a HIGH or CRITICAL vulnerability that has a fix, in either the Temurin

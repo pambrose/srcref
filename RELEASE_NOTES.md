@@ -2,6 +2,23 @@
 
 Full release notes for every published version, newest first. Mirrors https://github.com/pambrose/srcref/releases.
 
+## [v2.4.1](https://github.com/pambrose/srcref/releases/tag/2.4.1) — 2026-11-10
+
+## What's Changed
+
+- Add a Security workflow that runs on pushes to `master`, pull requests, and weekly: Trivy scans the Docker image and fails on a HIGH or CRITICAL vulnerability that has a fix, in either the Temurin base layer or a library in the fat JAR, and CodeQL analyzes the Kotlin code; non-PR runs upload the findings to code scanning ([#75](https://github.com/pambrose/srcref/pull/75))
+- Add a weekly Cache Cleanup workflow, run after Security, that deletes every Trivy vulnerability database cache on `master` but the newest, and every cache of a closed pull request, so they don't push `master`'s Gradle caches out of GitHub's 10 GB limit ([#75](https://github.com/pambrose/srcref/pull/75), [#76](https://github.com/pambrose/srcref/pull/76))
+- Add the Context7 chat widget to every page of the documentation site, through a Zensical theme override, so readers can ask an AI assistant about srcref ([#77](https://github.com/pambrose/srcref/pull/77))
+- Upgrade Gradle wrapper to 9.9.1 ([#77](https://github.com/pambrose/srcref/pull/77))
+- Bump dependencies: kotlin-logging 8.0.7 ([#77](https://github.com/pambrose/srcref/pull/77))
+- Bump build plugins: gradle-plugins 1.1.9, Dokka 2.3.0 ([#77](https://github.com/pambrose/srcref/pull/77))
+- Bump website tooling: zensical 0.1.1, pymdown-extensions 13.0, markdown 3.11.3, click 8.5.1 ([#77](https://github.com/pambrose/srcref/pull/77))
+- Document the Security and Cache Cleanup workflows in `CLAUDE.md` ([#75](https://github.com/pambrose/srcref/pull/75), [#76](https://github.com/pambrose/srcref/pull/76))
+
+There are no public API or behavior changes in this release; nothing under `src/` changed since 2.4.0. The library's only change is its kotlin-logging dependency, now 8.0.7. The rest is CI security scanning, documentation-site, and build tooling maintenance. Since `make release-check` requires every check run on HEAD to pass, a failing Security scan now blocks a release until it is fixed.
+
+**Full Changelog**: https://github.com/pambrose/srcref/compare/2.4.0...2.4.1
+
 ## [v2.4.0](https://github.com/pambrose/srcref/releases/tag/2.4.0) — 2026-11-04
 
 ## What's Changed
