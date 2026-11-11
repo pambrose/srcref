@@ -1,6 +1,6 @@
 .PHONY: default help build-all stop clean build tests ci run refresh \
 	fatjar uber run-docker build-docker docker-prebuild docker-push docker-verify \
-	release release-check _confirm-release log railway-restart railway-redeploy dist \
+	release release-check _confirm-release log railway-restart railway-redeploy railway-version dist \
 	versions versions-all kdocs coverage coverage-html coverage-xml coverage-log \
 	coverage-open coverage-packages coverage-clean coverage-verify check-site upgrade-site clean-site site \
 	publish-local publish-local-snapshot publish-snapshot publish-maven-central \
@@ -225,6 +225,25 @@ railway-restart:  ## Restart the Railway deployment as-is (same image, nothing r
 # --from-source pulls the latest image from the service's source; without it, redeploy reruns the deployed image.
 railway-redeploy:  ## Redeploy on Railway with the latest image from the service's source
 	railway redeploy --from-source
+
+# The service deploys pambrose/srcref with no tag, so the image name doesn't give the version; this asks the running app's
+# /version page, over the service's Railway domain, and adds the active deployment and image digest from `railway status`.
+railway-version:  ## Report the srcref version running on Railway, with its deployment time and image digest
+	@svc=$$(railway service status --json) \
+		|| { echo "ERROR: could not read the Railway service; run \`railway link\` first" >&2; exit 1; }; \
+	dep=$$(echo "$$svc" | jq -r .deploymentId); \
+	inst=$$(railway status --json | jq -c --arg dep "$$dep" \
+		'[.environments.edges[].node.serviceInstances.edges[].node | select(.latestDeployment.id == $$dep)][0]'); \
+	domain=$$(echo "$$inst" | jq -r '(.domains.serviceDomains + .domains.customDomains)[0].domain // empty'); \
+	[ -n "$$domain" ] || { echo "ERROR: the Railway service has no domain" >&2; exit 1; }; \
+	page=$$(curl -fsS --max-time 15 "https://$$domain/version") \
+		|| { echo "ERROR: could not fetch https://$$domain/version" >&2; exit 1; }; \
+	version=$$(echo "$$page" | grep -o 'Version: [^<]*' | head -1 | sed 's/^Version: //'); \
+	released=$$(echo "$$page" | grep -o 'Release Date: [^<]*' | head -1 | sed 's/^Release Date: //'); \
+	[ -n "$$version" ] || { echo "ERROR: no version found at https://$$domain/version" >&2; exit 1; }; \
+	echo "$$inst" | jq -r --arg v "$$version" --arg r "$$released" --arg d "$$domain" \
+		'.activeDeployments[0] as $$a | "Railway \(.serviceName) (\($$d))", "  Version:  \($$v) (released \($$r))", "  Deployed: \($$a.createdAt // "?") (deployment \($$a.id // "?"))", "  Image:    \($$a.meta.image // "?")@\($$a.meta.imageDigest // "?")"'; \
+	[ "$$version" = "$(VERSION)" ] || echo "Note: this checkout is at $(VERSION)"
 
 dist:  ## Install distribution via Gradle
 	./gradlew installDist
