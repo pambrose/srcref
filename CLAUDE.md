@@ -41,7 +41,9 @@ Run a single named test (Kotest string spec name):
 Makefile shortcuts: `make build`, `make tests`, `make ci` (run the CI workflows' build steps locally; see
 Continuous Integration), `make run`, `make uber`, `make release` and `make release-check` (see Releasing),
 `make log` (last `LOG_LINES`, default 200, of the Railway deployment log), `make railway-restart`,
-`make railway-redeploy` (redeploys the latest image; all three Railway targets need a one-time `railway link`),
+`make railway-redeploy` (redeploys the latest image), `make railway-version` (the version the running app reports
+at `/version` on the service's Railway domain, plus the active deployment and image digest; all four Railway targets
+need a one-time `railway link`),
 `make kdocs`, `make coverage`, `make coverage-xml`, `make coverage-verify`,
 `make coverage-packages` (per-package coverage summary via `scripts/coverage_packages.py`), `make lint`
 (kotlinter + detekt), `make detekt-baseline`, `make zizmor` (audit GitHub Actions workflows and `dependabot.yml`
