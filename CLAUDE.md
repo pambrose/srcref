@@ -169,10 +169,31 @@ Published to Maven Central as `com.pambrose:srcref` via the vanniktech maven-pub
 Dokka generates the javadoc jar from KDoc comments. Signing uses in-memory GPG keys via `signingInMemoryKey`,
 `signingInMemoryKeyId`, and `signingInMemoryKeyPassword` Gradle properties.
 
+The Maven Central targets (`publish-maven-central`, `publish-snapshot`) pass two sets of credentials to Gradle as
+`ORG_GRADLE_PROJECT_*` environment variables, for that one command only:
+
+- **Signing** (`GPG_ENV`): the secret key of `GPG_SIGNING_KEY_ID` (an environment variable), exported with
+  `gpg --armor`, and its passphrase from the macOS keychain entry `gradle-signing-password` (account `gpg-signing`).
+- **Maven Central** (`MAVEN_CENTRAL_ENV`): a user token's name and password from central.sonatype.com, from the
+  keychain entries `maven-central-username` and `maven-central-password` (account `maven-central`). They become the
+  vanniktech plugin's `mavenCentralUsername` and `mavenCentralPassword`. Keep them out of
+  `~/.gradle/gradle.properties`, which every Gradle build on the machine can read. Every repository that publishes
+  this way shares these entries. Add each one once; `-w` with no value makes `security` prompt for it, which keeps
+  the secret out of shell history:
+
+  ```bash
+  security add-generic-password -a maven-central -s maven-central-username -U -w
+  security add-generic-password -a maven-central -s maven-central-password -U -w
+  ```
+
+Before running Gradle, the `_check-gpg-env` and `_check-maven-central-env` preflight targets fail if any of these is
+missing or empty. The error names the missing keychain entry, not its value.
+
 - `make publish-local` — publish to `~/.m2/repository` for local testing. Note: this build only resolves from
   `mavenCentral()` (see `settings.gradle.kts`); to consume locally-published artifacts, add `mavenLocal()` to the
-  consuming build's repositories.
+  consuming build's repositories. Needs no credentials.
 - `make publish-maven-central` — publish and release to Maven Central (`make release` runs it as its last step).
+- `make publish-snapshot` — publish `VERSION-SNAPSHOT` to Maven Central.
 - `make kdocs` — generate KDoc HTML documentation to `build/dokka/html/`.
 
 ## Releasing
@@ -187,7 +208,7 @@ nothing and fails unless:
   `RELEASE_VERSION_FILES` mentions the version;
 - the version has no pre-release (`-…`) suffix, its tag (if one exists) points at HEAD, and it isn't already on
   Docker Hub or Maven Central;
-- the GPG setup `publish-maven-central` needs is in place, and Docker is running.
+- the GPG signing setup is in place (`_check-gpg-env`), and Docker is running.
 
 It then runs `make tests` and `make docker-prebuild` (every image platform, built but not pushed), and asks once,
 refusing if HEAD moved or the working tree changed during those steps. After a `y` it runs `make docker-push`,
