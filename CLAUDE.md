@@ -219,9 +219,8 @@ Apache License 2.0. See `LICENSE.txt`.
 
 Multi-arch (amd64/arm64) Docker images are pushed by `make release` (see Releasing); `make build-docker` builds a
 local single-arch image. Image runs on the Eclipse Temurin 25 JRE Alpine base image (`eclipse-temurin:25-jre-alpine`),
-pinned by digest; its Java version must match `jre` in `libs.versions.toml`. The Dockerfile also upgrades `libexpat`
-past the version the base image ships, for CVE fixes; drop that step once a new base digest includes them. Deployment
-itself is manual — no workflow publishes the Docker image or deploys the app.
+pinned by digest; its Java version must match `jre` in `libs.versions.toml`. Deployment itself is manual — no workflow
+publishes the Docker image or deploys the app.
 
 ## Continuous Integration
 
@@ -293,7 +292,5 @@ zizmor, and Security workflows like any other PR, though Security skips its Code
   `make upgrade-wrapper` instead, so the jar and `gradlew` scripts are regenerated along with the properties file.
 - The base image is pinned as `eclipse-temurin:25-jre-alpine@sha256:…`, and Dependabot bumps the digest as the tag is
   rebuilt with Alpine and JRE fixes. Java majors are ignored: moving to a new one means changing the tag and `jre` in
-  `libs.versions.toml` together. When a digest bump arrives, check whether the base image now ships the fixed `libexpat`
-  so the Dockerfile's upgrade step can go: delete the step on the Dependabot PR, and the Security workflow's image scan
-  fails if the base image still carries the vulnerable version (Trivy flags all four CVEs the step cites).
+  `libs.versions.toml` together.
 - A Kotlin bump PR does not update the Kotlin version badge in `README.md`; fix that by hand.
