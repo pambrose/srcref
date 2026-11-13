@@ -187,7 +187,7 @@ The Maven Central targets (`publish-maven-central`, `publish-snapshot`) pass two
   ```
 
 Before running Gradle, the `_check-gpg-env` and `_check-maven-central-env` preflight targets fail if any of these is
-missing or empty. The error names the missing keychain entry but never prints its value.
+missing or empty. The error names the missing keychain entry, not its value.
 
 - `make publish-local` — publish to `~/.m2/repository` for local testing. Note: this build only resolves from
   `mavenCentral()` (see `settings.gradle.kts`); to consume locally-published artifacts, add `mavenLocal()` to the
