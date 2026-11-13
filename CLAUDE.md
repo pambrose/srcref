@@ -208,7 +208,8 @@ nothing and fails unless:
   `RELEASE_VERSION_FILES` mentions the version;
 - the version has no pre-release (`-…`) suffix, its tag (if one exists) points at HEAD, and it isn't already on
   Docker Hub or Maven Central;
-- the GPG signing setup is in place (`_check-gpg-env`), and Docker is running.
+- the GPG signing setup and the Maven Central credentials `publish-maven-central` needs are in place
+  (`_check-gpg-env`, `_check-maven-central-env`), and Docker is running.
 
 It then runs `make tests` and `make docker-prebuild` (every image platform, built but not pushed), and asks once,
 refusing if HEAD moved or the working tree changed during those steps. After a `y` it runs `make docker-push`,

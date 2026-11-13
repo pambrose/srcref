@@ -160,7 +160,7 @@ docker-verify: _require-version  ## Check the published VERSION image has all PL
 
 # Publishes nothing: it fails unless this checkout is fit to publish VERSION. The local checks run first, then the
 # network ones (origin, GitHub's CI checks for HEAD, Docker Hub, Maven Central).
-release-check: _require-final-version _check-gpg-env  ## Fail unless this checkout is fit to publish VERSION
+release-check: _require-final-version _check-gpg-env _check-maven-central-env  ## Fail unless this checkout is fit to publish VERSION
 	@test -z "$$(git status --porcelain)" \
 		|| { echo "ERROR: the working tree is dirty; commit or stash first" >&2; exit 1; }
 	@branch=$$(git rev-parse --abbrev-ref HEAD); [ "$$branch" = "$(RELEASE_BRANCH)" ] \
