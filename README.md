@@ -345,6 +345,9 @@ make uber
 # Build Docker image
 make build-docker
 
+# Build the Docker image locally and list its CVEs with Docker Scout
+make docker-scan
+
 # Run all checks
 make tests
 ```
