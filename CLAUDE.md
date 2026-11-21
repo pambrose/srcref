@@ -44,6 +44,8 @@ Continuous Integration), `make run`, `make uber`, `make release` and `make relea
 `make railway-redeploy` (redeploys the latest image), `make railway-version` (the version the running app reports
 at `/version` on the service's Railway domain, plus the active deployment and image digest; all four Railway targets
 need a one-time `railway link`),
+`make docker-scan` (build the image locally as `srcref:local`, which isn't a Docker Hub tag, and list its CVEs with
+Docker Scout),
 `make kdocs`, `make coverage`, `make coverage-xml`, `make coverage-verify`,
 `make coverage-packages` (per-package coverage summary via `scripts/coverage_packages.py`), `make lint`
 (kotlinter + detekt), `make detekt-baseline`, `make zizmor` (audit GitHub Actions workflows and `dependabot.yml`
@@ -244,6 +246,9 @@ local single-arch image. Image runs on the Eclipse Temurin 25 JRE Alpine base im
 pinned by digest; its Java version must match `jre` in `libs.versions.toml`. Deployment itself is manual — no workflow
 publishes the Docker image or deploys the app.
 
+The Dockerfile runs `apk upgrade` on the base image, so Alpine's security fixes reach the image before Temurin rebuilds
+the tag; the Alpine packages therefore follow the build date rather than the digest.
+
 ## Continuous Integration
 
 Five GitHub Actions workflows in `.github/workflows/`:
@@ -270,6 +275,8 @@ SARIF to code scanning; PRs only print the table, since fork and Dependabot PRs 
 job compiles with Gradle's caches and daemon off and the Kotlin compiler in-process, so CodeQL sees every source file;
 it is skipped on fork and Dependabot PRs. Because `make release-check` requires every check run on HEAD to pass, a
 failing scan, including one from the weekly run on an unchanged `master`, blocks a release until it is fixed.
+`make docker-scan` is the local check: it builds the same image as `srcref:local` and scans it with Docker Scout rather
+than Trivy, so the two can report different results.
 trivy-action caches about 1 GB of vulnerability database under a new `cache-trivy-YYYY-MM-DD` key each day it scans,
 and a PR that scans saves its own copy under its PR ref, where only that PR can read it. Each Monday, after the
 Security run, `cache-cleanup.yml` deletes every Trivy database on `master` but the newest, and every cache (Trivy and

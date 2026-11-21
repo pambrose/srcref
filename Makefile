@@ -1,5 +1,5 @@
 .PHONY: default help build-all stop clean build tests ci run refresh \
-	fatjar uber run-docker build-docker docker-prebuild docker-push docker-verify \
+	fatjar uber run-docker build-docker docker-scan docker-prebuild docker-push docker-verify \
 	release release-check _confirm-release log railway-restart railway-redeploy railway-version dist \
 	versions versions-all kdocs coverage coverage-html coverage-xml coverage-log \
 	coverage-open coverage-packages coverage-clean coverage-verify check-site upgrade-site clean-site site \
@@ -13,6 +13,9 @@ GRADLE_VERSION := $(shell sed -n 's/^gradle-wrapper = "\(.*\)"/\1/p' gradle/libs
 # buildx records linux/arm64/v8 as linux/arm64 in the image index, so docker-verify looks for that form.
 PLATFORMS := linux/amd64,linux/arm64
 IMAGE_NAME := pambrose/srcref
+# The image docker-scan builds into the local Docker. It isn't an $(IMAGE_NAME) tag, so a stray `docker push` can't
+# send it to Docker Hub.
+LOCAL_IMAGE := srcref:local
 
 # `make release` publishes only from a clean, up-to-date checkout of this branch whose GitHub CI has passed.
 RELEASE_BRANCH ?= master
@@ -137,6 +140,13 @@ run-docker: _require-version  ## Run the published Docker image locally
 
 build-docker: _require-version build  ## Build the Docker image
 	docker build -t pambrose/srcref:$(VERSION) .
+
+# Scans the image, not just its base: the libraries inside srcref-all.jar are only visible here. --load puts the image
+# into the local Docker, which a docker-container builder, like the one _buildx selects, otherwise keeps to itself; it
+# builds for this machine's platform only. CI's Security workflow scans with Trivy, so the two can disagree.
+docker-scan: fatjar  ## Build the image locally as srcref:local, then list its CVEs with Docker Scout
+	docker buildx build --load -t $(LOCAL_IMAGE) .
+	docker scout cves $(LOCAL_IMAGE)
 
 # Builds every platform into the buildx builder's cache and pushes nothing, so `release` finds a broken image build
 # before it publishes anything, and the docker-push after its prompt is mostly cache hits.

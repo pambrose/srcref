@@ -3,6 +3,11 @@
 FROM eclipse-temurin:25-jre-alpine@sha256:e1898fd6a11fc965a994d8ace186fd3585aeb636cf8f05f47a723fcfee0b0918
 LABEL maintainer="Paul Ambrose <pambrose@mac.com>"
 
+# Clear the base image's fixable CVEs ahead of a Temurin rebuild: take Alpine's patched packages (zlib, openssl and
+# libfontenc as of this writing) from its repo. Alpine's stable branch only ships fixes, so this upgrades nothing else.
+# The patched versions then follow the build date rather than the digest; `make docker-scan` shows what is left.
+RUN apk upgrade --no-cache
+
 # Define the user to use in this instance to prevent using root that even in a container, can be a security risk.
 ENV APPLICATION_USER=srcref
 
