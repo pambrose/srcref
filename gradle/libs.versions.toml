@@ -1,6 +1,6 @@
 [versions]
 # Toolchain
-gradle-wrapper = "9.9.1"
+gradle-wrapper = "9.9.2"
 jvm = "17"
 # The Java the Docker image runs on, and so the one the tests run on. Keep in step with the Dockerfile's base image.
 jre = "25"
@@ -18,9 +18,9 @@ versions = "0.67.0"
 # Libraries
 coroutines = "1.11.0"
 dropwizard = "4.2.40"
-kotest = "6.2.6"
+kotest = "6.2.7"
 ktor = "3.6.1"
-logback = "1.6.6"
+logback = "1.6.8"
 logging = "8.0.7"
 text = "1.15.0"
 utils = "5.2.0"
