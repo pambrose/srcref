@@ -136,7 +136,7 @@ Test log output is quieted by `src/test/resources/logback-test.xml`, which sets 
 
 ## Version Management
 
-Version is defined in `gradle.properties` (`version=2.4.1`). The Makefile `VERSION` is derived automatically from
+Version is defined in `gradle.properties` (`version=2.4.2`). The Makefile `VERSION` is derived automatically from
 `gradle.properties`. The following must still be updated manually when changing the version:
 
 - `README.md` (Maven/Gradle dependency snippets and Kotlin version badge)
