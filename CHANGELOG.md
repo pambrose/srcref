@@ -2,6 +2,20 @@
 
 All notable changes to this project. Format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [2.4.2](https://github.com/pambrose/srcref/releases/tag/2.4.2) — 2026-11-21
+
+- Run `apk upgrade` on the Docker base image, so Alpine's security fixes reach the image before Temurin rebuilds the tag: today that takes zlib 1.4-r0 (a CRITICAL fix), openssl 3.5.9-r1, and libfontenc 1.1.10-r0, whose HIGH CVE had started failing the Trivy scan ([#85](https://github.com/pambrose/srcref/pull/85))
+- Move the Docker base image to the `eclipse-temurin:25-jre-alpine` digest `e1898fd`, which carries the `libexpat` 2.10.0 fix, and drop the `libexpat` upgrade step ([#80](https://github.com/pambrose/srcref/pull/80))
+- Add `make docker-scan`, which builds the image locally as `srcref:local` and lists its CVEs with Docker Scout, the fat JAR's libraries included ([#85](https://github.com/pambrose/srcref/pull/85))
+- Add `make railway-version`, which reports the version the running app serves at `/version` on the service's Railway domain, with the active deployment and image digest ([#78](https://github.com/pambrose/srcref/pull/78)); `make release` now ends by suggesting it after `make railway-redeploy` ([#79](https://github.com/pambrose/srcref/pull/79))
+- Read the Maven Central credentials from the macOS keychain (`maven-central-username` and `maven-central-password`, account `maven-central`) and pass them to the publishing commands only, instead of keeping them in `~/.gradle/gradle.properties`; the publishing targets fail, naming the missing keychain entry, when either is missing ([#82](https://github.com/pambrose/srcref/pull/82)), and so does `make release-check` ([#83](https://github.com/pambrose/srcref/pull/83))
+- Upgrade Gradle wrapper to 9.9.2 ([#85](https://github.com/pambrose/srcref/pull/85))
+- Bump dependencies: Kotest 6.2.7, Logback 1.6.8 ([#85](https://github.com/pambrose/srcref/pull/85))
+- Bump website tooling: zensical 0.1.3, zensical-ui 0.0.43, pymdown-extensions 13.1.2, pyyaml 6.0.4 ([#85](https://github.com/pambrose/srcref/pull/85))
+- Bump GitHub Actions: setup-java v6.2.0, codeql-action v4.39.3, zizmor-action v0.8.1 ([#81](https://github.com/pambrose/srcref/pull/81))
+
+**Full Changelog**: https://github.com/pambrose/srcref/compare/2.4.1...2.4.2
+
 ## [2.4.1](https://github.com/pambrose/srcref/releases/tag/2.4.1) — 2026-11-10
 
 - Add a Security workflow that runs on pushes to `master`, pull requests, and weekly: Trivy scans the Docker image and fails on a HIGH or CRITICAL vulnerability that has a fix, in either the Temurin base layer or a library in the fat JAR, and CodeQL analyzes the Kotlin code; non-PR runs upload the findings to code scanning ([#75](https://github.com/pambrose/srcref/pull/75))
