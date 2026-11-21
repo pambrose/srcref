@@ -44,7 +44,8 @@ Continuous Integration), `make run`, `make uber`, `make release` and `make relea
 `make railway-redeploy` (redeploys the latest image), `make railway-version` (the version the running app reports
 at `/version` on the service's Railway domain, plus the active deployment and image digest; all four Railway targets
 need a one-time `railway link`),
-`make docker-scan` (build the image locally as `srcref:local`, never pushed, and list its CVEs with Docker Scout),
+`make docker-scan` (build the image locally as `srcref:local`, which isn't a Docker Hub tag, and list its CVEs with
+Docker Scout),
 `make kdocs`, `make coverage`, `make coverage-xml`, `make coverage-verify`,
 `make coverage-packages` (per-package coverage summary via `scripts/coverage_packages.py`), `make lint`
 (kotlinter + detekt), `make detekt-baseline`, `make zizmor` (audit GitHub Actions workflows and `dependabot.yml`
@@ -244,6 +245,9 @@ Multi-arch (amd64/arm64) Docker images are pushed by `make release` (see Releasi
 local single-arch image. Image runs on the Eclipse Temurin 25 JRE Alpine base image (`eclipse-temurin:25-jre-alpine`),
 pinned by digest; its Java version must match `jre` in `libs.versions.toml`. Deployment itself is manual — no workflow
 publishes the Docker image or deploys the app.
+
+The Dockerfile runs `apk upgrade` on the base image, so Alpine's security fixes reach the image before Temurin rebuilds
+the tag; the Alpine packages therefore follow the build date rather than the digest.
 
 ## Continuous Integration
 
